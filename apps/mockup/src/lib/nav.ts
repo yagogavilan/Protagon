@@ -3,7 +3,7 @@ import { computeClock, currentSession, materialStatus, nextSession } from '@/lib
 import { materials } from '@/data/materials';
 import { useDemo, type ConnPanel, type TabId } from '@/state/store';
 import { useFeatures } from '@/state/features';
-import { OFFER_IDS, OFFER_RELEASE_DAY, type OfferId } from '@/data/offerTypes';
+import { OFFER_IDS, OFFER_RELEASE_DAY, OFFER_RELEASE_TIME, type OfferId } from '@/data/offerTypes';
 import { myGroupOf } from '@/lib/groups';
 
 export interface ScreenCode {
@@ -54,15 +54,19 @@ export const SCREEN_CODES: ScreenCode[] = [
   { code: 'U05', label: 'Suporte e FAQ', group: 'Eu' },
   { code: 'GR01', label: 'Card "Forme seu grupo"', group: 'Grupos' },
   { code: 'GR02', label: 'Grupos com vaga', group: 'Grupos' },
+  { code: 'GR01f', label: 'Card: poucos alunos na categoria', group: 'Grupos' },
   { code: 'GR02v', label: 'Lista vazia (nenhum grupo com vaga)', group: 'Grupos' },
+  { code: 'GR02f', label: 'Lista: poucos alunos na categoria', group: 'Grupos' },
   { code: 'GR03', label: 'Criar grupo (código e QR)', group: 'Grupos' },
   { code: 'GR04', label: 'Entrar por código ou QR', group: 'Grupos' },
   { code: 'GR05', label: 'Me coloque em um grupo', group: 'Grupos' },
   { code: 'GR05n', label: 'Me coloque, sem vaga', group: 'Grupos' },
   { code: 'GR06', label: 'Meu grupo', group: 'Grupos' },
   { code: 'OF01', label: 'Card na Home + toast', group: 'Ofertas' },
+  { code: 'OF01l', label: 'Card carregando (skeleton)', group: 'Ofertas' },
   { code: 'OF02', label: 'Tela da oferta', group: 'Ofertas' },
   { code: 'OF02x', label: 'Oferta não disponível (Executivo)', group: 'Ofertas' },
+  { code: 'OF02p', label: 'Prazo atualizado pelo time', group: 'Ofertas' },
   { code: 'OF02e', label: 'Condição encerrada', group: 'Ofertas' },
   { code: 'OF03', label: 'Falar com um consultor', group: 'Ofertas' },
   { code: 'OF04', label: 'Ofertas do evento', group: 'Ofertas' },
@@ -78,10 +82,11 @@ export const SCREEN_CODES: ScreenCode[] = [
 export async function releaseFromPanel(id: OfferId, toast = true): Promise<void> {
   const d = useDemo.getState();
   const day = OFFER_RELEASE_DAY[id];
-  if (d.day < day || d.moment === 'before' || d.moment === 'after') {
-    d.setDay(day);
-    if (d.moment === 'before' || d.moment === 'after') d.setMoment('live');
-  }
+  if (d.day < day) d.setDay(day);
+  // BUG-021: a liberação acontece às 18h15, dentro da palestra do fim do dia; o relógio vai para lá
+  // (setMoment('live') zera o ajuste, por isso o horário vem depois)
+  if (d.moment !== 'live') d.setMoment('live');
+  d.setLiveTime(OFFER_RELEASE_TIME);
   await useFeatures.getState().releaseOffer(id, { quiet: !toast });
 }
 
@@ -96,6 +101,7 @@ export function goTo(code: string): void {
   // folhas abertas por atalho não atravessam de uma tela para outra
   F().setSheet('gaiaHelp', false);
   F().setSheet('offerInterest', false);
+  F().setOfferLoading(false);
   const base = { auth: 'app' as const, stack: [], overlay: null, overlayId: undefined, locked: false, permissionSheet: false, wifiOpen: false };
   const tab = (t: TabId, extra: object = {}) => st.setState({ ...base, tab: t, ...extra });
   const overlay = (name: Parameters<ReturnType<typeof get>['openOverlay']>[0], id?: string, t: TabId = get().tab) => {
@@ -120,11 +126,12 @@ export function goTo(code: string): void {
     const m = get().moment;
     if (m !== 'break' && m !== 'lunch') get().setMoment('break');
   };
-  const clock = () => computeClock(get().moment, get().day, get().pausePhase);
+  const clock = () => computeClock(get().moment, get().day, get().pausePhase, get().liveTime);
 
   // Grupos: formação aberta (Dia 1, até 10h45) e o aluno sem grupo, salvo quando a tela pede o contrário
   const openFormation = () => {
     F().setForcedClosed(false);
+    F().setFewInCategory(false);
     if (get().day !== 1) get().setDay(1);
     if (get().moment !== 'live' && get().moment !== 'break') get().setMoment('break');
   };
@@ -230,6 +237,14 @@ export function goTo(code: string): void {
     case 'GR02':
       noGroup();
       return overlay('groups', undefined, 'agora');
+    case 'GR01f':
+      noGroup();
+      F().setFewInCategory(true);
+      return tab('agora');
+    case 'GR02f':
+      noGroup();
+      F().setFewInCategory(true);
+      return overlay('groups', undefined, 'agora');
     case 'GR02v':
       noGroup();
       F().clearVacancies();
@@ -253,11 +268,21 @@ export function goTo(code: string): void {
       return overlay('myGroup', undefined, 'agora');
     case 'OF01':
       return void withOffer('of-1', true).then(() => tab('agora'));
+    case 'OF01l':
+      return void withOffer('of-1').then(() => {
+        F().setOfferLoading(true);
+        tab('agora');
+      });
     case 'OF02':
       return void withOffer('of-1').then(() => overlay('offer', 'of-1', 'agora'));
     case 'OF02x':
       st.setState({ tier: 'executivo' });
       return void withOffer('of-1').then(() => overlay('offer', 'of-1', 'agora'));
+    case 'OF02p':
+      return void withOffer('of-1').then(() => {
+        F().updateDeadline('of-1');
+        overlay('offer', 'of-1', 'agora');
+      });
     case 'OF02e':
       return void withOffer('of-1').then(() => {
         F().closeCondition('of-1');

@@ -19,7 +19,7 @@ import { useClock, useDemo } from '@/state/store';
 import { cn } from '@/lib/cn';
 import { GroupStatusLine } from './GroupCard';
 
-const REASONS = ['Assédio ou comportamento inadequado', 'Mensagem ofensiva', 'Perfil falso ou de outra pessoa', 'Outro motivo'];
+const REASONS = ['Assédio ou comportamento inadequado', 'Mensagem ofensiva', 'Perfil falso ou de outra pessoa', 'Oferta indevida ou spam', 'Outro motivo'];
 
 type Help = 'menu' | 'swap' | 'report' | 'reported' | 'swapped';
 

@@ -3,8 +3,8 @@ import type { Offer, OfferId } from './offerTypes';
 // Ofertas do palco (DEC-003). Valores, bônus e prazos FICTÍCIOS. Este módulo só é carregado na liberação
 // (import() dinâmico em state/features.ts): nunca importe-o de forma estática.
 //
-// Matriz por ingresso (proposta, a confirmar com o PO): a spec do designer diz que o Olimpo não tem Executivo;
-// o PO listava o contrário. Para virar, basta incluir ou tirar a categoria em `prices`.
+// Matriz por ingresso (DEC-005): Olimpo só VIP e Diamond; Imersão Liderança 360 para os três. A matriz real depende
+// da diretoria (a confirmar). Para mudar, basta incluir ou tirar a categoria em `prices`.
 export const offers: Record<OfferId, Offer> = {
   'of-1': {
     id: 'of-1',

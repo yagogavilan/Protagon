@@ -150,6 +150,8 @@ interface DemoState {
   moment: Moment;
   day: DayNumber;
   pausePhase: PausePhase;
+  /** HH:MM dentro de "Sessão ao vivo" (BUG-021): o painel posiciona o relógio na hora da liberação; null = padrão do momento */
+  liveTime: string | null;
   online: boolean;
   /** true logo após voltar a internet (estado "reconectado" do G05) */
   justReconnected: boolean;
@@ -215,6 +217,7 @@ interface DemoState {
   setTier: (tier: Tier) => void;
   setMoment: (moment: Moment) => void;
   setDay: (day: DayNumber) => void;
+  setLiveTime: (time: string | null) => void;
   setPausePhase: (phase: PausePhase) => void;
   setOnline: (online: boolean) => void;
   setLocked: (locked: boolean) => void;
@@ -467,6 +470,7 @@ const urlState = fromUrl();
 export const useDemo = create<DemoState>()((set, get) => ({
   ...initialApp,
   resetCount: 0,
+  liveTime: null,
   justReconnected: false,
   ...urlState,
   // Entrada direta por URL (auth=app) simula um aluno que já fez login: traz as notificações de boas-vindas
@@ -480,20 +484,21 @@ export const useDemo = create<DemoState>()((set, get) => ({
     const { held, notifications } = get();
     // Chegou o intervalo/almoço/fim do dia: o que estava em espera é entregue.
     if (moment !== 'live' && held.length > 0) {
-      set({ moment, pausePhase: 'start', held: [], notifications: [...held, ...notifications] });
+      set({ moment, pausePhase: 'start', liveTime: null, held: [], notifications: [...held, ...notifications] });
       return;
     }
     // Voltou a palestra: o que é de Conexões ou material e ainda não foi lido volta para a espera.
     if (moment === 'live') {
       const split = deliverableNotifications(notifications, moment);
-      set({ moment, pausePhase: 'start', notifications: split.notifications, held: [...split.held, ...held] });
+      set({ moment, pausePhase: 'start', liveTime: null, notifications: split.notifications, held: [...split.held, ...held] });
       return;
     }
-    set({ moment, pausePhase: 'start' });
+    set({ moment, pausePhase: 'start', liveTime: null });
   },
 
   setDay: (day) => set({ day }),
   setPausePhase: (pausePhase) => set({ pausePhase }),
+  setLiveTime: (liveTime) => set({ liveTime }),
 
   setOnline: (online) => {
     set({ online, justReconnected: online && !get().online });
@@ -506,8 +511,8 @@ export const useDemo = create<DemoState>()((set, get) => ({
   setIslandExpanded: (islandExpanded) => set({ islandExpanded }),
 
   fireNotification: (templateId) => {
-    const { tier, moment, day, pausePhase, fireCount, notifPrefs } = get();
-    const clock = computeClock(moment, day, pausePhase);
+    const { tier, moment, day, pausePhase, liveTime, fireCount, notifPrefs } = get();
+    const clock = computeClock(moment, day, pausePhase, liveTime);
     const candidates = notificationTemplates.filter((t) => t.moments.includes(moment) && tierAllows(tier, t.minTier));
     const template = templateId
       ? notificationTemplates.find((t) => t.id === templateId)
@@ -554,6 +559,7 @@ export const useDemo = create<DemoState>()((set, get) => ({
       profileCardDismissed: false,
       notifPrefs: { avisos: true, agenda: true, conexoes: true, grupo: true },
       pausePhase: 'start',
+      liveTime: null,
       online: true,
       locked: false,
     })),
@@ -562,8 +568,8 @@ export const useDemo = create<DemoState>()((set, get) => ({
   setNotifPermission: (notifPermission) => set({ notifPermission, permissionAsked: notifPermission !== 'unknown' }),
 
   seedNetwork: () => {
-    const { moment, day, pausePhase } = get();
-    const seed = networkSeed(computeClock(moment, day, pausePhase).time);
+    const { moment, day, pausePhase, liveTime } = get();
+    const seed = networkSeed(computeClock(moment, day, pausePhase, liveTime).time);
     set((s) => ({
       connectionsActive: true,
       consent: true,
@@ -592,8 +598,8 @@ export const useDemo = create<DemoState>()((set, get) => ({
   submitIdentifier: (identifier) => set({ loginIdentifier: identifier, auth: 'code' }),
   backToLogin: () => set({ auth: 'login' }),
   completeLogin: () => {
-    const { tier, moment, day, pausePhase, notifications, held } = get();
-    const clock = computeClock(moment, day, pausePhase);
+    const { tier, moment, day, pausePhase, liveTime, notifications, held } = get();
+    const clock = computeClock(moment, day, pausePhase, liveTime);
     const seeded = notifications.length > 0 || held.length > 0 ? { notifications, held } : deliverableNotifications(welcomeNotifications(tier, clock.time), moment);
     set({
       auth: 'onboarding',
@@ -673,8 +679,8 @@ export const useDemo = create<DemoState>()((set, get) => ({
 
   answerRequest: (id, answer) => {
     const req = receivedRequests.find((r) => r.id === id);
-    const { moment, day, pausePhase } = get();
-    const time = computeClock(moment, day, pausePhase).time;
+    const { moment, day, pausePhase, liveTime } = get();
+    const time = computeClock(moment, day, pausePhase, liveTime).time;
     set((s) => {
       const answered = { ...s.answeredRequests };
       if (answer) answered[id] = answer;
@@ -695,8 +701,8 @@ export const useDemo = create<DemoState>()((set, get) => ({
   },
 
   connectViaQr: (participantId) => {
-    const { moment, day, pausePhase } = get();
-    const time = computeClock(moment, day, pausePhase).time;
+    const { moment, day, pausePhase, liveTime } = get();
+    const time = computeClock(moment, day, pausePhase, liveTime).time;
     set((s) => ({
       connected: { ...s.connected, [participantId]: { via: 'qr', at: time } },
       chats: { ...s.chats, [participantId]: s.chats[participantId] ?? [] },
@@ -724,8 +730,8 @@ export const useDemo = create<DemoState>()((set, get) => ({
   setPrivateNote: (id, text) => set((s) => ({ privateNotes: { ...s.privateNotes, [id]: text } })),
 
   sendChat: (id, text) => {
-    const { moment, day, pausePhase } = get();
-    const time = computeClock(moment, day, pausePhase).time;
+    const { moment, day, pausePhase, liveTime } = get();
+    const time = computeClock(moment, day, pausePhase, liveTime).time;
     seq += 1;
     const m: ChatMessage = { id: `c${seq}`, from: 'me', text, at: time, queued: moment === 'live' };
     set((s) => ({ chats: { ...s.chats, [id]: [...(s.chats[id] ?? []), m] } }));
@@ -764,7 +770,8 @@ export function useClock(): EventClock {
   const moment = useDemo((s) => s.moment);
   const day = useDemo((s) => s.day);
   const phase = useDemo((s) => s.pausePhase);
-  return computeClock(moment, day, phase);
+  const liveTime = useDemo((s) => s.liveTime);
+  return computeClock(moment, day, phase, liveTime);
 }
 
 export function useUnreadCount(): number {

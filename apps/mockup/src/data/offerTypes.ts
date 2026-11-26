@@ -10,6 +10,8 @@ export const OFFER_IDS: OfferId[] = ['of-1', 'of-2'];
 
 /** Dia da liberação de cada oferta (o painel usa só isto, sem nome) */
 export const OFFER_RELEASE_DAY: Record<OfferId, DayNumber> = { 'of-1': 2, 'of-2': 3 };
+/** Hora da liberação no palco, nos dois dias (R-OF-11) */
+export const OFFER_RELEASE_TIME = '18:15';
 export const OFFER_RELEASE_LABEL: Record<OfferId, string> = { 'of-1': 'Dia 2 · 18h15', 'of-2': 'Dia 3 · 18h15' };
 
 /** Valores em centavos */

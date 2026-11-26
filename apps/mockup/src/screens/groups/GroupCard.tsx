@@ -8,7 +8,7 @@ import { FORMATION } from '@/data/groups';
 import { formatHour, type EventClock } from '@/lib/clock';
 import { groupLabel, isComplete, listedGroups, vacancies, type Group } from '@/lib/groups';
 import { minutesToClose } from '@/lib/groups';
-import { personFor, useFeatures, useFormation, useMyGroup } from '@/state/features';
+import { FEW_TEXT, FEW_TITLE, personFor, useFeatures, useFormation, useMyGroup } from '@/state/features';
 import { useClock, useDemo } from '@/state/store';
 import { plural } from '@/lib/connections';
 
@@ -35,8 +35,22 @@ function FormationBody({ clock, embedded }: { clock: EventClock; embedded?: bool
   const openOverlay = useDemo((s) => s.openOverlay);
   const setWifiOpen = useDemo((s) => s.setWifiOpen);
   const open = listedGroups(groups, tier).length;
+  const few = useFeatures((s) => s.fewInCategory);
+  const openMap = useDemo((s) => s.openMap);
   const live = moment === 'live';
   const left = minutesToClose(clock);
+
+  // GR-19: poucos alunos na categoria. Sem botão de criar nem lista: o time decide fora do app
+  if (few)
+    return (
+      <>
+        <p className={embedded ? 'text-body-strong text-text-primary' : 'text-h2 text-text-primary'}>{FEW_TITLE}</p>
+        <p className="mt-1 text-body text-text-secondary">{FEW_TEXT}</p>
+        <Button size="compact" variant="ghost" className="mt-2 self-start" onClick={() => openMap('booth')}>
+          Ver estande
+        </Button>
+      </>
+    );
 
   return (
     <>

@@ -7,26 +7,24 @@ import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { StatusBanner } from '@/components/ui/StatusBanner';
 import { edition } from '@/data/edition';
-import { gaia as gaiaInfo, gaiaFaq, PENDING } from '@/data/gaia';
+import { gaia as gaiaInfo, gaiaFaq } from '@/data/gaia';
 import { demoUser } from '@/data/participants';
 import { formatHour } from '@/lib/clock';
 import { haptic } from '@/lib/haptics';
+import { copyText, COPY_FAILED } from '@/lib/clipboard';
 import { cn } from '@/lib/cn';
 import { useFeatures, type GaiaStepNumber } from '@/state/features';
 import { useDemo } from '@/state/store';
 import { currentStep, doneCount, groupGaiaText, useGroupGaiaCount, type GaiaStep } from './gaiaState';
 
-/** Texto com marca "[a confirmar]" em destaque discreto */
-function Pending({ children }: { children: ReactNode }) {
-  return <span className="text-text-secondary">{children}</span>;
-}
-
-async function copyText(text: string): Promise<void> {
-  try {
-    await navigator.clipboard?.writeText(text);
-  } catch {
-    // sem permissão de área de transferência no navegador: segue a simulação
-  }
+/** Linha cujo conteúdo depende do fundador: texto neutro com o selo "Proposta" (nunca "[a confirmar]" na tela) */
+function Proposal({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <p className={cn('flex flex-wrap items-center gap-2 text-body text-text-secondary', className)}>
+      <Chip variant="proposal" />
+      <span>{children}</span>
+    </p>
+  );
 }
 
 /** Passo do checklist: número ou check, título, "Feito" e conteúdo expansível. Todos tocáveis; nenhum bloqueado. */
@@ -91,6 +89,14 @@ function StepCard({
   );
 }
 
+function CopyFailed() {
+  return (
+    <p role="alert" className="flex items-start gap-2 text-body text-text-primary">
+      <CircleAlert size={20} aria-hidden className="mt-0.5 shrink-0 text-danger" /> {COPY_FAILED}
+    </p>
+  );
+}
+
 /** GA03 · Preciso de ajuda: onde está a equipe, perguntas frequentes e suporte. Disponível em todos os passos. */
 function HelpSheet() {
   const open = useFeatures((s) => s.sheets.gaiaHelp);
@@ -126,6 +132,7 @@ function HelpSheet() {
         <section className="flex flex-col gap-2" aria-label="Onde está a equipe">
           <h3 className="text-h2 text-text-primary">Onde está a equipe</h3>
           <p className="text-body text-text-primary">{gaiaInfo.teamPlace}</p>
+          <Chip variant="proposal" className="self-start" />
           <Button
             size="compact"
             variant="ghost"
@@ -188,6 +195,7 @@ function HelpSheet() {
                     <p className="pb-3 pl-7 text-body text-text-secondary">
                       {q.a}
                       {q.id === 'email' ? ` ${demoUser.email}` : ''}
+                      {q.proposal ? <Chip variant="proposal" className="ml-2 align-middle" /> : null}
                     </p>
                   ) : null}
                 </li>
@@ -214,7 +222,7 @@ function HelpSheet() {
 
 /**
  * GA02 · Checklist de 4 passos da atividade Gaia One. O progresso é autodeclarado: o app não verifica nada.
- * Wi-Fi fixo no topo; "Preciso de ajuda" no mesmo lugar em todos os passos. Textos pendentes marcados [a confirmar].
+ * Wi-Fi fixo no topo; "Preciso de ajuda" no mesmo lugar em todos os passos. O que depende do fundador leva o selo "Proposta".
  */
 export function GaiaScreen() {
   const gaia = useFeatures((s) => s.gaia);
@@ -235,6 +243,7 @@ export function GaiaScreen() {
   const [open, setOpen] = useState<GaiaStep | 0>(current);
   const [review, setReview] = useState(false);
   const [copied, setCopied] = useState<'email' | 'code' | null>(null);
+  const [copyFailed, setCopyFailed] = useState<'email' | 'code' | null>(null);
   const [storeError, setStoreError] = useState(false);
   const [otherDevice, setOtherDevice] = useState(false);
   const [wifiCopied, setWifiCopied] = useState(false);
@@ -244,14 +253,27 @@ export function GaiaScreen() {
   const completed = Boolean(gaia.completedAt);
 
   const copy = async (what: 'email' | 'code') => {
-    await copyText(what === 'email' ? demoUser.email : gaiaInfo.promoCode);
+    const ok = await copyText(what === 'email' ? demoUser.email : gaiaInfo.promoCode);
+    if (!ok) {
+      // BUG-020: nada de "copiado" se a cópia falhou; o texto fica selecionável (toque e segure)
+      haptic('warning', 'cópia falhou');
+      setCopied(null);
+      setCopyFailed(what);
+      return;
+    }
     haptic('light', what === 'email' ? 'e-mail copiado' : 'código copiado');
+    setCopyFailed(null);
     setCopied(what);
     window.setTimeout(() => setCopied((c) => (c === what ? null : c)), 2000);
   };
 
   const copyWifi = async () => {
-    await copyText(edition.venue.wifi.password);
+    const ok = await copyText(edition.venue.wifi.password);
+    if (!ok) {
+      haptic('warning', 'cópia da senha do Wi-Fi falhou');
+      showToast({ text: COPY_FAILED, tone: 'warning' });
+      return;
+    }
     haptic('light', 'senha do Wi-Fi copiada');
     showToast({ text: 'Senha do Wi-Fi copiada', tone: 'success' });
     setWifiCopied(true);
@@ -294,19 +316,17 @@ export function GaiaScreen() {
           Usar outro aparelho
         </Button>
         <p className="text-body text-text-secondary">O Wi-Fi do salão enche com muita gente. Se o download demorar, use os dados do celular.</p>
-        <p className="text-caption text-text-secondary">
-          <Pending>{gaiaInfo.storeLinkNote}</Pending>
-        </p>
+        <Proposal>{gaiaInfo.storeLinkNote}</Proposal>
       </StepCard>
 
       <StepCard n={2} title="Criar a conta" done={gaia.steps[2]} active={current === 2} open={open === 2} onToggleOpen={() => setOpen(open === 2 ? 0 : 2)} onToggleDone={() => toggleStep(2 as GaiaStepNumber)}>
-        <p className="text-body text-text-primary">
-          Use o mesmo e-mail da sua compra: <span className="select-all break-all font-semibold">{demoUser.email}</span>
-        </p>
+        <p className="text-body text-text-primary">Use o mesmo e-mail da sua compra:</p>
+        <p className="select-all break-words text-body-strong text-text-primary">{demoUser.email}</p>
         <Button block icon={copied === 'email' ? <Check size={20} aria-hidden /> : <Copy size={20} aria-hidden />} onClick={() => copy('email')}>
           {copied === 'email' ? 'E-mail copiado' : 'Copiar meu e-mail'}
         </Button>
         {copied === 'email' ? <p className="text-body text-text-secondary">Cole no cadastro do Gaia One e volte aqui.</p> : null}
+        {copyFailed === 'email' ? <CopyFailed /> : null}
         <Button size="compact" variant="ghost" className="self-start" onClick={() => setSheet('gaiaHelp', true)}>
           Já tem conta? Entre com ela.
         </Button>
@@ -318,15 +338,11 @@ export function GaiaScreen() {
         <Button block icon={copied === 'code' ? <Check size={20} aria-hidden /> : <Copy size={20} aria-hidden />} onClick={() => copy('code')}>
           {copied === 'code' ? 'Código copiado' : 'Copiar código'}
         </Button>
-        <p className="text-body text-text-secondary">
-          <Pending>{gaiaInfo.card}</Pending>
-        </p>
-        <p className="text-caption text-text-secondary">
-          <Pending>{gaiaInfo.promoPending}</Pending>
-        </p>
-        <p className="text-caption text-text-secondary">
-          <Pending>{gaiaInfo.trialLength}</Pending>
-        </p>
+        {copyFailed === 'code' ? <CopyFailed /> : null}
+        <p className="text-body text-text-secondary">{gaiaInfo.promoNote}</p>
+        <Proposal>
+          {gaiaInfo.card} {gaiaInfo.trialLength}
+        </Proposal>
       </StepCard>
 
       <StepCard n={4} title="Pronto" done={completed} active={current === 4 && !completed} open={open === 4} onToggleOpen={() => setOpen(open === 4 ? 0 : 4)}>
@@ -384,9 +400,7 @@ export function GaiaScreen() {
           <>
             <div className="flex flex-col gap-1">
               <h2 className="text-h1 text-text-primary">{completed ? 'Gaia One ativado' : 'Ative seu teste do Gaia One'}</h2>
-              <p className="text-body text-text-secondary">
-                <Pending>{gaiaInfo.oneLiner}</Pending>
-              </p>
+              <Proposal>{gaiaInfo.oneLiner}</Proposal>
               <p className="tabular text-body-strong text-text-primary">{done} de 4 passos feitos</p>
               <div role="progressbar" aria-label="Passos feitos" aria-valuemin={0} aria-valuemax={4} aria-valuenow={done} className="h-1.5 overflow-hidden rounded-pill bg-border-strong">
                 <div className="h-full origin-left rounded-pill bg-gradient-gold transition-[width] duration-base" style={{ width: `${(done / 4) * 100}%` }} />
@@ -410,9 +424,7 @@ export function GaiaScreen() {
             <QRCodeSVG value="https://gaia.exemplo/loja" size={176} level="M" bgColor="#F5F3EE" fgColor="#020111" role="img" aria-label="QR que abre a loja do Gaia One no aparelho que ler" />
           </div>
           <p className="text-body text-text-primary">Ou procure Gaia One na loja.</p>
-          <p className="text-caption text-text-secondary">
-            <Pending>{`QR simulado ${PENDING}`}</Pending>
-          </p>
+          <Proposal className="justify-center">Na versão real, o QR abre a loja do Gaia One.</Proposal>
         </div>
       </BottomSheet>
     </OverlayPage>

@@ -952,7 +952,9 @@ async function gaiaFlow(baseUrl) {
   await expectText('Protagon-Alunos');
   await expectText('Copiar senha');
   await expectText('0 de 4 passos feitos');
-  await expectText('[a confirmar]');
+  // BUG-019: nunca "[a confirmar]" cru na tela; o que depende do fundador leva o selo "Proposta"
+  await expectNoText(/\[a confirmar\]/i, 'checklist do Gaia One');
+  await expectText('Proposta');
   await expectText('Abrir na App Store');
   await shot('ga-02-checklist-passo-1-iphone');
   await setPanel('Aparelho', 'Android');

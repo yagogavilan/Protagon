@@ -1,21 +1,30 @@
 // Atividade Gaia One (Dia 2). O fundador ainda não passou o texto do produto, os links das lojas, se o teste pede
-// cartão nem a duração: tudo o que depende disso vai marcado "[a confirmar]" e os links das lojas são simulados.
+// cartão nem a duração (pergunta 8). Os textos abaixo são neutros e plausíveis, e a tela mostra o selo "Proposta"
+// onde o conteúdo depende dele. A marcação "[a confirmar]" fica SÓ aqui, em comentários e em `gaiaPending`: nunca na interface.
 
-export const PENDING = '[a confirmar]';
+/** O que ainda depende do fundador (pergunta 8): lista de referência para a revisão, não é exibida */
+export const gaiaPending = [
+  'descrição do produto em uma frase [a confirmar]',
+  'duração do teste [a confirmar]',
+  'o teste pede cartão [a confirmar]',
+  'código promocional real [a confirmar]',
+  'links das lojas [a confirmar]',
+  'onde fica a equipe de apoio no salão (operação) [a confirmar]',
+] as const;
 
 export const gaia = {
   name: 'Gaia One',
-  /** O que é o produto, em uma frase: pendente do fundador (pergunta 8) */
-  oneLiner: `Descrição do produto em uma frase ${PENDING}`,
-  trialLength: `Duração do teste ${PENDING}`,
+  /** O que é o produto, em uma frase (proposta; depende do fundador) */
+  oneLiner: 'O aplicativo para você colocar em prática o que aprende no Protagon.',
+  trialLength: 'O teste dura 7 dias.',
   /** Código promocional fictício */
   promoCode: 'PROTAGON27',
-  promoPending: `Código promocional de exemplo ${PENDING}`,
-  /** O teste pede cartão? Resposta de exemplo, a confirmar */
-  card: `O teste não pede cartão. ${PENDING}`,
-  storeLinkNote: `Link da loja simulado ${PENDING}`,
-  /** Onde fica a equipe de apoio no salão (a confirmar com a operação) */
-  teamPlace: `Equipe do Gaia One nas laterais do salão e no estande. Mais perto de você: lateral direita, perto do seu setor. ${PENDING}`,
+  promoNote: 'Este código vale só para quem está no Protagon.',
+  /** O teste pede cartão? Resposta de exemplo (proposta) */
+  card: 'O teste não pede cartão.',
+  storeLinkNote: 'O botão abre a loja do seu aparelho.',
+  /** Onde fica a equipe de apoio no salão (proposta; operação confirma) */
+  teamPlace: 'Equipe do Gaia One nas laterais do salão e no estande. Mais perto de você: lateral direita, perto do seu setor.',
   /** Linha de loja por aparelho (a demonstração escolhe o aparelho no painel) */
   store: {
     ios: { name: 'App Store', open: 'Abrir na App Store', hint: 'Baixe o Gaia One na App Store.' },
@@ -27,10 +36,12 @@ export interface GaiaFaq {
   id: string;
   q: string;
   a: string;
+  /** Resposta que depende do fundador: a tela mostra o selo "Proposta" */
+  proposal?: boolean;
 }
 
 export const gaiaFaq: GaiaFaq[] = [
-  { id: 'card', q: 'O teste pede cartão?', a: `Não. O teste não pede cartão. ${PENDING}` },
+  { id: 'card', q: 'O teste pede cartão?', a: 'Não. O teste não pede cartão.', proposal: true },
   {
     id: 'email',
     q: 'Não recebi o e-mail',

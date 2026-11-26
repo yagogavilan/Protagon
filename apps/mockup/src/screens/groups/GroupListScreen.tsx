@@ -14,7 +14,7 @@ import { formatHour } from '@/lib/clock';
 import { firstNameOf, groupLabel, listedGroups, minutesToClose, sectorName, vacancies, vacancyText, type Group } from '@/lib/groups';
 import { haptic } from '@/lib/haptics';
 import { useFakeLoad } from '@/lib/useFakeLoad';
-import { FORMATION_MSG, personFor, useFeatures, useFormation, useMyGroup } from '@/state/features';
+import { FEW_TEXT, FEW_TITLE, FORMATION_MSG, personFor, useFeatures, useFormation, useMyGroup } from '@/state/features';
 import { useClock, useDemo } from '@/state/store';
 
 const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
@@ -41,6 +41,7 @@ export function GroupListScreen() {
   const setWifiOpen = useDemo((s) => s.setWifiOpen);
   const groups = useFeatures((s) => s.groups);
   const simulateError = useFeatures((s) => s.simulateError);
+  const few = useFeatures((s) => s.fewInCategory);
   const f = useFeatures.getState;
   const formation = useFormation();
   const myGroup = useMyGroup();
@@ -136,6 +137,8 @@ export function GroupListScreen() {
   }, []);
 
   const closed = formation !== 'open';
+  // GR-19: com poucos alunos na categoria não há lista, criar nem código: o time decide fora do app
+  const hideActions = closed || few;
   const disabled = !online || closed || Boolean(busy);
   const left = minutesToClose(clock);
 
@@ -151,7 +154,7 @@ export function GroupListScreen() {
   );
 
   return (
-    <OverlayPage title="Grupos com vaga" footer={closed ? null : footer} quietOffline>
+    <OverlayPage title="Grupos com vaga" footer={hideActions ? null : footer} quietOffline>
       <div className="flex flex-col gap-3 pt-1">
         <div className="flex flex-wrap items-center gap-2">
           <Chip>Só ingresso {TIER_LABEL[tier]}</Chip>
@@ -161,9 +164,20 @@ export function GroupListScreen() {
             </p>
           ) : null}
         </div>
-        <p className="text-body text-text-secondary">Aparecem o primeiro nome e o setor de quem já está no grupo. Empresa e foto, só depois de entrar.</p>
+        {few && !closed ? null : <p className="text-body text-text-secondary">Aparecem o primeiro nome e o setor de quem já está no grupo. Empresa e foto, só depois de entrar.</p>}
 
-        {closed ? (
+        {few && !closed ? (
+          <EmptyState
+            icon={<UsersRound size={48} strokeWidth={1.5} />}
+            title={FEW_TITLE}
+            text={FEW_TEXT}
+            action={
+              <Button variant="secondary" onClick={() => useDemo.getState().openMap('booth')}>
+                Ver estande
+              </Button>
+            }
+          />
+        ) : closed ? (
           <EmptyState
             icon={<UsersRound size={48} strokeWidth={1.5} />}
             title="A formação terminou"

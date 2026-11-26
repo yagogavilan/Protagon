@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Check, Copy, Wifi } from 'lucide-react';
+import { Check, CircleAlert, Copy, Wifi } from 'lucide-react';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/Button';
 import { edition } from '@/data/edition';
 import { useDemo } from '@/state/store';
 import { haptic } from '@/lib/haptics';
+import { copyText, COPY_FAILED } from '@/lib/clipboard';
 
 /** A05 · Wi-Fi: rede e senha, com estado "copiado". Abre pela Home e pela tela do intervalo. */
 export function WifiSheet() {
@@ -12,18 +13,23 @@ export function WifiSheet() {
   const setOpen = useDemo((s) => s.setWifiOpen);
   const showToast = useDemo((s) => s.showToast);
   const [copied, setCopied] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    if (!open) setCopied(false);
+    if (!open) {
+      setCopied(false);
+      setFailed(false);
+    }
   }, [open]);
 
   const copy = async () => {
-    try {
-      await navigator.clipboard?.writeText(edition.venue.wifi.password);
-    } catch {
-      // sem permissão de área de transferência no navegador: segue a simulação
+    const ok = await copyText(edition.venue.wifi.password);
+    setCopied(ok);
+    setFailed(!ok);
+    if (!ok) {
+      haptic('warning', 'cópia da senha do Wi-Fi falhou');
+      return;
     }
-    setCopied(true);
     haptic('light', 'senha do Wi-Fi copiada');
     showToast({ text: 'Senha do Wi-Fi copiada', tone: 'success' });
   };
@@ -56,6 +62,11 @@ export function WifiSheet() {
           <dd className="select-all text-body-strong text-text-primary">{edition.venue.wifi.password}</dd>
         </div>
       </dl>
+      {failed ? (
+        <p role="alert" className="mt-3 flex items-start gap-2 text-body text-text-primary">
+          <CircleAlert size={20} aria-hidden className="mt-0.5 shrink-0 text-danger" /> {COPY_FAILED}
+        </p>
+      ) : null}
       <p className="mt-3 text-body text-text-secondary">Se a rede ficar lenta, agenda, mapa e credencial continuam funcionando sem internet.</p>
     </BottomSheet>
   );

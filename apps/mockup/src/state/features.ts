@@ -44,6 +44,8 @@ export interface OfferState {
   notSeen: boolean;
   /** HH:MM em que o painel encerrou a condição antes do prazo */
   closedAt: string | null;
+  /** O time mudou o prazo depois da liberação (OF02: banner "O time atualizou o prazo") */
+  deadlineUpdated: boolean;
 }
 
 export type GaiaDevice = 'ios' | 'android';
@@ -63,6 +65,8 @@ export interface FeaturesState {
   // Grupos
   groups: Group[];
   groupsForcedClosed: boolean;
+  /** Painel: a categoria do aluno tem menos de 3 presentes (R-GR-8, GR-19): "A equipe vai te informar seu grupo" */
+  fewInCategory: boolean;
   /** Aluno liga "Compartilhar meu WhatsApp com o grupo" (desligado por padrão, SEC-020) */
   shareWhatsapp: boolean;
   /** Linha de status em Meu grupo ("Thiago saiu do grupo...") */
@@ -78,6 +82,8 @@ export interface FeaturesState {
   // Ofertas
   offerData: Partial<Record<OfferId, Offer>>;
   offerState: Partial<Record<OfferId, OfferState>>;
+  /** Painel: o card da oferta na Home mostra o skeleton (estado "carregando" do OF01) */
+  offerLoading: boolean;
 
   // Gaia One
   gaia: GaiaState;
@@ -98,6 +104,7 @@ export interface FeaturesState {
   setNickname: (name: string) => 'ok' | 'invalid';
   setShareWhatsapp: (v: boolean) => void;
   setForcedClosed: (v: boolean) => void;
+  setFewInCategory: (v: boolean) => void;
   teamPlace: () => boolean;
   someoneJoined: () => boolean;
   someoneLeft: () => boolean;
@@ -117,6 +124,8 @@ export interface FeaturesState {
   cancelInterest: (id: OfferId) => void;
   startPurchase: (id: OfferId, paid: boolean) => void;
   closeCondition: (id: OfferId) => void;
+  updateDeadline: (id: OfferId) => void;
+  setOfferLoading: (v: boolean) => void;
 
   // ações: Gaia One
   startGaia: () => void;
@@ -136,7 +145,7 @@ export interface FeaturesState {
 const demo = () => useDemo.getState();
 const clockNow = (): EventClock => {
   const d = demo();
-  return computeClock(d.moment, d.day, d.pausePhase);
+  return computeClock(d.moment, d.day, d.pausePhase, d.liveTime);
 };
 
 let seq = 0;
@@ -211,6 +220,9 @@ function whenNoDialog(fn: () => void, tries = 40): void {
 
 const FORMATION_MSG = 'A formação terminou. O time vai encaixar você em um grupo.';
 export { FORMATION_MSG };
+/** Categoria com menos de 3 presentes (R-GR-8, GR-19): o time decide fora do app; nunca mistura categorias */
+export const FEW_TITLE = 'A equipe vai te informar seu grupo';
+export const FEW_TEXT = 'Ainda há poucos alunos com o seu ingresso por aqui. Você não precisa fazer nada agora.';
 
 export const useFeatures = create<FeaturesState>()((set, get) => {
   const tier = (): Tier => demo().tier;
@@ -241,6 +253,7 @@ export const useFeatures = create<FeaturesState>()((set, get) => {
   return {
     groups: initialGroups(),
     groupsForcedClosed: false,
+    fewInCategory: false,
     shareWhatsapp: false,
     groupNotice: null,
     lastJoinAnnounce: null,
@@ -250,6 +263,7 @@ export const useFeatures = create<FeaturesState>()((set, get) => {
     groupSeq: 0,
     offerData: {},
     offerState: {},
+    offerLoading: false,
     gaia: initialGaia(),
     sheets: { gaiaHelp: false, offerInterest: false },
     simulateError: false,
@@ -353,6 +367,7 @@ export const useFeatures = create<FeaturesState>()((set, get) => {
     setShareWhatsapp: (shareWhatsapp) => set({ shareWhatsapp }),
 
     setForcedClosed: (groupsForcedClosed) => set({ groupsForcedClosed }),
+    setFewInCategory: (fewInCategory) => set({ fewInCategory }),
 
     teamPlace: () => {
       const t = tier();
@@ -478,7 +493,7 @@ export const useFeatures = create<FeaturesState>()((set, get) => {
         offerData: { ...s.offerData, [id]: offer },
         offerState: {
           ...s.offerState,
-          [id]: { releasedAt: clock.time, viewed: false, dismissed: false, interestAt: null, purchase: 'none', purchaseDay: null, notSeen: false, closedAt: null },
+          [id]: { releasedAt: clock.time, viewed: false, dismissed: false, interestAt: null, purchase: 'none', purchaseDay: null, notSeen: false, closedAt: null, deadlineUpdated: false },
         },
       }));
       // Quem não tem a oferta no ingresso nunca vê card, toast nem item (e nunca cadeado)
@@ -553,6 +568,22 @@ export const useFeatures = create<FeaturesState>()((set, get) => {
       });
     },
 
+    /** O time estende o prazo em 1 dia (painel). Só vale para condição ainda aberta e uma vez. */
+    updateDeadline: (id) => {
+      const offer = get().offerData[id];
+      const st = get().offerState[id];
+      if (!offer || !st || st.closedAt || st.deadlineUpdated) return;
+      const d = new Date(`${offer.deadline.date}T12:00:00`);
+      d.setDate(d.getDate() + 1);
+      const date = d.toISOString().slice(0, 10);
+      set((s) => ({
+        offerData: { ...s.offerData, [id]: { ...offer, deadline: { ...offer.deadline, date } } },
+        offerState: { ...s.offerState, [id]: { ...st, deadlineUpdated: true } },
+      }));
+    },
+
+    setOfferLoading: (offerLoading) => set({ offerLoading }),
+
     /* ---------------- Gaia One ---------------- */
 
     startGaia: () => {
@@ -594,6 +625,7 @@ export const useFeatures = create<FeaturesState>()((set, get) => {
       set({
         groups: initialGroups(),
         groupsForcedClosed: false,
+        fewInCategory: false,
         shareWhatsapp: false,
         groupNotice: null,
         lastJoinAnnounce: null,
@@ -603,6 +635,7 @@ export const useFeatures = create<FeaturesState>()((set, get) => {
         groupSeq: 0,
         offerData: {},
         offerState: {},
+        offerLoading: false,
         gaia: initialGaia(),
         sheets: { gaiaHelp: false, offerInterest: false },
         simulateError: false,
@@ -616,8 +649,9 @@ export function useFormation(): Formation {
   const moment = useDemo((s) => s.moment);
   const day = useDemo((s) => s.day);
   const phase = useDemo((s) => s.pausePhase);
+  const liveTime = useDemo((s) => s.liveTime);
   const forced = useFeatures((s) => s.groupsForcedClosed);
-  return formationState(computeClock(moment, day, phase), forced);
+  return formationState(computeClock(moment, day, phase, liveTime), forced);
 }
 
 export function useMyGroup(): Group | undefined {
@@ -636,6 +670,10 @@ function initFromUrl(): void {
   if (groups === 'one') f.setMyGroupSize(1);
   if (groups === 'two') f.setMyGroupSize(2);
   if (groups === 'full') f.setMyGroupSize(3);
+  if (groups === 'few') {
+    f.setMyGroupSize(0);
+    f.setFewInCategory(true);
+  }
   if (q.get('formation') === 'closed') f.setForcedClosed(true);
   if (q.get('err') === '1') f.setSimulateError(true);
   const device = q.get('device');

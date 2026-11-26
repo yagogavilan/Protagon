@@ -1,5 +1,7 @@
 import { BadgeCheck, Check, Megaphone } from 'lucide-react';
 import { BentoTile } from '@/components/ui/BentoTile';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { useFeatures } from '@/state/features';
 import { Button } from '@/components/ui/Button';
 import { countdownText, deadlineText, spokenCountdown } from '@/lib/offers';
 import { useClock, useDemo } from '@/state/store';
@@ -14,7 +16,20 @@ export function useHomeOffers(): OfferView[] {
 export function OfferHomeCard() {
   const views = useHomeOffers();
   const openOverlay = useDemo((s) => s.openOverlay);
+  const loading = useFeatures((s) => s.offerLoading);
   if (views.length === 0) return null;
+
+  // OF01 · Carregando: skeleton do card; o resto da Home segue usável
+  if (loading)
+    return (
+      <div role="status" className="rounded-lg border border-border-subtle bg-surface-1 p-card shadow-card">
+        <p className="sr-only">Carregando a oferta do palco</p>
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="mt-3 h-6 w-3/4" />
+        <Skeleton className="mt-2 h-4 w-2/3" />
+        <Skeleton className="mt-3 h-12 w-full rounded-pill" />
+      </div>
+    );
 
   // Duas ofertas: um card só, que leva à lista
   if (views.length > 1) {

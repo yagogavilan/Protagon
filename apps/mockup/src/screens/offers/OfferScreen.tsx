@@ -182,6 +182,7 @@ export function OfferScreen() {
     </Button>
   ) : (
     <div className="flex flex-col gap-2">
+      <p className="text-center text-body text-text-primary">Você vai sair do app para pagar na Hotmart.</p>
       <Button block onClick={() => openOverlay('offerPay', id)}>
         {offer.ctaLabel}
       </Button>
@@ -200,7 +201,6 @@ export function OfferScreen() {
           Agora não
         </Button>
       </div>
-      <p className="text-center text-caption text-text-secondary">Você vai sair do app para pagar na Hotmart.</p>
     </div>
   );
 
@@ -244,6 +244,9 @@ export function OfferScreen() {
           </div>
         ) : null}
 
+        {state.deadlineUpdated && !closed ? (
+          <StatusBanner tone="info" icon={<Info size={24} />} title={`O time atualizou o prazo: agora vale até ${deadlineText(offer)}.`} />
+        ) : null}
         {confirming ? <StatusBanner tone="info" icon={<Info size={24} />} title="Estamos confirmando sua compra." text="Pode levar alguns minutos." /> : null}
         {state.notSeen && !confirming && !closed ? (
           <StatusBanner tone="info" icon={<Info size={24} />} title="Ainda não vimos sua compra." text="Se você já pagou, fale com um consultor." />

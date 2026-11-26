@@ -539,7 +539,7 @@ async function sectionA() {
   probe('OF04', 'ofertas ativas', 'go=OF04', [/Ofertas do evento/, /Ativa/], async (p) => { await settle(p, 700); });
   probe('GA01', 'card na Home', 'go=GA01', [/Ative seu teste em 4 passos/, /Passo 2 de 4/]);
   probe('GA01', 'bloco na Trilha do Dia 2', `${A}&tab=trilha&perm=granted&day=2&moment=break`, [/Atividade: Gaia One/, /9h20 às 9h30/]);
-  probe('GA02', 'checklist com Wi-Fi no topo e textos a confirmar', 'go=GA02', [/Protagon-Alunos/, /Copiar senha/, /\[a confirmar\]/, /Preciso de ajuda/], async (p) => { await settle(p, 400); });
+  probe('GA02', 'checklist com Wi-Fi no topo e selo Proposta (sem "[a confirmar]" cru, BUG-019)', 'go=GA02', [/Protagon-Alunos/, /Copiar senha/, /Proposta/, /Preciso de ajuda/], async (p) => { await settle(p, 400); });
   probe('GA02', 'concluída', 'go=GA02', [/Gaia One ativado/, /Concluído às/], async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Passo do checklist' }).getByRole('radio', { name: 'Concluída', exact: true }).click(); await settle(p, 400); });
   probe('GA02', 'sem internet', 'go=GA02&offline=1', /Conecte-se ao Wi-Fi para baixar o Gaia One\./, async (p) => { await settle(p, 400); });
   probe('GA02', 'grupo: só a contagem, sem nomes (SEC-024)', 'go=GA02&moment=break', /\d de 3 do seu grupo já ativaram\./, async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Estado do aluno no grupo' }).getByRole('radio', { name: 'Completo', exact: true }).click(); await settle(p, 400); });
@@ -1372,6 +1372,202 @@ async function sectionJ() {
     const homeLocks = await frameOf(page).locator('main svg.lucide-lock').count();
     check('j', 'Home do Executivo com grupos e oferta: cadeado em no máximo 1 card (regra 4)', homeLocks <= 1, `cadeados em main=${homeLocks}`);
     await ctx.close();
+  }
+
+  // --- J7. Correções da rodada final (BUG-017 a BUG-025) ---
+  {
+    const passo = async (pg, n) => { await panelOf(pg).getByRole('radiogroup', { name: 'Passo do checklist' }).getByRole('radio', { name: n, exact: true }).click(); await settle(pg, 500); };
+    // BUG-017: textos batem com a matriz do build (DEC-005)
+    const doc = readFileSync(join(root, '../../docs/produto/grupos-ofertas-gaia.md'), 'utf8');
+    const offersSrc = readFileSync(join(root, 'src/data/offers.ts'), 'utf8');
+    const olimpoNoExec = !/'of-1'[\s\S]*?prices: \{[^}]*executivo/.test(offersSrc.split("'of-2'")[0]);
+    const liderancaExec = /'of-2'[\s\S]*prices: \{\s*executivo/.test(offersSrc);
+    check('j', 'BUG-017: build = DEC-005 (Olimpo sem Executivo, Liderança 360 com os 3) e o documento do PO cita DEC-005 em R-OF-11, OF-07 e §5', olimpoNoExec && liderancaExec && (doc.match(/DEC-005/g) ?? []).length >= 4, `olimpoSemExec=${olimpoNoExec} liderancaExec=${liderancaExec} citacoes=${(doc.match(/DEC-005/g) ?? []).length}`);
+    {
+      const { ctx, page } = await open(`${A}&tier=executivo&moment=live&day=2&perm=granted`);
+      await panelOf(page).getByRole('button', { name: 'Liberar oferta' }).click();
+      await settle(page, 900);
+      const home = await deviceHtml(page);
+      check('j', 'BUG-017: Executivo, Dia 2, Olimpo liberada: nenhum card, nenhum nome da oferta no aparelho', !OFFER_NAMES.test(home.replace(/<[^>]+>/g, ' ')) , '');
+      await ctx.close();
+    }
+
+    // BUG-018: categoria com menos de 3 alunos, alcançável pelo painel e pelo atalho
+    for (const tier of ['executivo', 'vip', 'diamond']) {
+      const { ctx, page } = await open(`${A}&tier=${tier}&moment=break&day=1&perm=granted&groups=none`);
+      await panelOf(page).getByRole('switch', { name: /Poucos alunos na categoria/ }).click();
+      await settle(page, 500);
+      const home = await text(page);
+      check('j', `BUG-018: painel "Poucos alunos na categoria" (${tier}): card da Home diz "A equipe vai te informar seu grupo", sem "Formar meu grupo"`, /A equipe vai te informar seu grupo/.test(home) && !/Formar meu grupo/.test(home), home.slice(0, 120));
+      await ctx.close();
+    }
+    {
+      const { ctx, page } = await open(`${A}&tier=vip&moment=break&perm=granted&go=GR02f`);
+      await settle(page, 900);
+      const t = await text(page);
+      const others = onlyOthers('vip');
+      check('j', 'BUG-018: GR02 com poucos alunos: mensagem do time, sem lista, sem "Criar grupo"/"Me coloque", sem aluno de outra categoria', /A equipe vai te informar seu grupo/.test(t) && !/Criar grupo|Me coloque em um grupo|Entrar com código/.test(t) && !others.test(t), t.slice(0, 160));
+      await ctx.close();
+    }
+
+    // BUG-019: nunca "[a confirmar]" na interface; selo "Proposta" onde depende do fundador
+    {
+      const bad = [];
+      let proposta = 0;
+      for (const tier of ['executivo', 'vip', 'diamond']) {
+        for (const [label, q, steps] of [
+          ['GA01', 'go=GA01', null],
+          ['GA02 passo 1', 'go=GA02', async (pg) => { await passo(pg, 'Passo 1'); }],
+          ['GA02 passo 2', 'go=GA02', async (pg) => { await passo(pg, 'Passo 2'); }],
+          ['GA02 passo 3', 'go=GA02', async (pg) => { await passo(pg, 'Passo 3'); }],
+          ['GA02 passo 4', 'go=GA02', async (pg) => { await passo(pg, 'Passo 4'); }],
+          ['GA02 outro aparelho', 'go=GA02', async (pg) => { await passo(pg, 'Passo 1'); await tap(pg, /Usar outro aparelho/); }],
+          ['GA03', 'go=GA03', async (pg) => { await tap(pg, /O teste pede cartão\?/); }],
+        ]) {
+          const { ctx, page } = await open(`${A}&tier=${tier}&moment=break&perm=granted&${q}`);
+          await settle(page, 700);
+          if (steps) await steps(page);
+          const html = await everything(page);
+          // o painel tem o texto do "Ir direto para"; só o aparelho e o armazenamento contam
+          const dev = (await deviceHtml(page)) + (await page.evaluate(() => JSON.stringify({ ...localStorage })));
+          const vis = await frameOf(page).innerText();
+          if (/\[a confirmar\]|a confirmar\]/i.test(dev) || /\[a confirmar\]/i.test(vis)) bad.push(`${tier}/${label}`);
+          if (/Proposta/.test(vis)) proposta += 1;
+          void html;
+          await ctx.close();
+        }
+      }
+      check('j', 'BUG-019: nenhum "[a confirmar]" no aparelho (GA01 a GA03, passos 1 a 4, outro aparelho, FAQ) nos 3 ingressos', bad.length === 0, bad.join(' | '));
+      check('j', 'BUG-019: selo "Proposta" aparece onde o conteúdo depende do fundador', proposta >= 15, `telas com selo: ${proposta}`);
+    }
+
+    // BUG-020: copiar com falha real tratada (área de transferência ausente ou recusada)
+    {
+      const fail = () => {
+        Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: () => Promise.reject(new Error('NotAllowedError')) } });
+        document.execCommand = () => false;
+      };
+      const okInit = () => {
+        window.__copied = [];
+        Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: (t) => (window.__copied.push(t), Promise.resolve()) } });
+      };
+      const absent = () => {
+        Object.defineProperty(navigator, 'clipboard', { configurable: true, value: undefined });
+        document.execCommand = () => false;
+      };
+      for (const [label, init] of [['recusada', fail], ['ausente', absent]]) {
+        const { ctx, page } = await open(`${A}&tier=vip&moment=break&perm=granted&go=GA02`, { init });
+        await tap(page, /Copiar meu e-mail/);
+        await settle(page, 400);
+        let t = await text(page);
+        check('j', `BUG-020: Gaia One, copiar e-mail com área de transferência ${label}: avisa a falha e não diz "copiado"`, /Não conseguimos copiar\. Toque e segure o texto para copiar\./.test(t) && !/E-mail copiado/.test(t), t.slice(0, 80));
+        await passo(page, 'Passo 3');
+        await tap(page, /Copiar código/);
+        await settle(page, 400);
+        t = await text(page);
+        check('j', `BUG-020: Gaia One, copiar código (${label}): falha avisada, sem "Código copiado"`, /Não conseguimos copiar/.test(t) && !/Código copiado/.test(t), '');
+        await ctx.close();
+        const w = await open(`${A}&tier=vip&moment=break&perm=granted&go=A05`, { init });
+        await tap(w.page, /^Copiar senha$/);
+        await settle(w.page, 400);
+        const wt = await text(w.page);
+        check('j', `BUG-020: Wi-Fi, copiar senha (${label}): avisa a falha e não diz "Senha copiada"`, /Não conseguimos copiar/.test(wt) && !/Senha copiada/.test(wt), '');
+        await w.ctx.close();
+      }
+      const { ctx, page } = await open(`${A}&tier=vip&moment=break&perm=granted&go=GA02`, { init: okInit });
+      await tap(page, /Copiar meu e-mail/);
+      await settle(page, 300);
+      const copied = await page.evaluate(() => window.__copied);
+      check('j', 'BUG-020: controle positivo, com a área de transferência funcionando: copia o e-mail e mostra "E-mail copiado"', copied.length === 1 && /@/.test(copied[0]) && /E-mail copiado/.test(await text(page)), JSON.stringify(copied));
+      await ctx.close();
+    }
+
+    // BUG-021: relógio coerente ao liberar a oferta pelo painel
+    for (const [day, label, want] of [[2, 'Dia 2', /O legado do líder/], [3, 'Dia 3', /Protagonista para sempre/]]) {
+      const { ctx, page } = await open(`${A}&tier=vip&moment=live&day=1&perm=granted`);
+      await panelOf(page).getByRole('radiogroup', { name: 'Oferta' }).getByRole('radio', { name: new RegExp(`Dia ${day} · 18h15`) }).click();
+      await panelOf(page).getByRole('button', { name: 'Liberar oferta' }).click();
+      await settle(page, 1000);
+      const clock = (await panelOf(page).locator('header').innerText()).replace(/\s+/g, ' ');
+      const home = await text(page);
+      check('j', `BUG-021: liberar a oferta do ${label} leva o relógio a 18:15 e a Home mostra a palestra do pitch`, /18:15/.test(clock) && want.test(home) && !/Plenária da manhã/.test(home), `${clock} | ${home.slice(0, 90)}`);
+      if (day === 2) {
+        await panelOf(page).getByRole('radiogroup', { name: 'Momento do evento' }).getByRole('radio', { name: 'Intervalo' }).click();
+        await settle(page, 300);
+        const c2 = (await panelOf(page).locator('header').innerText()).replace(/\s+/g, ' ');
+        check('j', 'BUG-021: trocar o momento no painel desfaz o ajuste de 18:15', /10:38/.test(c2) && !/18:15/.test(c2), c2);
+      }
+      await ctx.close();
+    }
+
+    // BUG-022: denunciar em Grupo oferece os mesmos motivos do SEC-005
+    {
+      const { ctx, page } = await open(`${A}&tier=executivo&moment=break&perm=granted&go=GR06`);
+      await settle(page, 500);
+      await tap(page, /Pedir troca ou denunciar/);
+      await page.getByRole('dialog').getByRole('button', { name: /^Denunciar/ }).click();
+      await settle(page, 400);
+      const sheet = (await page.getByRole('dialog').last().innerText()).replace(/\s+/g, ' ');
+      const all = ['Assédio ou comportamento inadequado', 'Mensagem ofensiva', 'Perfil falso ou de outra pessoa', 'Oferta indevida ou spam', 'Outro motivo'];
+      check('j', 'BUG-022: GR06 Denunciar (Executivo) tem os 5 motivos, inclusive "Oferta indevida ou spam"', all.every((m) => sheet.includes(m)), sheet.slice(0, 200));
+      await ctx.close();
+    }
+
+    // BUG-023: aviso de saída para a Hotmart antes dos botões, em 16 px ou mais
+    for (const tier of ['executivo', 'vip', 'diamond']) {
+      const { ctx, page } = await open(`${A}&tier=${tier}&moment=break&perm=granted`);
+      await panelOf(page).getByRole('radiogroup', { name: 'Oferta' }).getByRole('radio', { name: /Dia 3/ }).click();
+      await panelOf(page).getByRole('button', { name: 'Liberar oferta' }).click();
+      await settle(page, 700);
+      await tap(page, /Ver oferta/);
+      await settle(page, 1000);
+      const r = await page.evaluate(() => {
+        const top = document.querySelector('[role=region][aria-label^="Tela do app"]');
+        const warn = [...top.querySelectorAll('p')].find((e) => /sair do app para pagar na Hotmart/.test(e.textContent ?? ''));
+        const cta = [...top.querySelectorAll('button')].find((b) => /Reservar minha vaga|Assinar o/.test(b.textContent ?? ''));
+        if (!warn || !cta) return { found: false };
+        const consult = [...top.querySelectorAll('button')].find((b) => /Falar com um consultor/.test(b.textContent ?? ''));
+        return { found: true, fs: parseFloat(getComputedStyle(warn).fontSize), beforeCta: Boolean(warn.compareDocumentPosition(cta) & Node.DOCUMENT_POSITION_FOLLOWING), beforeConsult: Boolean(warn.compareDocumentPosition(consult) & Node.DOCUMENT_POSITION_FOLLOWING) };
+      });
+      check('j', `BUG-023: aviso da Hotmart antes do botão principal e dos secundários, >= 16 px (${tier})`, r.found && r.fs >= 16 && r.beforeCta && r.beforeConsult, JSON.stringify(r));
+      await ctx.close();
+    }
+
+    // BUG-024: "prazo atualizado pelo time" e skeleton do card, ambos pelo painel
+    {
+      const { ctx, page } = await open(`${A}&tier=vip&moment=live&day=1&perm=granted`);
+      await panelOf(page).getByRole('button', { name: 'Liberar oferta' }).click();
+      await settle(page, 900);
+      await panelOf(page).getByRole('switch', { name: /Simular carregamento do card/ }).click();
+      await settle(page, 300);
+      const homeLoading = await frameOf(page).locator('main').innerText();
+      const skeleton = await frameOf(page).locator('main [role=status]').filter({ hasText: /Carregando a oferta do palco/ }).count();
+      check('j', 'BUG-024: painel "Simular carregamento do card": skeleton no lugar do card, sem "Ver oferta", resto da Home no lugar', skeleton === 1 && !/Ver oferta/.test(homeLoading) && /Plenária|legado|Agora/.test(homeLoading), `skeleton=${skeleton}`);
+      await panelOf(page).getByRole('switch', { name: /Simular carregamento do card/ }).click();
+      await settle(page, 300);
+      await panelOf(page).getByRole('button', { name: /Atualizar prazo/ }).click();
+      await settle(page, 300);
+      await tap(page, /Ver oferta/);
+      await settle(page, 1000);
+      const t = await text(page);
+      check('j', 'BUG-024: painel "Atualizar prazo": OF02 mostra "O time atualizou o prazo: agora vale até ..." sem cor de alerta', /O time atualizou o prazo: agora vale até 19h10 de 15\/03\./.test(t) && !/restam|última/i.test(t), t.match(/O time atualizou[^.]*\./)?.[0] ?? '');
+      await ctx.close();
+    }
+
+    // BUG-025: e-mail do passo 2 do Gaia One em uma linha, sem quebra no meio da palavra
+    {
+      const { ctx, page } = await open(`${A}&tier=vip&moment=break&perm=granted&go=GA02`);
+      await settle(page, 700);
+      const r = await page.evaluate(() => {
+        const el = [...document.querySelectorAll('p')].find((e) => /^[\w.]+@[\w.]+$/.test((e.textContent ?? '').trim()) && getComputedStyle(e).userSelect !== 'none' && e.closest('[role=region]'));
+        if (!el) return { found: false };
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return { found: true, lines: new Set([...range.getClientRects()].map((q) => Math.round(q.top))).size, fs: parseFloat(getComputedStyle(el).fontSize) };
+      });
+      check('j', 'BUG-025: e-mail do passo 2 em uma única linha (sem quebra no meio), >= 16 px', r.found && r.lines === 1 && r.fs >= 16, JSON.stringify(r));
+      await ctx.close();
+    }
   }
   console.log('\n[j] concluída.');
 }

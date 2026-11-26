@@ -71,8 +71,12 @@ function addDays(isoDate: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-export function computeClock(moment: Moment, day: DayNumber, phase: PausePhase = 'start'): EventClock {
-  const time = PAUSE_TIME[moment]?.[phase] ?? MOMENT_TIME[moment];
+/**
+ * `liveTime` (HH:MM) só vale em "Sessão ao vivo": o painel usa para levar o relógio ao momento de uma liberação
+ * (ex.: 18h15 do Dia 2, dentro de "O legado do líder"). Qualquer troca de momento no painel o desfaz.
+ */
+export function computeClock(moment: Moment, day: DayNumber, phase: PausePhase = 'start', liveTime: string | null = null): EventClock {
+  const time = (moment === 'live' && liveTime) || PAUSE_TIME[moment]?.[phase] || MOMENT_TIME[moment];
   const [d1, , d3] = edition.dates;
   if (moment === 'before') return { date: addDays(d1, -2), time, dayIndex: 0, minutes: toMinutes(time) };
   if (moment === 'after') return { date: addDays(d3, 1), time, dayIndex: 4, minutes: toMinutes(time) };

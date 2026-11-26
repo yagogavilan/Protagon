@@ -46,7 +46,7 @@
       "section": "j",
       "name": "nome da oferta só existe no chunk offers-*.js do build",
       "ok": true,
-      "detail": "chunks com \"Olimpo\": offers-Cwe86ijX.js; com outros termos: index-jzqHlfQF.js,offers-Cwe86ijX.js"
+      "detail": "chunks com \"Olimpo\": offers-Cwe86ijX.js; com outros termos: index-CCEevFEW.js,offers-Cwe86ijX.js"
     },
     {
       "section": "j",
@@ -362,7 +362,7 @@
     },
     {
       "section": "j",
-      "name": "Gaia One concluída só pelo app (vip): 5 toques, 1.6 s",
+      "name": "Gaia One concluída só pelo app (vip): 5 toques, 1.5 s",
       "ok": true,
       "detail": "concluída=true tocou Já ativei no passo 4=true"
     },
@@ -401,6 +401,156 @@
       "name": "Home do Executivo com grupos e oferta: cadeado em no máximo 1 card (regra 4)",
       "ok": true,
       "detail": "cadeados em main=1"
+    },
+    {
+      "section": "j",
+      "name": "BUG-017: build = DEC-005 (Olimpo sem Executivo, Liderança 360 com os 3) e o documento do PO cita DEC-005 em R-OF-11, OF-07 e §5",
+      "ok": true,
+      "detail": "olimpoSemExec=true liderancaExec=true citacoes=6"
+    },
+    {
+      "section": "j",
+      "name": "BUG-017: Executivo, Dia 2, Olimpo liberada: nenhum card, nenhum nome da oferta no aparelho",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "BUG-018: painel \"Poucos alunos na categoria\" (executivo): card da Home diz \"A equipe vai te informar seu grupo\", sem \"Formar meu grupo\"",
+      "ok": true,
+      "detail": "10:38 Intervalo volta 10h45 Bom dia, Rafael Dia 1 · Porto Alegre 1 Agora Intervalo · volte às 10h45 Café no foyer. Retor"
+    },
+    {
+      "section": "j",
+      "name": "BUG-018: painel \"Poucos alunos na categoria\" (vip): card da Home diz \"A equipe vai te informar seu grupo\", sem \"Formar meu grupo\"",
+      "ok": true,
+      "detail": "10:38 Intervalo volta 10h45 Bom dia, Rafael Dia 1 · Porto Alegre 2 Agora Intervalo · volte às 10h45 Café no foyer. Retor"
+    },
+    {
+      "section": "j",
+      "name": "BUG-018: painel \"Poucos alunos na categoria\" (diamond): card da Home diz \"A equipe vai te informar seu grupo\", sem \"Formar meu grupo\"",
+      "ok": true,
+      "detail": "10:38 Intervalo volta 10h45 Bom dia, Rafael Dia 1 · Porto Alegre 2 Agora Intervalo · volte às 10h45 Café no foyer. Retor"
+    },
+    {
+      "section": "j",
+      "name": "BUG-018: GR02 com poucos alunos: mensagem do time, sem lista, sem \"Criar grupo\"/\"Me coloque\", sem aluno de outra categoria",
+      "ok": true,
+      "detail": "10:38 Intervalo volta 10h45 Bom dia, Rafael Dia 1 · Porto Alegre 2 Agora Intervalo · volte às 10h45 Café no foyer. Retorno em 7 min Conexões Ative seu perfil e "
+    },
+    {
+      "section": "j",
+      "name": "BUG-019: nenhum \"[a confirmar]\" no aparelho (GA01 a GA03, passos 1 a 4, outro aparelho, FAQ) nos 3 ingressos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "BUG-019: selo \"Proposta\" aparece onde o conteúdo depende do fundador",
+      "ok": true,
+      "detail": "telas com selo: 18"
+    },
+    {
+      "section": "j",
+      "name": "BUG-020: Gaia One, copiar e-mail com área de transferência recusada: avisa a falha e não diz \"copiado\"",
+      "ok": true,
+      "detail": "10:38 Intervalo volta 10h45 Bom dia, Rafael Dia 2 · Porto Alegre 2 Agora Interva"
+    },
+    {
+      "section": "j",
+      "name": "BUG-020: Gaia One, copiar código (recusada): falha avisada, sem \"Código copiado\"",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "BUG-020: Wi-Fi, copiar senha (recusada): avisa a falha e não diz \"Senha copiada\"",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "BUG-020: Gaia One, copiar e-mail com área de transferência ausente: avisa a falha e não diz \"copiado\"",
+      "ok": true,
+      "detail": "10:38 Intervalo volta 10h45 Bom dia, Rafael Dia 2 · Porto Alegre 2 Agora Interva"
+    },
+    {
+      "section": "j",
+      "name": "BUG-020: Gaia One, copiar código (ausente): falha avisada, sem \"Código copiado\"",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "BUG-020: Wi-Fi, copiar senha (ausente): avisa a falha e não diz \"Senha copiada\"",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "BUG-020: controle positivo, com a área de transferência funcionando: copia o e-mail e mostra \"E-mail copiado\"",
+      "ok": true,
+      "detail": "[\"rafael.moraes@exemplo.com.br\"]"
+    },
+    {
+      "section": "j",
+      "name": "BUG-021: liberar a oferta do Dia 2 leva o relógio a 18:15 e a Home mostra a palestra do pitch",
+      "ok": true,
+      "detail": "PAINEL DE DEMONSTRAÇÃO Relógio do evento: 18:15 · Sábado, 13 de março | 18:15 Ao vivo até 19h Boa noite, Rafael Dia 2 · Porto Alegre 1 Agora Oferta especial do pa"
+    },
+    {
+      "section": "j",
+      "name": "BUG-021: trocar o momento no painel desfaz o ajuste de 18:15",
+      "ok": true,
+      "detail": "PAINEL DE DEMONSTRAÇÃO Relógio do evento: 10:38 · Sábado, 13 de março"
+    },
+    {
+      "section": "j",
+      "name": "BUG-021: liberar a oferta do Dia 3 leva o relógio a 18:15 e a Home mostra a palestra do pitch",
+      "ok": true,
+      "detail": "PAINEL DE DEMONSTRAÇÃO Relógio do evento: 18:15 · Domingo, 14 de março | 18:15 Ao vivo até 19h Boa noite, Rafael Dia 3 · Porto Alegre 1 Agora Oferta especial do pa"
+    },
+    {
+      "section": "j",
+      "name": "BUG-022: GR06 Denunciar (Executivo) tem os 5 motivos, inclusive \"Oferta indevida ou spam\"",
+      "ok": true,
+      "detail": "Denunciar Assédio ou comportamento inadequado Mensagem ofensiva Perfil falso ou de outra pessoa Oferta indevida ou spam Outro motivo É urgente? Depois de enviar, você pode falar com a equipe no estand"
+    },
+    {
+      "section": "j",
+      "name": "BUG-023: aviso da Hotmart antes do botão principal e dos secundários, >= 16 px (executivo)",
+      "ok": true,
+      "detail": "{\"found\":true,\"fs\":16,\"beforeCta\":true,\"beforeConsult\":true}"
+    },
+    {
+      "section": "j",
+      "name": "BUG-023: aviso da Hotmart antes do botão principal e dos secundários, >= 16 px (vip)",
+      "ok": true,
+      "detail": "{\"found\":true,\"fs\":16,\"beforeCta\":true,\"beforeConsult\":true}"
+    },
+    {
+      "section": "j",
+      "name": "BUG-023: aviso da Hotmart antes do botão principal e dos secundários, >= 16 px (diamond)",
+      "ok": true,
+      "detail": "{\"found\":true,\"fs\":16,\"beforeCta\":true,\"beforeConsult\":true}"
+    },
+    {
+      "section": "j",
+      "name": "BUG-024: painel \"Simular carregamento do card\": skeleton no lugar do card, sem \"Ver oferta\", resto da Home no lugar",
+      "ok": true,
+      "detail": "skeleton=1"
+    },
+    {
+      "section": "j",
+      "name": "BUG-024: painel \"Atualizar prazo\": OF02 mostra \"O time atualizou o prazo: agora vale até ...\" sem cor de alerta",
+      "ok": true,
+      "detail": "O time atualizou o prazo: agora vale até 19h10 de 15/03."
+    },
+    {
+      "section": "j",
+      "name": "BUG-025: e-mail do passo 2 em uma única linha (sem quebra no meio), >= 16 px",
+      "ok": true,
+      "detail": "{\"found\":true,\"lines\":1,\"fs\":16}"
     }
   ],
   "findings": {
@@ -459,39 +609,39 @@
       },
       "executivoOlimpoDadoNoHtml": false,
       "tempo-executivo-entrar": {
-        "secs": 1.708,
+        "secs": 1.707,
         "taps": 2
       },
       "tempo-executivo-criar": {
-        "secs": 9.68,
+        "secs": 9.687,
         "taps": 2
       },
       "tempo-executivo-encaixar": {
-        "secs": 2.201,
+        "secs": 2.193,
         "taps": 2
       },
       "tempo-vip-entrar": {
-        "secs": 1.715,
+        "secs": 1.682,
         "taps": 2
       },
       "tempo-vip-criar": {
-        "secs": 9.689,
+        "secs": 9.691,
         "taps": 2
       },
       "tempo-vip-encaixar": {
-        "secs": 2.205,
+        "secs": 2.191,
         "taps": 2
       },
       "tempo-diamond-entrar": {
-        "secs": 1.704,
+        "secs": 1.691,
         "taps": 2
       },
       "tempo-diamond-criar": {
-        "secs": 9.712,
+        "secs": 9.681,
         "taps": 2
       },
       "tempo-diamond-encaixar": {
-        "secs": 2.194,
+        "secs": 2.21,
         "taps": 2
       },
       "gaia-executivo": {

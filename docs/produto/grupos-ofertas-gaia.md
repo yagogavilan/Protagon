@@ -200,7 +200,7 @@ Metas `[HIPÓTESE]`: 85% ou mais agrupados antes do fechamento; mediana abaixo d
 | R-OF-8 | Compra por link de checkout externo (Hotmart) **(proposta, pergunta 5)**, aberto fora do app, mais consultor no estande. Justificativa: evita cobrança dentro do app e a dúvida de política das lojas, que segue `[HIPÓTESE]` não verificada. O mockup simula o checkout com a faixa "Simulação: nenhum pagamento é feito". |
 | R-OF-9 | Depois do prazo: "Condição encerrada" e botão "Falar com um consultor". |
 | R-OF-10 | Pós-evento **(proposta, pergunta 7)**: a oferta fica visível só até o fim da condição; depois permanece 7 dias em "Ofertas do evento" como "Condição encerrada" com botão de consultor, e então some. Justificativa: não deixar superfície de venda eterna, mas permitir contato de quem ficou na dúvida. |
-| R-OF-11 | Produtos de exemplo **(proposta, pergunta 4)**, valores fictícios. Olimpo (mentoria): Dia 2, liberada às 18h15 durante "O legado do líder" (17h30 a 19h00), todos os ingressos, preço único, condição até o fim do Dia 3 (19h10). Imersão Liderança 360: Dia 3, liberada às 18h15 durante "Protagonista para sempre", apenas VIP e Diamond, preço diferente para Diamond, condição por 7 dias. Justificativa: cobre no mockup oferta para todos, oferta restrita e preço por categoria. O prazo longo evita decisão sob a emoção do palco. |
+| R-OF-11 | Produtos de exemplo **(proposta, pergunta 4)**, valores fictícios. Olimpo (mentoria): Dia 2, liberada às 18h15 durante "O legado do líder" (17h30 a 19h00), **apenas VIP e Diamond, com preço por categoria (DEC-005)**, condição até o fim do Dia 3 (19h10). Imersão Liderança 360: Dia 3, liberada às 18h15 durante "Protagonista para sempre", **para os três ingressos (DEC-005), preço por categoria**, condição por 7 dias. Justificativa: cobre no mockup oferta restrita (Olimpo, Executivo vê "não disponível"), oferta para todos (Liderança 360) e preço por categoria; o Executivo tem um fluxo de oferta completo na demo. A matriz real depende da diretoria. O prazo longo evita decisão sob a emoção do palco. |
 | R-OF-12 | Interesse de 1 toque: dados preenchidos mostrados antes do envio (nome, e-mail, telefone), editáveis; sem CPF. |
 
 ### 2.2 LGPD (OF)
@@ -256,7 +256,7 @@ Funcionalidade: Ofertas ao vivo
     E o toast e o card de topo não voltam a abrir sozinhos
 
   Cenário: OF-07 permissão por ingresso, oferta restrita
-    Dado que "Imersão Liderança 360" foi liberada só para VIP e Diamond
+    Dado que "Olimpo" foi liberada só para VIP e Diamond (DEC-005)
     E sou Executivo
     Então não vejo card, toast nem item na lista
     Quando acesso o link direto da oferta
@@ -444,8 +444,8 @@ Observações: a janela de 10 min da Gaia One cabe na meta de 3 minutos com folg
 | Item | Executivo | VIP | Diamond |
 |---|---|---|---|
 | Grupos (só dentro da própria categoria) | sim | sim | sim |
-| Oferta "Olimpo" | sim | sim | sim |
-| Oferta "Imersão Liderança 360" | não aparece (link direto: aviso neutro, sem cadeado) | sim | sim, preço próprio |
+| Oferta "Olimpo" (DEC-005) | não aparece (link direto: aviso neutro, sem cadeado) | sim | sim, preço próprio |
+| Oferta "Imersão Liderança 360" (DEC-005) | sim | sim | sim, preço próprio |
 | Atividade Gaia One | sim | sim | sim |
 | Cadeado | só em Conexões e em no máximo um card da Home; nunca em Grupos, Ofertas ou Gaia | n/a | n/a |
 
@@ -460,7 +460,7 @@ GR: sem grupo (GR-01), aberta (GR-01/02), criando (GR-02), 1/3 e 2/3 (GR-02/13),
 | 1 | Fechamento e sobra | sem resposta | 10h45; resto 1 vira grupo de 4, resto 2 vira dois de 4 ou um de 2 (R-GR-5) |
 | 2 | Poucos Diamond, juntar com VIP | sem resposta | não juntar; time resolve fora do app (R-GR-8) |
 | 3 | Nome ou número oficial | sem resposta | "Grupo N" sequencial por edição (R-GR-6) |
-| 4 | Produtos, preço, momento | sem resposta | Olimpo D2 18h15 e Liderança 360 D3 18h15, valores fictícios (R-OF-11) |
+| 4 | Produtos, preço, momento | sem resposta | Olimpo D2 18h15 (VIP e Diamond) e Liderança 360 D3 18h15 (todos), valores fictícios (R-OF-11, DEC-005) |
 | 5 | Link ou consultor | sem resposta | link externo + consultor, simulados (R-OF-8) |
 | 6 | Push na liberação | sem resposta | sem push; toast silencioso e card (R-OF-3); exceção exige DEC |
 | 7 | Oferta pós-evento | sem resposta | 7 dias como "Condição encerrada" e some (R-OF-10) |

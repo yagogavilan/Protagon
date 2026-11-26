@@ -5,7 +5,7 @@ import { PanelSection, Segmented, Toggle } from './controls';
 import { useClock, useDemo, DAILY_REQUEST_LIMIT, type NotifPermission } from '@/state/store';
 import { formatLongDate, MOMENT_LABEL, PAUSE_PHASE_LABEL, type PausePhase } from '@/lib/clock';
 import { goTo, releaseFromPanel, SCREEN_CODES } from '@/lib/nav';
-import { useFeatures, useFormation, useMyGroup } from '@/state/features';
+import { FEW_TITLE, useFeatures, useFormation, useMyGroup } from '@/state/features';
 import { OFFER_IDS, OFFER_RELEASE_LABEL, type OfferId } from '@/data/offerTypes';
 import { SAMPLE_CODE } from '@/data/groups';
 import { formationState, isComplete, listedGroups } from '@/lib/groups';
@@ -202,6 +202,12 @@ export function DemoPanel() {
           disabled={formationState(clock, false) === 'closed'}
           onChange={f.setForcedClosed}
         />
+        <Toggle
+          label="Poucos alunos na categoria"
+          hint={`Menos de 3 do seu ingresso: o card e a lista dizem "${FEW_TITLE}"`}
+          checked={f.fewInCategory}
+          onChange={f.setFewInCategory}
+        />
         <Button variant="secondary" size="compact" icon={<UsersRound size={16} aria-hidden />} onClick={f.teamPlace} disabled={formation !== 'closed' || Boolean(myGroup)}>
           Encaixar quem ficou sem grupo
         </Button>
@@ -242,6 +248,10 @@ export function DemoPanel() {
               <Button variant="secondary" size="compact" disabled={!st || closed} onClick={() => f.closeCondition(offerSel)}>
                 Encerrar condição
               </Button>
+              <Button variant="secondary" size="compact" disabled={!st || closed || Boolean(st?.deadlineUpdated)} onClick={() => f.updateDeadline(offerSel)}>
+                {st?.deadlineUpdated ? 'Prazo atualizado (+1 dia)' : 'Atualizar prazo (+1 dia)'}
+              </Button>
+              <Toggle label="Simular carregamento do card" hint="O card da oferta na Home mostra o skeleton" checked={f.offerLoading} onChange={f.setOfferLoading} />
               <p className="text-caption text-text-tertiary">
                 {!st
                   ? 'Antes de liberar, nada da oferta existe no app: nem na Trilha, nem em Materiais, nem em Notificações.'
@@ -249,7 +259,7 @@ export function DemoPanel() {
                     ? 'Esta oferta não existe no ingresso atual: nada aparece no app (sem card, sem aviso, sem cadeado).'
                     : closed
                       ? 'Condição encerrada.'
-                      : 'Liberada: card na Home e um aviso discreto de 6 s, sem som nem vibração.'}
+                      : 'Liberada: card na Home e um aviso discreto de 6 s, sem som nem vibração. O relógio vai para 18h15 do dia da oferta.'}
               </p>
             </>
           );
