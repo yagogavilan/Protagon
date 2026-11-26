@@ -2,11 +2,14 @@ import { agenda } from '@/data/agenda';
 import { computeClock, currentSession, materialStatus, nextSession } from '@/lib/clock';
 import { materials } from '@/data/materials';
 import { useDemo, type ConnPanel, type TabId } from '@/state/store';
+import { useFeatures } from '@/state/features';
+import { OFFER_IDS, OFFER_RELEASE_DAY, type OfferId } from '@/data/offerTypes';
+import { myGroupOf } from '@/lib/groups';
 
 export interface ScreenCode {
   code: string;
   label: string;
-  group: 'Entrada' | 'Agora' | 'Camada global' | 'Trilha' | 'Conexões' | 'Materiais' | 'Eu';
+  group: 'Entrada' | 'Agora' | 'Camada global' | 'Trilha' | 'Conexões' | 'Materiais' | 'Eu' | 'Grupos' | 'Ofertas' | 'Gaia One';
 }
 
 /** Códigos da Etapa 1 (docs/design/etapa-1.html §3). "Ir direto para" no painel e `?go=` na URL. */
@@ -49,7 +52,38 @@ export const SCREEN_CODES: ScreenCode[] = [
   { code: 'U03', label: 'Privacidade', group: 'Eu' },
   { code: 'U04', label: 'Avaliação do dia', group: 'Eu' },
   { code: 'U05', label: 'Suporte e FAQ', group: 'Eu' },
+  { code: 'GR01', label: 'Card "Forme seu grupo"', group: 'Grupos' },
+  { code: 'GR02', label: 'Grupos com vaga', group: 'Grupos' },
+  { code: 'GR02v', label: 'Lista vazia (nenhum grupo com vaga)', group: 'Grupos' },
+  { code: 'GR03', label: 'Criar grupo (código e QR)', group: 'Grupos' },
+  { code: 'GR04', label: 'Entrar por código ou QR', group: 'Grupos' },
+  { code: 'GR05', label: 'Me coloque em um grupo', group: 'Grupos' },
+  { code: 'GR05n', label: 'Me coloque, sem vaga', group: 'Grupos' },
+  { code: 'GR06', label: 'Meu grupo', group: 'Grupos' },
+  { code: 'OF01', label: 'Card na Home + toast', group: 'Ofertas' },
+  { code: 'OF02', label: 'Tela da oferta', group: 'Ofertas' },
+  { code: 'OF02x', label: 'Oferta não disponível (Executivo)', group: 'Ofertas' },
+  { code: 'OF02e', label: 'Condição encerrada', group: 'Ofertas' },
+  { code: 'OF03', label: 'Falar com um consultor', group: 'Ofertas' },
+  { code: 'OF04', label: 'Ofertas do evento', group: 'Ofertas' },
+  { code: 'GA01', label: 'Card na Home', group: 'Gaia One' },
+  { code: 'GA02', label: 'Checklist de 4 passos', group: 'Gaia One' },
+  { code: 'GA03', label: 'Preciso de ajuda', group: 'Gaia One' },
 ];
+
+/**
+ * Libera uma oferta como o time faz no palco (botão do painel): leva a demonstração ao dia da liberação e libera.
+ * Os dados da oferta só chegam ao aparelho aqui (import dinâmico).
+ */
+export async function releaseFromPanel(id: OfferId, toast = true): Promise<void> {
+  const d = useDemo.getState();
+  const day = OFFER_RELEASE_DAY[id];
+  if (d.day < day || d.moment === 'before' || d.moment === 'after') {
+    d.setDay(day);
+    if (d.moment === 'before' || d.moment === 'after') d.setMoment('live');
+  }
+  await useFeatures.getState().releaseOffer(id, { quiet: !toast });
+}
 
 /**
  * Leva o mockup direto a uma tela do inventário, ajustando o que ela exige (ingresso, perfil ativo, rede de exemplo,
@@ -58,6 +92,10 @@ export const SCREEN_CODES: ScreenCode[] = [
 export function goTo(code: string): void {
   const st = useDemo;
   const get = st.getState;
+  const F = useFeatures.getState;
+  // folhas abertas por atalho não atravessam de uma tela para outra
+  F().setSheet('gaiaHelp', false);
+  F().setSheet('offerInterest', false);
   const base = { auth: 'app' as const, stack: [], overlay: null, overlayId: undefined, locked: false, permissionSheet: false, wifiOpen: false };
   const tab = (t: TabId, extra: object = {}) => st.setState({ ...base, tab: t, ...extra });
   const overlay = (name: Parameters<ReturnType<typeof get>['openOverlay']>[0], id?: string, t: TabId = get().tab) => {
@@ -83,6 +121,27 @@ export function goTo(code: string): void {
     if (m !== 'break' && m !== 'lunch') get().setMoment('break');
   };
   const clock = () => computeClock(get().moment, get().day, get().pausePhase);
+
+  // Grupos: formação aberta (Dia 1, até 10h45) e o aluno sem grupo, salvo quando a tela pede o contrário
+  const openFormation = () => {
+    F().setForcedClosed(false);
+    if (get().day !== 1) get().setDay(1);
+    if (get().moment !== 'live' && get().moment !== 'break') get().setMoment('break');
+  };
+  const noGroup = () => {
+    openFormation();
+    F().setMyGroupSize(0);
+  };
+  const withOffer = async (id: OfferId, toast = false) => {
+    await releaseFromPanel(id, toast);
+    const offer = F().offerData[id];
+    // atalhos de tela da oferta precisam de um ingresso que a tenha; "OF02x" escolhe o contrário de propósito
+    if (offer && !offer.prices[get().tier] && code !== 'OF02x') st.setState({ tier: 'vip' });
+  };
+  const gaiaAt = (p: 2) => {
+    F().startGaia();
+    F().setGaiaProgress(p);
+  };
 
   switch (code) {
     case 'E01': return void st.setState({ ...base, auth: 'login' });
@@ -165,14 +224,79 @@ export function goTo(code: string): void {
       return overlay('privacy', undefined, 'eu');
     case 'U04': return overlay('nps', undefined, 'eu');
     case 'U05': return overlay('support', undefined, 'eu');
+    case 'GR01':
+      noGroup();
+      return tab('agora');
+    case 'GR02':
+      noGroup();
+      return overlay('groups', undefined, 'agora');
+    case 'GR02v':
+      noGroup();
+      F().clearVacancies();
+      return overlay('groups', undefined, 'agora');
+    case 'GR03':
+      openFormation();
+      F().setMyGroupSize(1);
+      return overlay('groupCreate', 'new', 'agora');
+    case 'GR04':
+      noGroup();
+      return overlay('groupCode', undefined, 'agora');
+    case 'GR05':
+    case 'GR05n':
+      noGroup();
+      if (code === 'GR05n') F().clearVacancies();
+      F().setAutoRunOnOpen(true);
+      return overlay('groups', undefined, 'agora');
+    case 'GR06':
+      openFormation();
+      F().setMyGroupSize(2);
+      return overlay('myGroup', undefined, 'agora');
+    case 'OF01':
+      return void withOffer('of-1', true).then(() => tab('agora'));
+    case 'OF02':
+      return void withOffer('of-1').then(() => overlay('offer', 'of-1', 'agora'));
+    case 'OF02x':
+      st.setState({ tier: 'executivo' });
+      return void withOffer('of-1').then(() => overlay('offer', 'of-1', 'agora'));
+    case 'OF02e':
+      return void withOffer('of-1').then(() => {
+        F().closeCondition('of-1');
+        overlay('offer', 'of-1', 'agora');
+      });
+    case 'OF03':
+      return void withOffer('of-1').then(() => {
+        overlay('offer', 'of-1', 'agora');
+        F().setSheet('offerInterest', true);
+      });
+    case 'OF04':
+      return void Promise.all(OFFER_IDS.map((id) => withOffer(id))).then(() => overlay('offerList', undefined, 'eu'));
+    case 'GA01':
+      gaiaAt(2);
+      return tab('agora');
+    case 'GA02':
+      gaiaAt(2);
+      return overlay('gaia', undefined, 'agora');
+    case 'GA03':
+      gaiaAt(2);
+      overlay('gaia', undefined, 'agora');
+      return void F().setSheet('gaiaHelp', true);
     default:
   }
 }
 
 /** Para onde leva cada notificação ao ser tocada */
-export function openNotificationTarget(templateId: string): void {
+export function openNotificationTarget(templateId: string, ref?: string): void {
   const s = useDemo.getState();
   switch (templateId) {
+    case 'n-offer':
+      return void useDemo.setState({ stack: [{ name: 'offer', id: ref }], overlay: 'offer', overlayId: ref, tab: 'agora' });
+    case 'n-group-joined':
+    case 'n-group-complete':
+    case 'n-group-placed': {
+      const mine = myGroupOf(useFeatures.getState().groups, s.tier);
+      if (!mine) return s.setTab('agora');
+      return void useDemo.setState({ stack: [{ name: 'myGroup' }], overlay: 'myGroup', overlayId: undefined, tab: 'agora' });
+    }
     case 'n-request-received':
       return void useDemo.setState({ stack: [], overlay: null, overlayId: undefined, tab: 'conexoes', connPanel: 'pedidos' });
     case 'n-request-accepted':

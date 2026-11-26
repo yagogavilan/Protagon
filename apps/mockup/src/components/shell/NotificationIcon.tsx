@@ -1,16 +1,18 @@
-import { CalendarClock, Megaphone, Users } from 'lucide-react';
+import { CalendarClock, Megaphone, UsersRound, Users } from 'lucide-react';
 import type { NotificationCategory } from '@/data/types';
 
 const map = {
   avisos: { Icon: Megaphone, label: 'Aviso' },
   agenda: { Icon: CalendarClock, label: 'Agenda' },
   conexoes: { Icon: Users, label: 'Conexões' },
+  grupo: { Icon: UsersRound, label: 'Grupo' },
 } as const;
 
 export const CATEGORY_LABEL: Record<NotificationCategory, string> = {
   avisos: 'Avisos',
   agenda: 'Agenda',
   conexoes: 'Conexões',
+  grupo: 'Grupo',
 };
 
 export function NotificationIcon({ category }: { category: NotificationCategory }) {

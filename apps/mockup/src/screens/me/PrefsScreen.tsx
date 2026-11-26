@@ -32,6 +32,7 @@ export function PrefsScreen() {
         <div className="rounded-lg border border-border-subtle bg-surface-1 p-2">
           <Switch label="Avisos operacionais" hint="Volta do almoço, mudança de sala e segurança. Sempre ligados." checked disabled onChange={() => undefined} />
           <Switch label="Agenda e materiais" hint="Mudança de horário e material liberado" checked={prefs.agenda} onChange={(v) => setPref('agenda', v)} />
+          <Switch label="Grupo" hint="Quem entrou ou saiu do seu grupo, entregue no intervalo" checked={prefs.grupo} onChange={(v) => setPref('grupo', v)} />
           {tier !== 'executivo' ? (
             <Switch label="Conexões" hint="Pedidos e respostas, entregues no intervalo" checked={prefs.conexoes} onChange={(v) => setPref('conexoes', v)} />
           ) : null}

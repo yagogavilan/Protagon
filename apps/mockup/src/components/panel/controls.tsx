@@ -49,14 +49,15 @@ export function Segmented<T extends string | number>({
   );
 }
 
-export function Toggle({ label, hint, checked, onChange }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void }) {
+export function Toggle({ label, hint, checked, onChange, disabled }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void; disabled?: boolean }) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
+      disabled={disabled}
       onClick={() => onChange(!checked)}
-      className="flex min-h-[48px] w-full items-center justify-between gap-3 rounded-md border border-border-subtle bg-surface-1 px-3 text-left"
+      className="flex min-h-[48px] w-full items-center justify-between gap-3 rounded-md border border-border-subtle bg-surface-1 px-3 text-left disabled:opacity-50"
     >
       <span className="flex flex-col">
         <span className="text-[15px] font-semibold text-text-primary">{label}</span>

@@ -31,6 +31,14 @@ import { EatScreen } from '@/screens/EatScreen';
 import { SessionScreen } from '@/screens/SessionScreen';
 import { MaterialViewer } from '@/screens/MaterialViewer';
 import { WifiSheet } from '@/screens/WifiSheet';
+import { GroupListScreen } from '@/screens/groups/GroupListScreen';
+import { GroupCreateScreen } from '@/screens/groups/GroupCreateScreen';
+import { GroupCodeScreen } from '@/screens/groups/GroupCodeScreen';
+import { MyGroupScreen } from '@/screens/groups/MyGroupScreen';
+import { OfferScreen } from '@/screens/offers/OfferScreen';
+import { OfferPayScreen } from '@/screens/offers/OfferPayScreen';
+import { OfferListScreen } from '@/screens/offers/OfferListScreen';
+import { GaiaScreen } from '@/screens/gaia/GaiaScreen';
 import { PermissionSheet } from '@/screens/PermissionSheet';
 import { haptic } from '@/lib/haptics';
 import { cn } from '@/lib/cn';
@@ -62,6 +70,14 @@ const OVERLAYS: Record<OverlayName, ComponentType> = {
   privacy: PrivacyScreen,
   nps: NpsScreen,
   support: SupportScreen,
+  groups: GroupListScreen,
+  groupCreate: GroupCreateScreen,
+  groupCode: GroupCodeScreen,
+  myGroup: MyGroupScreen,
+  offer: OfferScreen,
+  offerPay: OfferPayScreen,
+  offerList: OfferListScreen,
+  gaia: GaiaScreen,
 };
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;

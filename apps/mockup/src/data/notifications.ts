@@ -111,4 +111,28 @@ export const notificationTemplates: NotificationTemplate[] = [
     moments: ['after'],
     minTier: 'vip',
   },
+  {
+    id: 'n-group-joined',
+    category: 'grupo',
+    title: 'Luciana entrou no seu grupo',
+    body: 'Grupo 4 · 3 de 3. Veja quem está com você em Meu grupo.',
+    operational: false,
+    moments: ['break', 'lunch', 'endOfDay'],
+  },
+  {
+    id: 'n-group-complete',
+    category: 'grupo',
+    title: 'Seu grupo está completo',
+    body: 'Rafael, Luciana e Thiago. O ponto de encontro está em Meu grupo.',
+    operational: false,
+    moments: ['break', 'lunch', 'endOfDay'],
+  },
+  {
+    id: 'n-group-placed',
+    category: 'grupo',
+    title: 'O time colocou você no Grupo 4',
+    body: 'Veja quem está com você em Meu grupo.',
+    operational: true,
+    moments: ['lunch', 'endOfDay'],
+  },
 ];

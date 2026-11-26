@@ -44,6 +44,9 @@ import { Countdown, formatCountdownInline, spokenMinutes } from '@/components/ui
 import { LockedPreviewTile } from '@/components/ui/LockedPreview';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Chip } from '@/components/ui/Chip';
+import { OfferHomeCard } from '@/screens/offers/OfferHomeCard';
+import { GroupHomeCard } from '@/screens/groups/GroupCard';
+import { GaiaHomeCard } from '@/screens/gaia/GaiaHomeCard';
 
 export function greetingFor(clock: EventClock): string {
   const first = demoUser.name.split(' ')[0];
@@ -652,6 +655,9 @@ export function HomeScreen() {
       <h1 className="sr-only">Agora</h1>
       <HomeBanner moment={moment} clock={clock} />
 
+      {/* OF01: a oferta liberada fica no topo; antes da liberação não existe nada aqui */}
+      <OfferHomeCard />
+
       {connectionsUp ? <ConnectionsTile moment={moment} clock={clock} /> : null}
 
       {moment === 'live' ? (
@@ -667,9 +673,14 @@ export function HomeScreen() {
       {moment === 'endOfDay' ? <EndOfDayCard clock={clock} /> : null}
       {moment === 'after' ? <AfterCards /> : null}
 
+      {/* Gaia One sobe para logo abaixo do card principal quando não há sessão ao vivo */}
+      {moment !== 'live' ? <GaiaHomeCard /> : null}
+      <GroupHomeCard />
+
       <Shortcuts moment={moment} nextSlot={moment === 'lunch' ? <WhereToEatTile /> : hasNextToday ? <NextTile clock={clock} /> : null} />
 
       {during ? <WifiTile /> : null}
+      {moment === 'live' ? <GaiaHomeCard /> : null}
       {moment !== 'after' ? <PinnedTile /> : null}
 
       {!connectionsUp ? <ConnectionsTile moment={moment} clock={clock} /> : null}

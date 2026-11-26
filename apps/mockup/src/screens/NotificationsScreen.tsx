@@ -34,12 +34,14 @@ export function NotificationsScreen() {
   const list = visibleAll.filter((n) => filter === 'todas' || n.category === filter);
   const unread = (c: Filter) => visibleAll.filter((n) => !n.read && (c === 'todas' || n.category === c)).length;
   const unreadTotal = unread('todas');
+  const hasGroup = visibleAll.some((n) => n.category === 'grupo');
 
   const items: { id: Filter; label: string; count?: number; countLabel?: string }[] = [
     { id: 'todas', label: 'Todas', count: unreadTotal || undefined, countLabel: plural(unreadTotal, 'não lida', 'não lidas') },
     { id: 'avisos', label: 'Avisos', count: unread('avisos') || undefined, countLabel: plural(unread('avisos'), 'não lida', 'não lidas') },
     { id: 'agenda', label: 'Agenda', count: unread('agenda') || undefined, countLabel: plural(unread('agenda'), 'não lida', 'não lidas') },
     ...(vip ? [{ id: 'conexoes' as const, label: 'Conexões', count: unread('conexoes') || undefined, countLabel: plural(unread('conexoes'), 'não lida', 'não lidas') }] : []),
+    ...(hasGroup ? [{ id: 'grupo' as const, label: 'Grupo', count: unread('grupo') || undefined, countLabel: plural(unread('grupo'), 'não lida', 'não lidas') }] : []),
   ];
 
   const clearAll = () => {
@@ -110,7 +112,7 @@ export function NotificationsScreen() {
                   type="button"
                   onClick={() => {
                     markRead(n.id);
-                    openNotificationTarget(n.templateId);
+                    openNotificationTarget(n.templateId, n.ref);
                   }}
                   className={cn(
                     'flex w-full items-start gap-3 rounded-lg border p-3 text-left active:bg-surface-3',

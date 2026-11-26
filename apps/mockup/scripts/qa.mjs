@@ -289,6 +289,61 @@ const SCREENS = [
   ['U04', 'go=U04&moment=endOfDay'],
   ['U05', 'go=U05'],
   ['checkout', `${A}&tier=executivo&overlay=checkout`],
+
+  // Grupos de 3 (GR), Ofertas do palco (OF) e Gaia One (GA): DEC-003, DEC-004, SEC-018 a SEC-024
+  ['GR01-live', 'go=GR01'],
+  ['GR01-break', 'go=GR01&moment=break'],
+  ['GR01-exec', 'go=GR01&moment=break&tier=executivo'],
+  ['GR01-offline', 'go=GR01&moment=break&offline=1'],
+  ['GR01-encerrada', `${A}&moment=lunch&groups=none`],
+  ['GR01-trilha', `${A}&tab=trilha&perm=granted&moment=break&groups=none`],
+  ['GR02', 'go=GR02&moment=break'],
+  ['GR02-diamond', 'go=GR02&moment=break&tier=diamond'],
+  ['GR02-exec', 'go=GR02&moment=break&tier=executivo'],
+  ['GR02-vazia', 'go=GR02v&moment=break'],
+  ['GR02-offline', 'go=GR02&moment=break&offline=1'],
+  ['GR02-erro', 'go=GR02&moment=break&err=1'],
+  ['GR03', 'go=GR03&moment=break', async (p) => { await settle(p, 800); }],
+  ['GR03-so-codigo', 'go=GR03&moment=break', async (p) => { await settle(p, 800); await tap(p, /Mostrar meu grupo na lista/); }],
+  ['GR04', 'go=GR04&moment=break'],
+  ['GR04-nao-encontrado', 'go=GR04&moment=break', async (p) => { await frameOf(p).getByLabel('Código do grupo').fill('XXXX'); await settle(p, 900); }],
+  ['GR04-camera-pedido', 'go=GR04&moment=break', async (p) => { await tap(p, /Ler QR do grupo/); }],
+  ['GR04-camera', 'go=GR04&moment=break&tier=executivo', async (p) => { await tap(p, /Ler QR do grupo/); await tap(p, /^Continuar/); await tap(p, /^Permitir$/); }],
+  ['GR04-camera-negada', 'go=GR04&moment=break', async (p) => { await tap(p, /Ler QR do grupo/); await tap(p, /^Continuar/); await tap(p, /^Não permitir$/); }],
+  ['GR04-offline', 'go=GR04&moment=break&offline=1'],
+  ['GR05-sem-vaga', 'go=GR05n&moment=break', async (p) => { await settle(p, 1400); }],
+  ['GR06-2de3', 'go=GR06&moment=break', async (p) => { await settle(p, 400); }],
+  ['GR06-completo', 'go=GR06&moment=break', async (p) => { await settle(p, 400); await panelOf(p).getByRole('button', { name: /Alguém entrou no meu grupo/ }).click(); await settle(p, 400); }],
+  ['GR06-whatsapp-ligado', 'go=GR06&moment=break', async (p) => { await settle(p, 400); await tap(p, /Compartilhar meu WhatsApp/); await tap(p, /^Compartilhar$/); await panelOf(p).getByRole('button', { name: /Alguém entrou no meu grupo/ }).click(); await settle(p, 500); }],
+  ['GR06-encerrada', 'go=GR06&moment=break', async (p) => { await settle(p, 400); await panelOf(p).getByRole('switch', { name: /Formação encerrada/ }).click(); await settle(p, 400); }],
+  ['GR06-offline', 'go=GR06&moment=break&offline=1'],
+  ['GR06-time', `${A}&moment=lunch&groups=none`, async (p) => { await panelOf(p).getByRole('button', { name: /Encaixar quem ficou sem grupo/ }).click(); await settle(p, 400); await tap(p, /^Meu grupo: Grupo/); await settle(p, 600); }],
+  ['OF01-home', 'go=OF01&day=2'],
+  ['OF01-exec-sem-oferta', `${A}&tier=executivo&day=2&moment=live`, async (p) => { await panelOf(p).getByRole('button', { name: 'Liberar oferta' }).click(); await settle(p, 900); }],
+  ['OF02', 'go=OF02', async (p) => { await settle(p, 500); }],
+  ['OF02-diamond', 'go=OF02&tier=diamond', async (p) => { await settle(p, 500); }],
+  ['OF02-exec-lideranca', `${A}&tier=executivo&day=3&moment=live`, async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Oferta' }).getByRole('radio', { name: /Dia 3/ }).click(); await panelOf(p).getByRole('button', { name: 'Liberar oferta' }).click(); await settle(p, 800); await tap(p, /^Ver oferta/); await settle(p, 700); }],
+  ['OF02-encerrada', 'go=OF02e', async (p) => { await settle(p, 500); }],
+  ['OF02-indisponivel', 'go=OF02x', async (p) => { await settle(p, 500); }],
+  ['OF02-offline', 'go=OF02&offline=1', async (p) => { await settle(p, 500); }],
+  ['OF02-erro', 'go=OF02&err=1', async (p) => { await settle(p, 500); }],
+  ['OF02-interesse-enviado', 'go=OF03', async (p) => { await settle(p, 700); await tap(p, /^Quero falar com um consultor/); await settle(p, 1100); }],
+  ['OF02-confirmando', 'go=OF02', async (p) => { await settle(p, 600); await tap(p, /^Assinar o/); await tap(p, /^Simular pagamento concluído/); await settle(p, 500); }],
+  ['OF-checkout', 'go=OF02', async (p) => { await settle(p, 600); await tap(p, /^Assinar o/); }],
+  ['OF03', 'go=OF03', async (p) => { await settle(p, 700); }],
+  ['OF03-sem-internet', 'go=OF03&offline=1', async (p) => { await settle(p, 700); }],
+  ['OF04', 'go=OF04', async (p) => { await settle(p, 700); }],
+  ['OF04-encerradas', 'go=OF04', async (p) => { await settle(p, 700); await panelOf(p).getByRole('button', { name: 'Encerrar condição' }).click(); await panelOf(p).getByRole('radiogroup', { name: 'Oferta' }).getByRole('radio', { name: /Dia 3/ }).click(); await panelOf(p).getByRole('button', { name: 'Encerrar condição' }).click(); await settle(p, 500); }],
+  ['GA01-card', 'go=GA01'],
+  ['GA01-offline', 'go=GA01&offline=1'],
+  ['GA02', 'go=GA02', async (p) => { await settle(p, 400); }],
+  ['GA02-android', 'go=GA02&device=android', async (p) => { await settle(p, 400); }],
+  ['GA02-passo-3', 'go=GA02', async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Passo do checklist' }).getByRole('radio', { name: 'Passo 3', exact: true }).click(); await settle(p, 400); }],
+  ['GA02-concluida', 'go=GA02', async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Passo do checklist' }).getByRole('radio', { name: 'Concluída', exact: true }).click(); await settle(p, 400); }],
+  ['GA02-offline', 'go=GA02&offline=1', async (p) => { await settle(p, 400); }],
+  ['GA02-erro-loja', 'go=GA02&err=1', async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Passo do checklist' }).getByRole('radio', { name: 'Passo 1', exact: true }).click(); await settle(p, 300); await tap(p, /^Abrir na App Store/); }],
+  ['GA02-grupo', 'go=GA02&moment=break', async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Estado do aluno no grupo' }).getByRole('radio', { name: 'Completo', exact: true }).click(); await settle(p, 400); }],
+  ['GA03', 'go=GA03', async (p) => { await settle(p, 500); }],
 ];
 
 async function eachScreen(fn, only) {
@@ -435,6 +490,60 @@ async function sectionA() {
   probe('C11', 'SEC-008 desfazer conexão não promete apagar o que foi salvo fora', 'go=C11', /O que já foi salvo fora do app não é apagado/, async (p) => { await tap(p, /^Desfazer conexão/); });
   probe('C09', 'SEC-007 aviso de uso responsável na exportação', 'go=C09&moment=after', [/listas de transmissão/, /só os contatos que cada pessoa liberou/, /Neste arquivo: 5 WhatsApp, 3 LinkedIn, 4 Instagram/]);
   probe('C03', 'SEC-002 conectado mostra só os canais liberados (Larissa: sem LinkedIn)', 'go=C09&moment=break', [/WhatsApp/, /Instagram/, /Só os canais que Larissa liberou/], async (p) => { await tap(p, /Abrir perfil de Larissa Antunes/); const ov = await p.locator('.z-overlay').innerText(); if (/LinkedIn/.test(ov)) throw new Error('LinkedIn aparece no perfil de quem não o liberou'); });
+
+  // Grupos, Ofertas e Gaia One (DEC-003, DEC-004, SEC-018 a SEC-024)
+  probe('GR01', 'formação aberta durante a palestra', 'go=GR01', [/Forme seu grupo de 3/, /Formação aberta até 10h45\. Você pode entrar no intervalo\./]);
+  probe('GR01', 'formação aberta no intervalo (contagem)', 'go=GR01&moment=break', [/Fecha às 10h45/, /grupos? com vaga agora/]);
+  probe('GR01', 'antes de abrir (bloco da Trilha)', `${A}&moment=before&tab=trilha&perm=granted`, [/Formação dos grupos/, /Abre às 8h/]);
+  probe('GR01', 'formação encerrada, sem grupo', `${A}&moment=lunch&groups=none`, [/A formação terminou/, /Ver estande/]);
+  probe('GR01', 'sem internet', 'go=GR01&offline=1', /Sem internet\. Para entrar em um grupo você precisa de conexão\./);
+  probe('GR01', 'Executivo igual, sem cadeado nem Conexões', 'go=GR01&tier=executivo', /Forme seu grupo de 3/);
+  probe('GR01', 'em grupo: tile Meu grupo (completo)', 'go=GR06&moment=break', /Meu grupo[\s\S]*Grupo \d+ · completo/, async (p) => { await panelOf(p).getByRole('button', { name: /Alguém entrou no meu grupo/ }).click(); await tap(p, /^Agora$/); });
+  probe('GR02', 'lista com vagas, só primeiro nome e setor (SEC-018)', 'go=GR02&moment=break', [/Grupo 4 · 1 vaga/, /Thiago, Camila/, /Setor VIP/, /Empresa e foto, só depois de entrar/]);
+  probe('GR02', 'só a própria categoria (Diamond)', 'go=GR02&moment=break&tier=diamond', [/Renata, Eduardo/, /Só ingresso Diamond/]);
+  probe('GR02', 'só a própria categoria (Executivo)', 'go=GR02&moment=break&tier=executivo', [/Rodrigo, Gabriel/, /Só ingresso Executivo/]);
+  probe('GR02', 'vazia', 'go=GR02v&moment=break', [/Nenhum grupo com vaga agora/, /Crie um ou peça para o app te encaixar\./]);
+  probe('GR02', 'sem internet', 'go=GR02&moment=break&offline=1', /A lista de grupos precisa de conexão/);
+  probe('GR02', 'erro com Tentar de novo', 'go=GR02&moment=break&err=1', [/Não conseguimos carregar os grupos/, /Tentar de novo/]);
+  probe('GR02', 'formação encerrada', 'go=GR02&moment=break', /A formação terminou/, async (p) => { await panelOf(p).getByRole('switch', { name: /Formação encerrada/ }).click(); await settle(p, 300); });
+  probe('GR02', 'grupo cheio ao tentar entrar', 'go=GR02&moment=break', /acabou de completar/, async (p) => { await settle(p, 700); await panelOf(p).getByRole('button', { name: /Alguém entra antes de mim/ }).click(); await frameOf(p).getByRole('button', { name: 'Entrar no Grupo 4' }).click(); await settle(p, 900); });
+  probe('GR03', 'código, QR e aviso de exposição (SEC-018)', 'go=GR03&moment=break', [/Seu grupo foi criado/, /Seu grupo aparece para alunos com ingresso VIP/, /Mostrar meu grupo na lista/], async (p) => { await settle(p, 900); });
+  probe('GR03', 'só por código', 'go=GR03&moment=break', /Só por código \(fora da lista\)/, async (p) => { await settle(p, 900); await tap(p, /Mostrar meu grupo na lista/); });
+  probe('GR04', 'campo de código', 'go=GR04&moment=break', [/Digite as 4 letras do grupo/, /Ler QR do grupo/]);
+  probe('GR04', 'código não encontrado (mesma mensagem para outra categoria)', 'go=GR04&moment=break', /Código não encontrado\. Confira as letras com quem criou o grupo\./, async (p) => { await frameOf(p).getByLabel('Código do grupo').fill('MKRB'); await settle(p, 900); });
+  probe('GR04', 'câmera: explicação antes do diálogo do sistema', 'go=GR04&moment=break', /Usamos a câmera só para ler o QR do grupo\./, async (p) => { await tap(p, /Ler QR do grupo/); });
+  probe('GR04', 'câmera negada', 'go=GR04&moment=break', /A câmera está desligada para o Protagon/, async (p) => { await tap(p, /Ler QR do grupo/); await tap(p, /^Continuar/); await tap(p, /^Não permitir$/); });
+  probe('GR04', 'leitor de QR do grupo no Executivo não cai no C00', 'go=GR04&moment=break&tier=executivo', /Aponte para o QR do grupo/, async (p) => { await tap(p, /Ler QR do grupo/); await tap(p, /^Continuar/); await tap(p, /^Permitir$/); const ov = await p.locator('.z-overlay').last().innerText(); if (/já estão se conectando|Quero me conectar/.test(ov)) throw new Error('o leitor de QR de grupo caiu no C00'); });
+  probe('GR05', 'sem vaga: grupo criado para o aluno', 'go=GR05n&moment=break', /Criamos o Grupo \d+ para você\. Quem pedir para ser encaixado entra nele\./, async (p) => { await settle(p, 1400); });
+  probe('GR05', 'encaixado no grupo mais próximo (Escolhido pelo app)', 'go=GR05&moment=break', /Escolhido pelo app/, async (p) => { await settle(p, 1600); });
+  probe('GR06', 'WhatsApp desligado por padrão e aviso de reciprocidade (SEC-020)', 'go=GR06&moment=break', [/Compartilhar meu WhatsApp com o grupo\./, /só para quem também compartilhar/, /Quem salvar seu número fica com ele/], async (p) => { await settle(p, 500); });
+  probe('GR06', 'rodapé: pedir troca ou denunciar (SEC-019)', 'go=GR06&moment=break', /Algum problema com o grupo\? Pedir troca ou denunciar\. A equipe resolve com discrição\./, async (p) => { await settle(p, 500); });
+  probe('GR06', 'grupo completo', 'go=GR06&moment=break', /Grupo completo/, async (p) => { await settle(p, 400); await panelOf(p).getByRole('button', { name: /Alguém entrou no meu grupo/ }).click(); await settle(p, 400); });
+  probe('GR06', 'alguém saiu do grupo', 'go=GR06&moment=break', /saiu do grupo\. A vaga voltou para a lista\./, async (p) => { await settle(p, 400); await panelOf(p).getByRole('button', { name: /Alguém saiu do meu grupo/ }).click(); await settle(p, 300); });
+  probe('GR06', 'formação encerrada: sem Sair, caminho do estande', 'go=GR06&moment=break', [/A formação terminou\. Para trocar de grupo, fale com o time no estande\./, /^(?!.*Sair do grupo)/], async (p) => { await settle(p, 400); await panelOf(p).getByRole('switch', { name: /Formação encerrada/ }).click(); await settle(p, 300); });
+  probe('GR06', 'encaixado pelo time', `${A}&moment=lunch&groups=none`, [/Encaixado pelo time/, /O time colocou você no Grupo \d+\./], async (p) => { await panelOf(p).getByRole('button', { name: /Encaixar quem ficou sem grupo/ }).click(); await settle(p, 400); await tap(p, /^Meu grupo: Grupo/); await settle(p, 600); });
+  probe('GR06', 'dinâmicas em trio com os nomes do grupo', 'go=GR06&moment=break', /Dinâmica em trios: compromissos do dia[\s\S]*Com /, async (p) => { await settle(p, 500); });
+  probe('GR06', 'sem internet (cache) e Sair desabilitado', 'go=GR06&moment=break&offline=1', [/Sem internet\. Você vê a última versão salva do grupo\./, /Precisa de internet\./], async (p) => { await settle(p, 500); });
+  probe('OF01', 'toast único e card no topo da Home', 'go=OF01', [/Oferta do palco disponível/, /Oferta especial do palco/, /Condição válida até/]);
+  probe('OF01', 'Executivo: nenhuma oferta, nenhum cadeado novo', `${A}&tier=executivo&day=2&moment=live`, /^(?!.*(Oferta especial|Oferta do palco))/, async (p) => { await panelOf(p).getByRole('button', { name: 'Liberar oferta' }).click(); await settle(p, 900); });
+  probe('OF02', 'preço da categoria, parcelado e à vista, prazo real e aviso antifraude', 'go=OF02', [/12x de R\$ 1\.490,00/, /Total parcelado: R\$ 17\.880,00/, /À vista no PIX: R\$ 15\.990,00/, /Condição válida até 19h10 de 14\/03/, /Não pague por links recebidos em grupos/, /Você vai sair do app para pagar na Hotmart/], async (p) => { await settle(p, 600); });
+  probe('OF02', 'condição encerrada', 'go=OF02e', [/Condição encerrada/, /Falar com um consultor/], async (p) => { await settle(p, 600); });
+  probe('OF02', 'não disponível para o ingresso (sem cadeado)', 'go=OF02x', /Esta oferta não está disponível para o seu ingresso\./, async (p) => { await settle(p, 600); });
+  probe('OF02', 'sem internet: QR do estande', 'go=OF02&offline=1', [/Para contratar agora, mostre este QR no estande\./, /Estande Comercial/], async (p) => { await settle(p, 600); });
+  probe('OF02', 'erro com Tentar de novo', 'go=OF02&err=1', [/Não conseguimos abrir a oferta/, /Tentar de novo/], async (p) => { await settle(p, 500); });
+  probe('OF02', 'compra em confirmação', 'go=OF02', /Estamos confirmando sua compra/, async (p) => { await settle(p, 600); await tap(p, /^Assinar o/); await tap(p, /^Simular pagamento concluído/); await settle(p, 500); });
+  probe('OF02', 'compra concluída (simulada)', 'go=OF02', /Compra confirmada/, async (p) => { await settle(p, 600); await tap(p, /^Assinar o/); await tap(p, /^Simular pagamento concluído/); await settle(p, 3500); });
+  probe('OF03', 'dados enviados, destinatário e finalidade (SEC-022)', 'go=OF03', [/Vamos enviar ao time comercial do Grupo Virtus/, /Seu perfil e suas conexões não são enviados/, /Quero falar com um consultor/], async (p) => { await settle(p, 800); });
+  probe('OF03', 'interesse enviado com Cancelar pedido', 'go=OF03', [/Interesse enviado\. O time comercial vai falar com você\./, /Cancelar pedido/], async (p) => { await settle(p, 800); await tap(p, /^Quero falar com um consultor/); await settle(p, 1100); });
+  probe('OF03', 'sem internet', 'go=OF03&offline=1', /Sem internet\. Mostre o QR no estande/, async (p) => { await settle(p, 800); });
+  probe('OF04', 'ofertas ativas', 'go=OF04', [/Ofertas do evento/, /Ativa/], async (p) => { await settle(p, 700); });
+  probe('GA01', 'card na Home', 'go=GA01', [/Ative seu teste em 4 passos/, /Passo 2 de 4/]);
+  probe('GA01', 'bloco na Trilha do Dia 2', `${A}&tab=trilha&perm=granted&day=2&moment=break`, [/Atividade: Gaia One/, /9h20 às 9h30/]);
+  probe('GA02', 'checklist com Wi-Fi no topo e textos a confirmar', 'go=GA02', [/Protagon-Alunos/, /Copiar senha/, /\[a confirmar\]/, /Preciso de ajuda/], async (p) => { await settle(p, 400); });
+  probe('GA02', 'concluída', 'go=GA02', [/Gaia One ativado/, /Concluído às/], async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Passo do checklist' }).getByRole('radio', { name: 'Concluída', exact: true }).click(); await settle(p, 400); });
+  probe('GA02', 'sem internet', 'go=GA02&offline=1', /Conecte-se ao Wi-Fi para baixar o Gaia One\./, async (p) => { await settle(p, 400); });
+  probe('GA02', 'grupo: só a contagem, sem nomes (SEC-024)', 'go=GA02&moment=break', /\d de 3 do seu grupo já ativaram\./, async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Estado do aluno no grupo' }).getByRole('radio', { name: 'Completo', exact: true }).click(); await settle(p, 400); });
+  probe('GA03', 'equipe de apoio e perguntas frequentes', 'go=GA03', [/Onde está a equipe/, /O teste pede cartão\?/, /Não recebi o e-mail/, /Já tenho conta no Gaia One/, /O download está lento/], async (p) => { await settle(p, 500); });
 
   const unreachable = [];
   for (const pr of P) {
@@ -683,6 +792,14 @@ async function sectionF() {
     ['C00 convite', 'go=C00', async (p) => { await tap(p, /Quero me conectar/); }],
     ['U03 aviso do Instagram', 'go=U03', async (p) => { await tap(p, /Mostrar meu Instagram antes da conexão/); }],
     ['E04 permissão', 'go=E04', null],
+    ['GR05 sem vaga', 'go=GR05n&moment=break', async (p) => { await settle(p, 1400); }],
+    ['GR06 WhatsApp', 'go=GR06&moment=break', async (p) => { await settle(p, 400); await tap(p, /Compartilhar meu WhatsApp/); }],
+    ['GR06 sair do grupo', 'go=GR06&moment=break', async (p) => { await settle(p, 400); await tap(p, /^Sair do grupo/); }],
+    ['GR06 problema com o grupo', 'go=GR06&moment=break', async (p) => { await settle(p, 400); await tap(p, /^Pedir troca ou denunciar/); }],
+    ['GR06 membro', 'go=GR06&moment=break', async (p) => { await settle(p, 400); await tap(p, /Ver detalhes/); }],
+    ['OF03 consultor', 'go=OF03', async (p) => { await settle(p, 800); }],
+    ['GA03 ajuda', 'go=GA03', async (p) => { await settle(p, 600); }],
+    ['GA02 outro aparelho', 'go=GA02', async (p) => { await panelOf(p).getByRole('radiogroup', { name: 'Passo do checklist' }).getByRole('radio', { name: 'Passo 1', exact: true }).click(); await settle(p, 400); await tap(p, /Usar outro aparelho/); }],
   ];
   for (const [name, q, steps] of sheets) {
     const { ctx, page } = await open(q);
@@ -739,7 +856,7 @@ async function sectionF() {
   }
 
   // F3: Tab através da Home: todo controle focado mostra anel; ordem de foco; skip
-  for (const [name, q] of [['Home VIP live', `${A}&moment=live&connections=1&profile=full`], ['Conexões VIP', 'go=C02&moment=break'], ['Trilha', `${A}&tab=trilha&perm=granted`], ['Login', 'go=E01']]) {
+  for (const [name, q] of [['Home VIP live', `${A}&moment=live&connections=1&profile=full`], ['Conexões VIP', 'go=C02&moment=break'], ['Trilha', `${A}&tab=trilha&perm=granted`], ['Login', 'go=E01'], ['Grupos com vaga', 'go=GR02&moment=break'], ['Oferta', 'go=OF02'], ['Gaia One', 'go=GA02']]) {
     const { ctx, page } = await open(q);
     const seen = [];
     const noRing = [];
@@ -925,7 +1042,7 @@ async function main() {
   browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox'] });
   if (process.env.QA_URL) base = process.env.QA_URL;
   else {
-    const s = await serve(join(root, 'dist'));
+    const s = await serve(process.env.QA_DIST ? resolve(process.env.QA_DIST) : join(root, 'dist'));
     base = s.url;
   }
   if (process.env.QA_DBG) {

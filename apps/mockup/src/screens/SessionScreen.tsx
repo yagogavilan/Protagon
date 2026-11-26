@@ -8,10 +8,13 @@ import { agenda } from '@/data/agenda';
 import { agendaChange, speakers } from '@/data/edition';
 import { materials } from '@/data/materials';
 import { formatHour, sessionProgress, sessionStatus, toMinutes } from '@/lib/clock';
+import { groupLabel } from '@/lib/groups';
 import { MATERIAL_ICON, MATERIAL_LABEL, materialView, releaseLabel } from '@/lib/materials';
 import { useClock, useDemo } from '@/state/store';
 import { KIND_LABEL } from './TrilhaScreen';
 import { cn } from '@/lib/cn';
+import { useFormation, useMyGroup } from '@/state/features';
+import { trioNames } from '@/screens/groups/MyGroupScreen';
 
 /** T02 · Detalhe da sessão: palestrante, objetivo, material (liberado ou "libera às 14h") e anotações pessoais. */
 export function SessionScreen() {
@@ -24,6 +27,8 @@ export function SessionScreen() {
   const openOverlay = useDemo((s) => s.openOverlay);
   const openMap = useDemo((s) => s.openMap);
   const session = agenda.find((s) => s.id === id);
+  const myGroup = useMyGroup();
+  const formation = useFormation();
 
   if (!session) {
     return (
@@ -107,6 +112,26 @@ export function SessionScreen() {
               <Target size={16} aria-hidden className="text-gold-500" /> Objetivo
             </p>
             <p className="mt-1 text-body text-text-primary">{session.objective}</p>
+          </section>
+        ) : null}
+
+        {session.trio ? (
+          <section aria-label="Seu grupo" className="rounded-lg border border-border-subtle bg-surface-1 p-card">
+            <p className="flex items-center gap-2 text-caption text-text-secondary">Seu grupo</p>
+            {myGroup ? (
+              <p className="mt-1 text-body text-text-primary">
+                {groupLabel(myGroup)}. {trioNames(myGroup)}.
+              </p>
+            ) : (
+              <>
+                <p className="mt-1 text-body text-text-primary">Você ainda não tem grupo para esta dinâmica.</p>
+                {formation === 'open' ? (
+                  <Button size="compact" variant="secondary" className="mt-2" onClick={() => openOverlay('groups')}>
+                    Formar meu grupo
+                  </Button>
+                ) : null}
+              </>
+            )}
           </section>
         ) : null}
 

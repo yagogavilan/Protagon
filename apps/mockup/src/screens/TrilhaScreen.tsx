@@ -11,6 +11,9 @@ import { Button } from '@/components/ui/Button';
 import { formatCountdownInline } from '@/components/ui/Countdown';
 import { scrollWithin } from '@/lib/scroll';
 import { cn } from '@/lib/cn';
+import { GroupTrilhaBody } from '@/screens/groups/GroupCard';
+import { trioNames } from '@/screens/groups/MyGroupScreen';
+import { useMyGroup } from '@/state/features';
 
 export const KIND_LABEL: Record<SessionKind, string> = {
   abertura: 'Abertura',
@@ -93,15 +96,40 @@ function PauseRow({ s, status }: { s: Session; status: SessionStatus }) {
   );
 }
 
+/** Bloco "Formação dos grupos" (D1 09h15): mostra o card de GR01 dentro do bloco, sem abrir o detalhe da sessão */
+function GroupFormationRow({ s, status }: { s: Session; status: SessionStatus }) {
+  return (
+    <section
+      aria-label={`${KIND_LABEL[s.kind]}: ${s.title}, ${formatHour(s.start)} às ${formatHour(s.end)}`}
+      className={cn(
+        'flex w-full flex-col gap-1 rounded-lg border p-card text-left shadow-card',
+        status === 'now' ? 'border-live bg-surface-2 shadow-glow-live' : 'border-border-subtle bg-surface-1',
+        status === 'done' && 'opacity-75',
+      )}
+    >
+      <span className="flex items-center justify-between gap-2">
+        <span className="text-caption text-text-secondary">{KIND_LABEL[s.kind]}</span>
+        <StatusTag status={status} minutes={0} />
+      </span>
+      <h3 className="text-body-strong text-text-primary">{s.title}</h3>
+      <p className="tabular text-body text-text-secondary">
+        {formatHour(s.start)} às {formatHour(s.end)}
+      </p>
+      <GroupTrilhaBody />
+    </section>
+  );
+}
+
 function SessionRow({ s, status, clock }: { s: Session; status: SessionStatus; clock: EventClock }) {
   const openOverlay = useDemo((x) => x.openOverlay);
+  const myGroup = useMyGroup();
   const changed = s.id === agendaChange.sessionId;
   const minutes = toMinutes(s.start) - clock.minutes;
   const names = speakerLine(s);
   return (
     <button
       type="button"
-      onClick={() => openOverlay('session', s.id)}
+      onClick={() => (s.id === 'd2-gaia' ? openOverlay('gaia') : openOverlay('session', s.id))}
       aria-label={`${KIND_LABEL[s.kind]}: ${s.title}, ${formatHour(changed ? agendaChange.newStart : s.start)} às ${formatHour(s.end)}${changed ? ', horário alterado' : ''}`}
       className={cn(
         'flex w-full flex-col gap-1 rounded-lg border p-card text-left shadow-card transition-transform duration-fast active:scale-press',
@@ -127,6 +155,7 @@ function SessionRow({ s, status, clock }: { s: Session; status: SessionStatus; c
         )}
         {names ? <span>· {names}</span> : null}
       </span>
+      {s.trio && myGroup ? <span className="text-body text-text-secondary">{trioNames(myGroup)}</span> : null}
       {changed ? (
         <span className="mt-1 inline-flex items-center gap-1.5 self-start rounded-sm bg-tint-warning px-2 py-0.5 text-caption font-semibold text-warning">
           <CalendarClock size={14} aria-hidden /> Alterado
@@ -214,7 +243,7 @@ export function TrilhaScreen() {
                   status === 'now' ? 'border-live bg-live shadow-glow-live' : status === 'done' ? 'border-border-strong bg-border-strong' : status === 'next' ? 'border-gold-500 bg-bg' : 'border-border-strong bg-bg',
                 )}
               />
-              {content(s) ? <SessionRow s={s} status={status} clock={clock} /> : <PauseRow s={s} status={status} />}
+              {s.id === 'd1-grupos' ? <GroupFormationRow s={s} status={status} /> : content(s) ? <SessionRow s={s} status={status} clock={clock} /> : <PauseRow s={s} status={status} />}
             </li>
           );
         })}

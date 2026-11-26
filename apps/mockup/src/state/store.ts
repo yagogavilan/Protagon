@@ -38,7 +38,16 @@ export type OverlayName =
   | 'prefs'
   | 'privacy'
   | 'nps'
-  | 'support';
+  | 'support'
+  // Grupos (GR), Ofertas (OF) e Gaia One (GA): páginas empilhadas, sem aba nova
+  | 'groups'
+  | 'groupCreate'
+  | 'groupCode'
+  | 'myGroup'
+  | 'offer'
+  | 'offerPay'
+  | 'offerList'
+  | 'gaia';
 export type Overlay = OverlayName | null;
 /** Foco do mapa: setor do aluno, estande, praça de alimentação ou um Ponto de Conexão */
 export type MapFocus = 'sector' | 'booth' | 'food' | 'checkin' | 'A' | 'B' | 'C';
@@ -77,6 +86,8 @@ export interface AppNotification {
   /** HH:MM do relógio do evento quando chegou */
   time: string;
   read: boolean;
+  /** Referência do destino (ex.: id da oferta) */
+  ref?: string;
 }
 
 /** Perfil de Conexões do aluno (C01 e "Complete seu perfil"). Desafio e conhecimento começam vazios: são opcionais. */
@@ -132,6 +143,8 @@ export type DemoStateSnapshot = DemoState;
 export const DAILY_REQUEST_LIMIT: Record<Tier, number> = { executivo: 0, vip: 15, diamond: 25 };
 
 interface DemoState {
+  /** Sobe a cada "Reiniciar demo": o estado de Grupos, Ofertas e Gaia One (state/features.ts) escuta e reinicia junto */
+  resetCount: number;
   // painel
   tier: Tier;
   moment: Moment;
@@ -222,6 +235,8 @@ interface DemoState {
   openOverlay: (overlay: OverlayName, id?: string) => void;
   openMap: (focus: MapFocus) => void;
   closeOverlay: () => void;
+  /** Troca a página do topo da pilha (ex.: da lista de grupos para "Meu grupo"), sem empilhar */
+  replaceOverlay: (name: OverlayName, id?: string) => void;
   showToast: (t: Omit<Toast, 'id'>) => void;
   hideToast: () => void;
   recordHaptic: (label: string) => void;
@@ -284,7 +299,7 @@ const initialApp = {
   notifPermission: 'unknown' as NotifPermission,
   permissionSheet: false,
   permissionAsked: false,
-  notifPrefs: { avisos: true, agenda: true, conexoes: true } as Record<NotificationCategory, boolean>,
+  notifPrefs: { avisos: true, agenda: true, conexoes: true, grupo: true } as Record<NotificationCategory, boolean>,
   wifiOpen: false,
   walletAdded: false,
   agendaUpdated: true,
@@ -451,6 +466,7 @@ const urlState = fromUrl();
 
 export const useDemo = create<DemoState>()((set, get) => ({
   ...initialApp,
+  resetCount: 0,
   justReconnected: false,
   ...urlState,
   // Entrada direta por URL (auth=app) simula um aluno que já fez login: traz as notificações de boas-vindas
@@ -512,7 +528,8 @@ export const useDemo = create<DemoState>()((set, get) => ({
   },
 
   resetDemo: () =>
-    set({
+    set((cur) => ({
+      resetCount: cur.resetCount + 1,
       ...initialApp,
       stack: [],
       overlay: null,
@@ -535,11 +552,11 @@ export const useDemo = create<DemoState>()((set, get) => ({
       profile: initialProfile(),
       instagramEarly: false,
       profileCardDismissed: false,
-      notifPrefs: { avisos: true, agenda: true, conexoes: true },
+      notifPrefs: { avisos: true, agenda: true, conexoes: true, grupo: true },
       pausePhase: 'start',
       online: true,
       locked: false,
-    }),
+    })),
   setAgendaUpdated: (agendaUpdated) => set({ agendaUpdated }),
   setRequestsSent: (n) => set((s) => ({ requestsSentByDay: { ...s.requestsSentByDay, [s.day]: n } })),
   setNotifPermission: (notifPermission) => set({ notifPermission, permissionAsked: notifPermission !== 'unknown' }),
@@ -609,6 +626,7 @@ export const useDemo = create<DemoState>()((set, get) => ({
     set({ mapFocus, ...(top?.name === 'map' ? {} : withStack([...stack, { name: 'map' }])) });
   },
   closeOverlay: () => set((s) => withStack(s.stack.slice(0, -1))),
+  replaceOverlay: (name, id) => set((s) => withStack([...s.stack.slice(0, -1), { name, id }])),
 
   showToast: (t) => set({ toast: { ...t, id: Date.now() } }),
   hideToast: () => set({ toast: null }),

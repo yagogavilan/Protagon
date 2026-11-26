@@ -3,7 +3,16 @@ import type { DayNumber, Session, SessionKind } from './types';
 // D2: 9h abertura, 10h30 intervalo de 15 min, 12h30–13h30 almoço,
 // 15h40 intervalo, 19h encerramento. Mesma grade nos 3 dias; muda o conteúdo.
 
-type Row = [start: string, end: string, kind: SessionKind, title: string, speakers: string[], objective?: string, materials?: string[]];
+/**
+ * Opções por linha. `id` fixa o ID de um bloco novo (Grupos e Gaia One, DEC-003/DEC-004): os blocos antigos continuam
+ * numerados só entre si (d1-s01..), então materiais, `agendaChange` e o chat não precisam mudar quando entra um bloco.
+ */
+interface RowOpts {
+  id?: string;
+  trio?: boolean;
+}
+
+type Row = [start: string, end: string, kind: SessionKind, title: string, speakers: string[], objective?: string, materials?: string[], opts?: RowOpts];
 
 const PLENARIA = 'Plenária principal';
 
@@ -15,7 +24,8 @@ const dayThemes: Record<DayNumber, string> = {
 
 const rows: Record<DayNumber, Row[]> = {
   1: [
-    ['09:00', '09:30', 'abertura', 'Abertura: por que você está aqui', ['wendell', 'karina'], 'Alinhar a jornada dos 3 dias e o compromisso de cada um.'],
+    ['09:00', '09:15', 'abertura', 'Abertura: por que você está aqui', ['wendell', 'karina'], 'Alinhar a jornada dos 3 dias e o compromisso de cada um.'],
+    ['09:15', '09:30', 'dinamica', 'Formação dos grupos', ['equipe'], 'Formar o seu grupo de 3 para os 3 dias, só com quem tem o mesmo ingresso que você.', [], { id: 'd1-grupos' }],
     ['09:30', '10:30', 'palestra', 'A mentalidade do protagonista', ['wendell'], 'Trocar a postura de vítima pela de responsável pelos próprios resultados.', ['m-d1-1']],
     ['10:30', '10:45', 'intervalo', 'Intervalo', []],
     ['10:45', '11:30', 'dinamica', 'Dinâmica: crenças que travam seu crescimento', ['equipe'], 'Identificar 3 crenças limitantes e o custo de cada uma.'],
@@ -26,15 +36,16 @@ const rows: Record<DayNumber, Row[]> = {
     ['15:00', '15:40', 'palestra', 'Disciplina e consistência', ['wendell'], 'Transformar intenção em execução diária.'],
     ['15:40', '15:55', 'intervalo', 'Intervalo', []],
     ['15:55', '17:00', 'palestra', 'Inteligência emocional para empresários', ['karina'], 'Reconhecer gatilhos e responder sob pressão sem perder o controle.', ['m-d1-4']],
-    ['17:00', '17:30', 'dinamica', 'Dinâmica em trios: compromissos do dia', ['equipe'], 'Declarar um compromisso e ter duas testemunhas.'],
+    ['17:00', '17:30', 'dinamica', 'Dinâmica em trios: compromissos do dia', ['equipe'], 'Declarar um compromisso e ter duas testemunhas.', [], { trio: true }],
     ['17:30', '19:00', 'palestra', 'Seu próximo nível', ['wendell'], 'Definir a visão de 12 meses com metas claras.', ['m-d1-5']],
     ['19:00', '19:10', 'encerramento', 'Encerramento do Dia 1', ['wendell', 'karina']],
   ],
   2: [
-    ['09:00', '09:30', 'abertura', 'Abertura do Dia 2', ['karina'], 'Revisar os compromissos do Dia 1.'],
+    ['09:00', '09:20', 'abertura', 'Abertura do Dia 2', ['karina'], 'Revisar os compromissos do Dia 1.'],
+    ['09:20', '09:30', 'dinamica', 'Atividade: Gaia One', ['equipe'], 'Instalar o Gaia One e ativar o teste em menos de 3 minutos.', [], { id: 'd2-gaia' }],
     ['09:30', '10:30', 'palestra', 'Liderança que forma líderes', ['wendell'], 'Sair do centro de todas as decisões e desenvolver o time.', ['m-d2-1']],
     ['10:30', '10:45', 'intervalo', 'Intervalo', []],
-    ['10:45', '11:30', 'dinamica', 'Dinâmica: o líder que eu sou hoje', ['equipe'], 'Comparar a autopercepção com a percepção do grupo.'],
+    ['10:45', '11:30', 'dinamica', 'Dinâmica: o líder que eu sou hoje', ['equipe'], 'Comparar a autopercepção com a percepção do grupo.', [], { trio: true }],
     ['11:30', '12:30', 'palestra', 'Gestão de equipes na prática', ['helena'], 'Rituais simples de feedback, metas e acompanhamento.', ['m-d2-2']],
     ['12:30', '13:30', 'almoco', 'Almoço', []],
     ['13:30', '14:30', 'palestra', 'Comunicação e influência', ['karina'], 'Conduzir conversas difíceis com clareza e respeito.'],
@@ -70,21 +81,26 @@ function locationFor(kind: SessionKind): string {
   return PLENARIA;
 }
 
-export const agenda: Session[] = ([1, 2, 3] as const).flatMap((day) =>
-  rows[day].map(([start, end, kind, title, speakerIds, objective, materialIds], i) => ({
-    id: `d${day}-s${String(i + 1).padStart(2, '0')}`,
-    day,
-    start,
-    end,
-    kind,
-    title,
-    theme: dayThemes[day],
-    speakerIds,
-    objective,
-    location: locationFor(kind),
-    materialIds: materialIds ?? [],
-  })),
-);
+export const agenda: Session[] = ([1, 2, 3] as const).flatMap((day) => {
+  let legacy = 0;
+  return rows[day].map(([start, end, kind, title, speakerIds, objective, materialIds, opts]) => {
+    if (!opts?.id) legacy += 1;
+    return {
+      id: opts?.id ?? `d${day}-s${String(legacy).padStart(2, '0')}`,
+      day,
+      start,
+      end,
+      kind,
+      title,
+      theme: dayThemes[day],
+      speakerIds,
+      objective,
+      location: locationFor(kind),
+      materialIds: materialIds ?? [],
+      trio: opts?.trio,
+    };
+  });
+});
 
 export { dayThemes };
 

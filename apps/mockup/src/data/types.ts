@@ -59,6 +59,8 @@ export interface Session {
   objective?: string;
   location: string;
   materialIds: string[];
+  /** Dinâmica em trio: usa o grupo do aluno (R-GR-13) */
+  trio?: boolean;
 }
 
 export type MaterialType = 'pdf' | 'workbook' | 'audio' | 'video';
@@ -157,7 +159,7 @@ export interface DemoUser {
   credentialCode: string;
 }
 
-export type NotificationCategory = 'avisos' | 'agenda' | 'conexoes';
+export type NotificationCategory = 'avisos' | 'agenda' | 'conexoes' | 'grupo';
 
 export interface NotificationTemplate {
   id: string;

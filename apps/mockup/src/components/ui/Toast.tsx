@@ -34,7 +34,10 @@ export function ToastHost({ bottom }: { bottom: number }) {
               aria-hidden
               className={cn('shrink-0', toast.tone === 'warning' ? 'text-warning' : toast.tone === 'info' ? 'text-info' : 'text-live')}
             />
-            <span className="min-w-0 py-2 text-body text-text-primary">{toast.text}</span>
+            {/* O aviso com ação (ex.: oferta do palco) some ao tocar fora da ação */}
+            <span className="min-w-0 py-2 text-body text-text-primary" onClick={toast.action ? hideToast : undefined}>
+              {toast.text}
+            </span>
             {toast.action ? (
               <button
                 type="button"

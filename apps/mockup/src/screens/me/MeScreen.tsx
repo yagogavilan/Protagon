@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Bell, ChevronRight, LifeBuoy, LogOut, QrCode, ShieldCheck, Star } from 'lucide-react';
+import { Bell, ChevronRight, LifeBuoy, LogOut, Megaphone, QrCode, ShieldCheck, Star, UsersRound } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { TierBadge } from '@/components/ui/TierBadge';
 import { Button } from '@/components/ui/Button';
@@ -8,6 +8,9 @@ import { edition } from '@/data/edition';
 import { hideEmail } from '@/lib/format';
 import { useClock, useDemo } from '@/state/store';
 import { npsAvailable, npsKeyFor } from './nps';
+import { useFormation, useMyGroup } from '@/state/features';
+import { useOffers } from '@/screens/offers/useOffers';
+import { groupLabel } from '@/lib/groups';
 
 const shortDate = new Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'short' });
 function editionRange(): string {
@@ -42,6 +45,10 @@ export function EuScreen() {
   const active = useDemo((s) => s.connectionsActive);
   const profile = useDemo((s) => s.profile);
   const clock = useClock();
+  const group = useMyGroup();
+  const formation = useFormation();
+  // "Ofertas do evento" só existe depois da 1ª liberação para o ingresso do aluno (nunca vazio, nunca cadeado)
+  const hasOffers = useOffers().length > 0;
   const key = npsKeyFor(clock, moment);
   const open = npsAvailable(key, clock, moment);
   const npsTag = open ? (
@@ -116,6 +123,15 @@ export function EuScreen() {
 
       <ul className="flex flex-col rounded-lg border border-border-subtle bg-surface-1 py-1" aria-label="Menu Eu">
         <MenuRow icon={<QrCode size={22} />} label="Credencial" hint="QR, setor e Wallet" onClick={() => openOverlay('credential')} />
+        {group || formation === 'open' ? (
+          <MenuRow
+            icon={<UsersRound size={22} />}
+            label="Meu grupo"
+            hint={group ? groupLabel(group) : 'Forme seu grupo de 3'}
+            onClick={() => openOverlay(group ? 'myGroup' : 'groups')}
+          />
+        ) : null}
+        {hasOffers ? <MenuRow icon={<Megaphone size={22} />} label="Ofertas do evento" hint="O que o palco apresentou" onClick={() => openOverlay('offerList')} /> : null}
         <MenuRow icon={<Bell size={22} />} label="Notificações" hint="O que você quer receber" onClick={() => openOverlay('prefs')} />
         <MenuRow icon={<ShieldCheck size={22} />} label="Privacidade" hint={tier === 'executivo' ? 'Seus dados e exclusão' : 'Visibilidade, pausa e exclusão'} onClick={() => openOverlay('privacy')} />
         <MenuRow icon={<Star size={22} />} label="Avaliação do dia" hint="Nota de 0 a 10" tag={npsTag} onClick={() => openOverlay('nps')} />
