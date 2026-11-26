@@ -1,0 +1,392 @@
+<title>App Protagon · Etapa 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: documento de validação em coluna única, superfícies em 4 níveis, dourado como luz. Tema escuro único por escolha (identidade Protagon). */
+:root{
+  color-scheme: dark;
+  --bg:#020111; --s1:#0E0D24; --s2:#16153A; --s3:#1E1D48;
+  --line:rgba(240,206,153,.12); --line-strong:#6B6994;
+  --fg:#F5F3EE; --fg2:#A8A6B8; --fg3:#8A8899;
+  --gold:#CC8F4E; --gold2:#F0CE99;
+  --live:#33EC74; --warn:#FFB547; --danger:#FF5C6C; --info:#5AB8FF;
+  --ink:#020111;
+  --f-display:"Sora", ui-sans-serif, system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--f-display);
+  background-image:radial-gradient(900px 420px at 50% -120px, rgba(204,143,78,.22), transparent 70%);
+  background-repeat:no-repeat}
+.wrap{max-width:1040px;margin:0 auto;padding-block:48px 80px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));padding-right:max(20px, env(safe-area-inset-right,0px));
+  display:grid;gap:56px}
+h1,h2,h3{text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.15;font-weight:700;letter-spacing:-.01em}
+h2{font-size:24px;line-height:32px;font-weight:600}
+h3{font-size:17px;line-height:24px;font-weight:600}
+p{margin:0;max-width:68ch}
+a{color:var(--gold2);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.eyebrow{font:500 13px/18px var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--gold2)}
+.muted{color:var(--fg2)}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.02em}
+section{display:grid;gap:20px}
+.head{display:grid;gap:14px}
+.stamp{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);
+  background:var(--s1);font:500 13px/18px var(--f-display);color:var(--fg2);white-space:nowrap}
+.pill.live{color:var(--ink);background:linear-gradient(135deg,#33EC74,#1FCF58);border-color:transparent}
+.pill.gold{color:var(--ink);background:linear-gradient(135deg,#CC8F4E,#F0CE99);border-color:transparent}
+.pill.warn{color:var(--warn);border-color:rgba(255,181,71,.35)}
+.pill.info{color:var(--info);border-color:rgba(90,184,255,.35)}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+
+/* Pesquisa */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:20px;padding:22px;display:grid;gap:14px;min-width:0;
+  box-shadow:inset 0 1px 0 rgba(240,206,153,.08)}
+.panel h3{display:flex;align-items:center;gap:10px}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.list li{display:grid;gap:2px;padding-top:12px;border-top:1px solid var(--line)}
+.list li:first-child{border-top:0;padding-top:0}
+.list b{font-weight:600}
+.list .src{font-size:13px;color:var(--fg3)}
+.mark{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font:700 13px/1 var(--f-display);flex:none}
+.mark.yes{background:rgba(51,236,116,.14);color:var(--live)}
+.mark.no{background:rgba(255,92,108,.14);color:var(--danger)}
+
+/* Mapa de navegação */
+.map{display:grid;gap:14px}
+.layer{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+@media (max-width:760px){.layer{grid-template-columns:1fr}}
+.layer > .lbl{padding-top:12px;font:500 13px/18px var(--f-display);color:var(--fg3);letter-spacing:.08em;text-transform:uppercase}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.node{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px;line-height:20px}
+.node small{display:block;color:var(--fg3);font-size:12px;line-height:16px;margin-top:2px}
+.node.g{border-color:rgba(240,206,153,.45)}
+.arrow{color:var(--fg3);font-size:18px}
+.tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.tabs{grid-template-columns:1fr}}
+.tab{background:var(--s1);border:1px solid var(--line);border-radius:20px;padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.tab .t{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:600}
+.tab ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.tab li{font-size:14px;line-height:20px;color:var(--fg2);padding-left:14px;position:relative}
+.tab li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:2px;background:var(--line-strong)}
+.tab li.deep{margin-left:14px}
+.tab li.deep::before{background:transparent;border:1px solid var(--line-strong)}
+.lock{font:500 12px/16px var(--f-display);color:var(--gold2);border:1px solid rgba(240,206,153,.35);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.global{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.global{grid-template-columns:1fr}}
+.note{font-size:14px;color:var(--fg2)}
+
+/* Tabela */
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:20px;background:var(--s1)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:14px;line-height:20px}
+th,td{text-align:left;vertical-align:top;padding:14px 16px;border-top:1px solid var(--line)}
+thead th{border-top:0;font:500 12px/16px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);background:var(--s2);position:sticky;top:0}
+tbody tr.grp td{background:var(--bg);color:var(--gold2);font:600 13px/18px var(--f-display);letter-spacing:.06em;text-transform:uppercase;padding:10px 16px}
+td .chips{display:flex;flex-wrap:wrap;gap:6px}
+td .c{border:1px solid var(--line);background:var(--s2);border-radius:8px;padding:2px 8px;font-size:13px;color:var(--fg);white-space:nowrap}
+td.id{white-space:nowrap;color:var(--fg3)}
+td.name{font-weight:600;min-width:150px}
+td.tier{color:var(--fg2);min-width:170px}
+td.ctl{color:var(--fg2);min-width:150px}
+
+/* Fluxos */
+.flows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.flows{grid-template-columns:1fr}}
+.steps{margin:0;padding:0;list-style:none;display:grid;gap:0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:10px;padding:8px 0;font-size:14px;line-height:20px;color:var(--fg2)}
+.steps li::before{content:counter(s);font:500 12px/20px var(--f-mono);color:var(--gold2);text-align:right}
+
+/* Decisões */
+.decisions{display:grid;gap:12px}
+.dec{display:grid;grid-template-columns:44px 1fr;gap:14px;background:var(--s1);border:1px solid var(--line);border-radius:20px;padding:18px 20px}
+.dec .n{font:500 13px/24px var(--f-mono);color:var(--gold2)}
+.dec h3{margin-bottom:4px}
+.dec p{color:var(--fg2);font-size:15px}
+.dec p b{color:var(--fg);font-weight:600}
+.foot{border-top:1px solid var(--line);padding-top:24px;color:var(--fg2);font-size:14px;display:grid;gap:8px}
+@media (prefers-reduced-motion:no-preference){.pill.live .dot{animation:pulse 1.8s ease-in-out infinite}}
+@keyframes pulse{50%{opacity:.35}}
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eyebrow">App Protagon · Fase 1 Mockup</span>
+  <h1>Etapa 1: pesquisa, mapa de navegação e telas × estados</h1>
+  <p class="muted">Entrega para validação antes do design system. Nada foi desenhado em alta fidelidade ainda. Revise o mapa, a lista de estados e as 8 decisões no fim da página; com o seu ok, sigo para a Etapa 2 (tokens, componentes e as 3 telas-chave).</p>
+  <div class="stamp">
+    <span class="pill gold">Aguardando validação</span>
+    <span class="pill">26 nov 2026</span>
+    <span class="pill">Edição de exemplo: Porto Alegre</span>
+    <span class="pill">35 telas · 130 estados</span>
+  </div>
+</header>
+
+<!-- 1. PESQUISA -->
+<section id="pesquisa">
+  <div class="head">
+    <span class="eyebrow">1 · Pesquisa de produto</span>
+    <h2>O que adotar e o que evitar</h2>
+    <p class="muted">Síntese de sete referências. Os números citados no briefing vêm, em sua maioria, dos próprios fornecedores e devem ser tratados como indicativos.</p>
+  </div>
+  <div class="cols">
+    <div class="panel">
+      <h3><span class="mark yes">+</span>Adotar</h3>
+      <ul class="list">
+        <li><b>Objetivos declarados e encontro com hora e lugar</b><span class="muted">Opções prontas no perfil; o pedido aceito vira "Ponto C, 15h40" no próximo intervalo.</span><span class="src"><a href="https://www.brella.io" target="_blank" rel="noopener">Brella</a></span></li>
+        <li><b>"Conectar" ou "Agora não" treinam a fila</b><span class="muted">Chat só entre conexões aceitas. Quem foi pulado nunca é avisado.</span><span class="src"><a href="https://www.grip.events" target="_blank" rel="noopener">Grip</a></span></li>
+        <li><b>Limite diário e mensagens prontas</b><span class="muted">Reduz pedidos em massa; acesso por tipo de ingresso.</span><span class="src"><a href="https://www.swapcard.com" target="_blank" rel="noopener">Swapcard</a></span></li>
+        <li><b>Troca por QR com aceite dos dois</b><span class="muted">Ler a credencial do outro gera um pedido, não uma conexão automática.</span><span class="src"><a href="https://whova.com" target="_blank" rel="noopener">Whova</a></span></li>
+        <li><b>Mudança de agenda comunicada na hora</b><span class="muted">Banner "Agenda atualizada" na Home e marca no bloco alterado da Trilha.</span><span class="src"><a href="https://www.cvent.com/en/event-marketing-management/attendee-hub" target="_blank" rel="noopener">Cvent Attendee Hub</a></span></li>
+        <li><b>Agenda e credencial offline</b><span class="muted">Trilha, mapa e QR ficam em cache desde o login.</span><span class="src"><a href="https://doity.com.br" target="_blank" rel="noopener">Doity</a> · <a href="https://www.even3.com.br" target="_blank" rel="noopener">Even3</a></span></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3><span class="mark no">−</span>Evitar</h3>
+      <ul class="list">
+        <li><b>Excesso de notificações</b><span class="muted">Maior queixa nas avaliações da Whova. Regra: durante palestra, só aviso operacional; o resto espera o intervalo.</span></li>
+        <li><b>Pedir push no primeiro acesso</b><span class="muted">A permissão aparece quando o aluno abre a trilha do dia pela primeira vez.</span></li>
+        <li><b>Cadastro longo</b><span class="muted">Login por código; nome, ingresso e edição vêm da compra. Perfil de Conexões em menos de 60 s.</span></li>
+        <li><b>Diretório sem filtro e chat aberto</b><span class="muted">Explorar sempre com filtros; mensagem só após aceite mútuo.</span></li>
+        <li><b>Paywall na abertura do app</b><span class="muted">Cadeado só na aba Conexões e em um card da Home, convite apenas ao tocar em "Conectar", sempre fechável.</span></li>
+        <li><b>Gamificação e ranking na v1</b><span class="muted">Concorre com a palestra e não resolve nenhum dos quatro problemas do briefing.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 2. MAPA -->
+<section id="mapa">
+  <div class="head">
+    <span class="eyebrow">2 · Arquitetura de informação</span>
+    <h2>Mapa de navegação</h2>
+    <p class="muted">Cinco abas, uma camada global e um fluxo de entrada. Agenda, mapa e credencial ficam a no máximo 2 toques de qualquer tela.</p>
+  </div>
+
+  <div class="map">
+    <div class="layer">
+      <div class="lbl">Entrada</div>
+      <div class="flow">
+        <div class="node">Login<small>e-mail ou CPF</small></div><span class="arrow">→</span>
+        <div class="node">Código de 6 dígitos</div><span class="arrow">→</span>
+        <div class="node">Onboarding<small>até 3 telas, puláveis</small></div><span class="arrow">→</span>
+        <div class="node g">Agora</div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="lbl">Sempre no topo</div>
+      <div class="global">
+        <div class="node">Sino → Notificações<small>filtros Avisos · Agenda · Conexões</small></div>
+        <div class="node">QR → Credencial<small>1 toque, offline, brilho máximo</small></div>
+        <div class="node">Live Activity / Dynamic Island<small>intervalo e almoço, fora do app</small></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="lbl">Abas</div>
+      <div class="tabs">
+        <div class="tab">
+          <div class="t">Agora</div>
+          <ul>
+            <li>Home (6 versões por momento)</li>
+            <li>Tela cheia de intervalo / almoço</li>
+            <li class="deep">Onde comer</li>
+            <li>Mapa do local</li>
+            <li>Wi-Fi (sheet)</li>
+            <li>Aviso fixado (sheet)</li>
+          </ul>
+        </div>
+        <div class="tab">
+          <div class="t">Trilha</div>
+          <ul>
+            <li>Dia 1 · 2 · 3</li>
+            <li>Detalhe da sessão</li>
+            <li class="deep">Material vinculado</li>
+            <li class="deep">Minhas anotações</li>
+          </ul>
+        </div>
+        <div class="tab">
+          <div class="t">Conexões <span class="lock">cadeado no Executivo</span></div>
+          <ul>
+            <li>Ativar perfil (3 passos)</li>
+            <li>Sugestões</li>
+            <li class="deep">Perfil da pessoa</li>
+            <li class="deep">Pedido de conexão</li>
+            <li>Explorar com filtros</li>
+            <li>Pedidos recebidos</li>
+            <li>Minha rede</li>
+            <li class="deep">Chat</li>
+            <li class="deep">Marcar encontro</li>
+            <li>Ler QR de outra pessoa</li>
+          </ul>
+        </div>
+        <div class="tab">
+          <div class="t">Materiais</div>
+          <ul>
+            <li>Lista por dia e sessão</li>
+            <li>Leitor de PDF / workbook</li>
+            <li>Player de áudio e vídeo</li>
+            <li>Baixados (offline)</li>
+          </ul>
+        </div>
+        <div class="tab">
+          <div class="t">Eu</div>
+          <ul>
+            <li>Perfil e ingresso</li>
+            <li>Notificações</li>
+            <li>Privacidade</li>
+            <li class="deep">Excluir meus dados</li>
+            <li>Avaliação do dia (NPS)</li>
+            <li>Suporte e FAQ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="lbl">Fora da moldura</div>
+      <div class="flow">
+        <div class="node">Painel de demonstração<small>ingresso · momento · disparar notificação · sem internet · tela bloqueada</small></div>
+      </div>
+    </div>
+    <p class="note">Mapa e credencial também aparecem como atalhos na Home, na tela de intervalo e no cartão de encontro marcado, para cumprir a regra dos 2 toques.</p>
+  </div>
+</section>
+
+<!-- 3. TELAS x ESTADOS -->
+<section id="telas">
+  <div class="head">
+    <span class="eyebrow">3 · Inventário</span>
+    <h2>Telas × estados</h2>
+    <p class="muted">Cada estado será acessível pelo painel de demonstração. Os códigos servem para você comentar ("ajustar C04, estado limite atingido").</p>
+  </div>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Código</th><th>Tela</th><th>Estados</th><th>Diferença por ingresso</th><th>Como chegar no painel</th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="5">Entrada</td></tr>
+        <tr><td class="id mono">E01</td><td class="name">Login</td><td><div class="chips"><span class="c">vazio</span><span class="c">CPF mascarado</span><span class="c">enviando código</span><span class="c">ingresso não encontrado + suporte</span></div></td><td class="tier">igual</td><td class="ctl">Reiniciar demo</td></tr>
+        <tr><td class="id mono">E02</td><td class="name">Código</td><td><div class="chips"><span class="c">digitando</span><span class="c">código inválido</span><span class="c">reenviar em 30 s</span><span class="c">sucesso</span></div></td><td class="tier">igual</td><td class="ctl">Código 000000 = erro</td></tr>
+        <tr><td class="id mono">E03</td><td class="name">Onboarding</td><td><div class="chips"><span class="c">o que o app faz</span><span class="c">offline e credencial</span><span class="c">convite Conexões</span></div></td><td class="tier">3ª tela só VIP/Diamond; Executivo tem 2</td><td class="ctl">Ingresso</td></tr>
+        <tr><td class="id mono">E04</td><td class="name">Permissão de notificações</td><td><div class="chips"><span class="c">pedido contextual</span><span class="c">negado + como ativar depois</span></div></td><td class="tier">igual</td><td class="ctl">1ª abertura da Trilha</td></tr>
+
+        <tr class="grp"><td colspan="5">Agora</td></tr>
+        <tr><td class="id mono">A01</td><td class="name">Home</td><td><div class="chips"><span class="c">antes do evento</span><span class="c">sessão ao vivo</span><span class="c">intervalo</span><span class="c">almoço</span><span class="c">fim do dia</span><span class="c">depois do evento</span><span class="c">agenda atualizada</span><span class="c">sem internet</span></div></td><td class="tier">Card Conexões ou 1 teaser com cadeado</td><td class="ctl">Momento</td></tr>
+        <tr><td class="id mono">A02</td><td class="name">Intervalo / almoço (tela cheia)</td><td><div class="chips"><span class="c">intervalo 15 min</span><span class="c">almoço</span><span class="c">faltam 5 min</span><span class="c">volte agora</span></div></td><td class="tier">VIP vê encontro marcado no intervalo</td><td class="ctl">Momento</td></tr>
+        <tr><td class="id mono">A03</td><td class="name">Onde comer</td><td><div class="chips"><span class="c">praça de alimentação</span><span class="c">restaurantes próximos</span></div></td><td class="tier">igual</td><td class="ctl">Momento: almoço</td></tr>
+        <tr><td class="id mono">A04</td><td class="name">Mapa do local</td><td><div class="chips"><span class="c">meu setor destacado</span><span class="c">ponto selecionado</span><span class="c">Ponto de Conexão</span></div></td><td class="tier">Setor muda por ingresso; Pontos A/B/C só VIP+</td><td class="ctl">Ingresso</td></tr>
+        <tr><td class="id mono">A05</td><td class="name">Wi-Fi</td><td><div class="chips"><span class="c">rede e senha</span><span class="c">copiado</span></div></td><td class="tier">igual</td><td class="ctl">—</td></tr>
+
+        <tr class="grp"><td colspan="5">Camada global</td></tr>
+        <tr><td class="id mono">G01</td><td class="name">Credencial</td><td><div class="chips"><span class="c">online</span><span class="c">offline</span><span class="c">adicionado à Wallet</span></div></td><td class="tier">Selo Executivo, VIP ou Diamond</td><td class="ctl">Ingresso · sem internet</td></tr>
+        <tr><td class="id mono">G02</td><td class="name">Notificações</td><td><div class="chips"><span class="c">não lidas</span><span class="c">lidas</span><span class="c">filtro ativo</span><span class="c">vazia</span><span class="c">em espera até o intervalo</span></div></td><td class="tier">Filtro Conexões só VIP+</td><td class="ctl">Disparar notificação</td></tr>
+        <tr><td class="id mono">G03</td><td class="name">Push na tela bloqueada</td><td><div class="chips"><span class="c">almoço liberado</span><span class="c">faltam 10 min</span><span class="c">material liberado</span><span class="c">pedido aceito</span></div></td><td class="tier">Push de Conexões só VIP+</td><td class="ctl">Tela bloqueada</td></tr>
+        <tr><td class="id mono">G04</td><td class="name">Live Activity / Dynamic Island</td><td><div class="chips"><span class="c">compacta</span><span class="c">expandida</span><span class="c">volte agora</span></div></td><td class="tier">igual</td><td class="ctl">Tela bloqueada</td></tr>
+        <tr><td class="id mono">G05</td><td class="name">Banner sem internet</td><td><div class="chips"><span class="c">offline</span><span class="c">reconectado</span></div></td><td class="tier">igual</td><td class="ctl">Sem internet</td></tr>
+
+        <tr class="grp"><td colspan="5">Trilha</td></tr>
+        <tr><td class="id mono">T01</td><td class="name">Linha do tempo</td><td><div class="chips"><span class="c">dia em andamento</span><span class="c">dia futuro</span><span class="c">dia encerrado</span><span class="c">bloco alterado</span><span class="c">progresso da jornada</span></div></td><td class="tier">igual</td><td class="ctl">Momento + Dia</td></tr>
+        <tr><td class="id mono">T02</td><td class="name">Detalhe da sessão</td><td><div class="chips"><span class="c">ao vivo</span><span class="c">concluída</span><span class="c">próxima</span><span class="c">material liberado</span><span class="c">libera às 14h</span><span class="c">com anotações</span></div></td><td class="tier">igual</td><td class="ctl">Momento</td></tr>
+
+        <tr class="grp"><td colspan="5">Conexões</td></tr>
+        <tr><td class="id mono">C00</td><td class="name">Cadeado (Executivo)</td><td><div class="chips"><span class="c">prévia borrada + contador</span><span class="c">convite de upgrade</span><span class="c">convite fechado</span></div></td><td class="tier">Só Executivo</td><td class="ctl">Ingresso: Executivo</td></tr>
+        <tr><td class="id mono">C01</td><td class="name">Ativar perfil</td><td><div class="chips"><span class="c">dados da compra</span><span class="c">objetivos</span><span class="c">interesses (até 8)</span><span class="c">o que fica visível</span><span class="c">consentimento desligado</span><span class="c">concluído</span></div></td><td class="tier">VIP/Diamond</td><td class="ctl">Perfil: não ativado</td></tr>
+        <tr><td class="id mono">C02</td><td class="name">Sugestões</td><td><div class="chips"><span class="c">fila com afinidade</span><span class="c">fim das sugestões</span><span class="c">limite diário atingido</span><span class="c">perfil pausado</span><span class="c">aberto antes do evento (proposta)</span></div></td><td class="tier">Diamond com destaque (proposta)</td><td class="ctl">Momento: antes</td></tr>
+        <tr><td class="id mono">C03</td><td class="name">Perfil da pessoa</td><td><div class="chips"><span class="c">antes do aceite</span><span class="c">pedido enviado</span><span class="c">conectados (contatos visíveis)</span></div></td><td class="tier">VIP/Diamond</td><td class="ctl">—</td></tr>
+        <tr><td class="id mono">C04</td><td class="name">Pedido de conexão</td><td><div class="chips"><span class="c">modelo de mensagem</span><span class="c">mensagem própria</span><span class="c">enviado</span><span class="c">limite atingido</span></div></td><td class="tier">Limite maior no Diamond (proposta)</td><td class="ctl">—</td></tr>
+        <tr><td class="id mono">C05</td><td class="name">Pedidos recebidos</td><td><div class="chips"><span class="c">com pedidos</span><span class="c">vazio</span><span class="c">aceito</span><span class="c">recusado em silêncio</span></div></td><td class="tier">VIP/Diamond</td><td class="ctl">Disparar notificação</td></tr>
+        <tr><td class="id mono">C06</td><td class="name">Explorar</td><td><div class="chips"><span class="c">filtros</span><span class="c">resultados</span><span class="c">sem resultados</span></div></td><td class="tier">VIP/Diamond</td><td class="ctl">—</td></tr>
+        <tr><td class="id mono">C07</td><td class="name">Chat</td><td><div class="chips"><span class="c">primeira mensagem</span><span class="c">conversa</span><span class="c">encontro proposto</span><span class="c">encontro confirmado</span><span class="c">outro horário sugerido</span></div></td><td class="tier">VIP/Diamond</td><td class="ctl">—</td></tr>
+        <tr><td class="id mono">C08</td><td class="name">Marcar encontro</td><td><div class="chips"><span class="c">próximo intervalo + Ponto</span><span class="c">almoço</span><span class="c">escolher outro</span></div></td><td class="tier">VIP/Diamond</td><td class="ctl">—</td></tr>
+        <tr><td class="id mono">C09</td><td class="name">Minha rede</td><td><div class="chips"><span class="c">lista</span><span class="c">vazia</span><span class="c">nota privada</span><span class="c">exportar contatos (depois do evento)</span></div></td><td class="tier">VIP/Diamond</td><td class="ctl">Momento: depois</td></tr>
+        <tr><td class="id mono">C10</td><td class="name">Ler QR</td><td><div class="chips"><span class="c">câmera</span><span class="c">pessoa encontrada</span><span class="c">aguardando confirmação do outro</span><span class="c">conectados</span></div></td><td class="tier">VIP/Diamond; Executivo cai em C00</td><td class="ctl">—</td></tr>
+        <tr><td class="id mono">C11</td><td class="name">Segurança (sheet)</td><td><div class="chips"><span class="c">bloquear</span><span class="c">denunciar</span><span class="c">desfazer conexão</span><span class="c">pausar meu perfil</span></div></td><td class="tier">VIP/Diamond</td><td class="ctl">—</td></tr>
+
+        <tr class="grp"><td colspan="5">Materiais</td></tr>
+        <tr><td class="id mono">M01</td><td class="name">Lista</td><td><div class="chips"><span class="c">liberado</span><span class="c">agendado</span><span class="c">baixado</span><span class="c">concluído</span><span class="c">offline (só baixados)</span></div></td><td class="tier">igual</td><td class="ctl">Momento · sem internet</td></tr>
+        <tr><td class="id mono">M02</td><td class="name">Leitor / player</td><td><div class="chips"><span class="c">PDF</span><span class="c">workbook</span><span class="c">áudio</span><span class="c">vídeo</span></div></td><td class="tier">igual</td><td class="ctl">—</td></tr>
+
+        <tr class="grp"><td colspan="5">Eu</td></tr>
+        <tr><td class="id mono">U01</td><td class="name">Perfil e ingresso</td><td><div class="chips"><span class="c">dados da compra</span><span class="c">selo</span></div></td><td class="tier">Selo por ingresso</td><td class="ctl">Ingresso</td></tr>
+        <tr><td class="id mono">U02</td><td class="name">Preferências de notificação</td><td><div class="chips"><span class="c">por categoria</span><span class="c">permissão negada</span></div></td><td class="tier">Categoria Conexões só VIP+</td><td class="ctl">—</td></tr>
+        <tr><td class="id mono">U03</td><td class="name">Privacidade</td><td><div class="chips"><span class="c">campos visíveis</span><span class="c">perfil pausado</span><span class="c">excluir dados (confirmação)</span><span class="c">dados excluídos</span></div></td><td class="tier">Conexões só VIP+</td><td class="ctl">—</td></tr>
+        <tr><td class="id mono">U04</td><td class="name">Avaliação do dia</td><td><div class="chips"><span class="c">pendente</span><span class="c">respondida</span><span class="c">NPS final</span></div></td><td class="tier">igual</td><td class="ctl">Momento: fim do dia / depois</td></tr>
+        <tr><td class="id mono">U05</td><td class="name">Suporte e FAQ</td><td><div class="chips"><span class="c">FAQ</span><span class="c">falar com o CS</span></div></td><td class="tier">igual</td><td class="ctl">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 4. FLUXOS -->
+<section id="fluxos">
+  <div class="head">
+    <span class="eyebrow">4 · Fluxos críticos</span>
+    <h2>Os três roteiros que o mockup precisa sustentar</h2>
+  </div>
+  <div class="flows">
+    <div class="panel">
+      <h3>Aluno VIP no Dia 1</h3>
+      <ol class="steps">
+        <li>Entra por código (E01 → E02) e aceita o convite de Conexões (E03).</li>
+        <li>Ativa o perfil em 3 passos e liga o consentimento (C01).</li>
+        <li>Às 9h, Home ao vivo; abre a Trilha e autoriza notificações (A01, E04).</li>
+        <li>No intervalo, recebe os pedidos que ficaram em espera (G02, C05).</li>
+        <li>Conecta, conversa e marca "Ponto C, 15h40" (C04, C07, C08).</li>
+        <li>Fim do dia: anota a conexão e responde o NPS (C09, U04).</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Executivo no Dia 1</h3>
+      <ol class="steps">
+        <li>Mesmo login, onboarding de 2 telas (E03).</li>
+        <li>Home completa, com um único teaser de Conexões (A01).</li>
+        <li>Abre Conexões e vê a prévia borrada com o contador real (C00).</li>
+        <li>Toca em "Conectar"; o convite de upgrade abre e pode ser fechado.</li>
+        <li>Trilha, materiais, mapa e credencial funcionam sem nenhum cadeado.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Almoço sem Wi-Fi</h3>
+      <ol class="steps">
+        <li>Push "Almoço liberado, retorno às 13h30" e Live Activity (G03, G04).</li>
+        <li>Tela de almoço com contagem e onde comer (A02, A03).</li>
+        <li>Internet cai; banner offline, mapa e credencial seguem (G05, A04, G01).</li>
+        <li>13h20: "volte agora", vibração, atalho para o setor (A02).</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 5. DECISOES -->
+<section id="decisoes">
+  <div class="head">
+    <span class="eyebrow">5 · Para validar agora</span>
+    <h2>8 decisões que travam a Etapa 2</h2>
+    <p class="muted">Cada item já tem uma proposta padrão. Se você não responder algum, sigo com a proposta e marco a tela como "proposta" no mockup.</p>
+  </div>
+  <div class="decisions">
+    <div class="dec"><span class="n">D1</span><div><h3>Permissão de notificações no onboarding</h3><p>O briefing coloca a permissão na 2ª tela do onboarding; o prompt pede que ela venha depois do primeiro valor. <b>Proposta: seguir o prompt</b> e pedir na primeira abertura da Trilha. A 2ª tela do onboarding passa a explicar offline e credencial.</p></div></div>
+    <div class="dec"><span class="n">D2</span><div><h3>Agenda de exemplo</h3><p>Não tenho a grade real de Porto Alegre. <b>Proposta:</b> 9h abertura, 10h30 intervalo de 15 min, 12h30 almoço até 13h30, 15h40 intervalo, encerramento às 19h. Se houver uma grade real de alguma edição, ela deixa a demo mais crível.</p></div></div>
+    <div class="dec"><span class="n">D3</span><div><h3>Destino do botão de upgrade</h3><p>Ainda não se sabe se o upgrade é vendido no app. <b>Proposta:</b> o convite mostra as duas saídas, "Ver upgrade para VIP" (link de checkout simulado) e "Falar com o time no estande" (abre o estande no mapa).</p></div></div>
+    <div class="dec"><span class="n">D4</span><div><h3>Limite diário de pedidos</h3><p><b>Proposta:</b> 15 por dia para VIP e 25 para Diamond (marcado como proposta). Pedidos por QR presencial não contam no limite.</p></div></div>
+    <div class="dec"><span class="n">D5</span><div><h3>O que acontece no "Agora não"</h3><p><b>Proposta:</b> a pessoa sai da fila e volta só no dia seguinte, sem aviso para ela. O mesmo vale para pedido recusado: o remetente vê "Pendente" até o fim do evento, nunca "Recusado".</p></div></div>
+    <div class="dec"><span class="n">D6</span><div><h3>Pontos de Conexão</h3><p><b>Proposta:</b> três pontos fixos no mapa: A no foyer do credenciamento, B ao lado do estande, C na saída da praça de alimentação. Na vida real, precisam de sinalização física.</p></div></div>
+    <div class="dec"><span class="n">D7</span><div><h3>Retenção depois do evento</h3><p><b>Proposta para a demo:</b> chat e Minha rede ficam disponíveis por 90 dias; exportação de contatos liberada no dia seguinte ao fim. Entra na lista de decisões da diretoria.</p></div></div>
+    <div class="dec"><span class="n">D8</span><div><h3>Momento "antes do evento" com Conexões abertas</h3><p>Proposta do briefing: abrir Conexões 2 a 3 semanas antes. <b>Proposta:</b> mostrar no estado "antes do evento" com o selo "proposta", já com sugestões e pedidos, para a diretoria ver o efeito.</p></div></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <span class="eyebrow">Próximo passo</span>
+  <p>Com a sua validação, a Etapa 2 entrega o design system (tokens em variáveis CSS e componentes base) e as 3 telas-chave em alta fidelidade dentro da moldura de iPhone: Home ao vivo, Conexões VIP e Conexões Executivo com cadeado.</p>
+</footer>
+
+</div>
