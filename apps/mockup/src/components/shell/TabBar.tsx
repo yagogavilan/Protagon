@@ -27,7 +27,7 @@ export function TabBar() {
 
   return (
     <nav aria-label="Navegação principal" className="glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-[34px]">
-      <ul className="flex h-tabbar items-stretch" role="tablist">
+      <ul className="flex h-tabbar items-stretch">
         {TABS.map(({ id, label, Icon }) => {
           const isActive = id === tab;
           const locked = id === 'conexoes' && tier === 'executivo';
@@ -37,15 +37,14 @@ export function TabBar() {
             <li key={id} className="flex flex-1">
               <button
                 type="button"
-                role="tab"
-                aria-selected={isActive}
+                aria-current={isActive ? 'page' : undefined}
                 aria-label={a11y}
                 onClick={() => {
                   if (id !== tab) haptic('selection', `aba ${label}`);
                   setTab(id);
                 }}
                 className={cn(
-                  'relative flex w-full flex-col items-center justify-center gap-1 text-caption',
+                  'relative flex w-full flex-col items-center justify-center gap-1 text-label-sm',
                   isActive ? 'text-gold-200' : 'text-text-secondary',
                 )}
               >

@@ -56,7 +56,7 @@ export function WifiSheet() {
           <dd className="select-all text-body-strong text-text-primary">{edition.venue.wifi.password}</dd>
         </div>
       </dl>
-      <p className="mt-3 text-caption text-text-secondary">Se a rede ficar lenta, agenda, mapa e credencial continuam funcionando sem internet.</p>
+      <p className="mt-3 text-body text-text-secondary">Se a rede ficar lenta, agenda, mapa e credencial continuam funcionando sem internet.</p>
     </BottomSheet>
   );
 }

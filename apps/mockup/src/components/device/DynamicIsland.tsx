@@ -22,7 +22,7 @@ export function DynamicIsland() {
   const color = activity?.tone === 'live' ? 'text-live' : 'text-warning';
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-[11px] z-50 flex justify-center">
+    <div data-device-chrome="dynamic-island" className="pointer-events-none absolute inset-x-0 top-[11px] z-50 flex justify-center">
       <motion.button
         type="button"
         initial={false}

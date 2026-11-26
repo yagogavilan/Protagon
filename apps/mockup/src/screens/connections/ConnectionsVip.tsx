@@ -112,8 +112,8 @@ function CompleteProfileCard() {
         </button>
       </div>
       <div className="-mt-2 flex items-center justify-between gap-3 pb-1">
-        <p className="min-w-0 flex-1 text-caption text-text-secondary">Opcional, 30 segundos. Mostra quem pode ajudar no seu desafio.</p>
-        <Button size="compact" className="shrink-0 px-4" onClick={() => openOverlay('profile')}>
+        <p className="min-w-0 flex-1 text-body text-text-secondary">Opcional, 30 segundos. Mostra quem pode ajudar no seu desafio.</p>
+        <Button size="compact" variant="gold" className="shrink-0 px-4" onClick={() => openOverlay('profile')}>
           Completar
         </Button>
       </div>
@@ -164,7 +164,7 @@ export function ConnectionsVip() {
           <button
             type="button"
             onClick={() => openOverlay('qrscan')}
-            className="flex min-h-touch items-center gap-1.5 rounded-md border border-border-strong px-3 text-caption font-semibold text-text-primary active:bg-surface-3"
+            className="flex min-h-touch items-center gap-1.5 rounded-md border border-border-strong px-3 text-label-sm text-text-primary active:bg-surface-3"
           >
             <ScanLine size={18} aria-hidden className="text-gold-200" /> Ler QR
           </button>
@@ -188,11 +188,11 @@ export function ConnectionsVip() {
               ? 'Ative seu perfil em menos de 1 minuto.'
               : 'Em menos de 1 minuto você recebe sugestões de pessoas com interesses em comum e objetivos que combinam com os seus.'}
           </p>
-          {moment === 'before' ? <p className="mt-2 flex items-center gap-2 text-caption text-text-secondary"><Chip variant="proposal" /> Conexões abertas antes do evento</p> : null}
+          {moment === 'before' ? <p className="mt-2 flex items-center gap-2 text-body text-text-secondary"><Chip variant="proposal" /> Conexões abertas antes do evento</p> : null}
           <Button block className="mt-5" onClick={() => openOverlay('activate')}>
             Ativar perfil
           </Button>
-          <p className="mt-2 text-center text-caption text-text-secondary">Você escolhe o que fica visível.</p>
+          <p className="mt-2 text-center text-body text-text-secondary">Você escolhe o que fica visível.</p>
         </section>
       </div>
     );
@@ -201,7 +201,7 @@ export function ConnectionsVip() {
   return (
     <div className="flex flex-col gap-3 px-margin pb-4">
       {header}
-      {moment === 'before' ? <p className="-mt-2 text-caption text-text-secondary">Conexões abertas antes do evento</p> : null}
+      {moment === 'before' ? <p className="-mt-2 text-body text-text-secondary">Conexões abertas antes do evento</p> : null}
       <div className="sticky top-0 z-banner -mx-margin bg-bg px-margin py-1">
         <SegmentedTabs<ConnPanel> label="Seções de Conexões" items={items} value={panel} onChange={setPanel} />
       </div>
@@ -214,7 +214,7 @@ export function ConnectionsVip() {
         <EmptyState
           icon={<PauseCircle size={48} strokeWidth={1.5} />}
           title="Seu perfil está pausado"
-          text="Ninguém vê você nas sugestões e você não recebe pedidos."
+          text="Você some das sugestões e da busca e não recebe pedidos novos. Suas conexões continuam."
           action={
             <Button block onClick={() => setPaused(false)}>
               Reativar meu perfil
@@ -223,8 +223,8 @@ export function ConnectionsVip() {
         />
       ) : panel === 'sugestoes' ? (
         <>
-          <CompleteProfileCard />
           <SuggestionsPanel onExplore={() => setPanel('explorar')} />
+          <CompleteProfileCard />
         </>
       ) : panel === 'pedidos' ? (
         <RequestsPanel />

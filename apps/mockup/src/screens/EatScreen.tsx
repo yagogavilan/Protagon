@@ -54,7 +54,7 @@ export function EatScreen() {
           </>
         ) : (
           <>
-            {!online ? <p className="text-caption text-text-secondary">Sem internet: tempos a pé podem ter mudado.</p> : null}
+            {!online ? <p className="text-body text-text-secondary">Sem internet: tempos a pé podem ter mudado.</p> : null}
             <ul className="flex flex-col gap-2">
               {nearbyRestaurants.map((r) => (
                 <li key={r.id} className="rounded-lg border border-border-subtle bg-surface-1 p-card">
@@ -70,7 +70,7 @@ export function EatScreen() {
                 </li>
               ))}
             </ul>
-            <p className="text-caption text-text-secondary">Saindo do local, considere 10 min para ir e 10 para voltar antes de 13h20.</p>
+            <p className="text-body text-text-secondary">Saindo do local, considere 10 min para ir e 10 para voltar antes de 13h20.</p>
           </>
         )}
       </div>

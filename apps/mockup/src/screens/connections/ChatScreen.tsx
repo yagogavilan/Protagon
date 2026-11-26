@@ -173,13 +173,15 @@ export function ChatScreen() {
           <p className="text-caption text-text-secondary">
             {person.name} · {person.role}
           </p>
-          <p className="text-caption text-gold-200" aria-label={`Instagram ${person.instagram}`}>
-            {person.instagram}
-          </p>
+          {person.shares.instagram ? (
+            <p className="text-caption text-gold-200" aria-label={`Instagram ${person.instagram}`}>
+              {person.instagram}
+            </p>
+          ) : null}
         </div>
 
         {moment === 'live' ? (
-          <p className="flex items-start gap-2 text-caption text-text-secondary" role="status">
+          <p className="flex items-start gap-2 text-body text-text-secondary" role="status">
             <Clock3 size={14} aria-hidden className="mt-0.5 shrink-0" /> Palestra em andamento. As mensagens que você enviar chegam no intervalo.
           </p>
         ) : null}

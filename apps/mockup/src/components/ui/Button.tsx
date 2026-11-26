@@ -2,7 +2,7 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { LoaderCircle } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'destructive';
+type Variant = 'primary' | 'secondary' | 'gold' | 'ghost' | 'destructive';
 type Size = 'lg' | 'compact';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -19,6 +19,8 @@ const variants: Record<Variant, string> = {
   primary:
     'bg-gradient-cta text-on-cta active:bg-gradient-cta-pressed disabled:bg-none disabled:bg-surface-3 disabled:text-text-tertiary',
   secondary: 'border border-border-strong bg-transparent text-text-primary active:bg-surface-3 disabled:opacity-40',
+  // Ação opcional ao lado de um primário (um verde por tela): contorno dourado
+  gold: 'border border-border-gold bg-transparent text-gold-200 active:bg-surface-3 disabled:opacity-40',
   ghost: 'bg-transparent px-2 text-gold-200 active:bg-surface-3 disabled:opacity-40',
   destructive: 'border border-danger bg-transparent text-danger active:bg-tint-danger disabled:opacity-40',
 };

@@ -72,7 +72,7 @@ export function CodeScreen() {
       <button
         type="button"
         onClick={backToLogin}
-        className="-ml-2 flex h-11 items-center gap-1 self-start rounded-pill px-2 text-body text-text-secondary"
+        className="-ml-2 flex h-12 items-center gap-1 self-start rounded-pill px-2 text-body text-text-secondary"
       >
         <ChevronLeft size={20} aria-hidden /> Trocar e-mail ou CPF
       </button>
@@ -148,7 +148,7 @@ export function CodeScreen() {
         <Button variant="ghost" disabled={seconds > 0} onClick={resend} className="tabular disabled:text-text-secondary disabled:opacity-100">
           {seconds > 0 ? `Reenviar código em 0:${String(seconds).padStart(2, '0')}` : 'Reenviar código'}
         </Button>
-        <p className="text-center text-caption text-text-tertiary">Não chegou? Veja a caixa de spam ou promoções.</p>
+        <p className="text-center text-body text-text-tertiary">Não chegou? Veja a caixa de spam ou promoções.</p>
       </div>
     </div>
   );

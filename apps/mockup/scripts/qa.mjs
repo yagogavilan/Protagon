@@ -8,7 +8,8 @@
  *
  * a  estados do inventário alcançáveis      f  foco e teclado nos sheets e telas
  * b  contraste WCAG AA no DOM renderizado   g  agenda, mapa e credencial a <= 2 toques
- * c  tamanhos de fonte (< 16 px)            h  brilho baixo (capturas com filtro) e extras
+ * c  tamanhos de fonte (corpo >= 16 px;      h  brilho baixo (capturas com filtro) e extras
+ *    rótulos de ação >= 14 px, peso 500-600)
  * d  regras invioláveis (texto, contato,    i  notificações durante a palestra
  *    cadeado, blur)
  * e  alvos de toque (>= 44 px)
@@ -198,6 +199,8 @@ const TARGET_SCAN = `
   scopes.forEach((s) => s.querySelectorAll(sel).forEach((el) => {
     const cs = getComputedStyle(el); const r = el.getBoundingClientRect();
     if (cs.display === 'none' || cs.visibility === 'hidden' || r.width < 1 || r.height < 1) return;
+    // Ilha dinâmica: hardware do iPhone simulado (cromo do aparelho, não UI do app); decisão registrada na revisão da Etapa 4
+    if (el.closest('[data-device-chrome]')) return;
     let op = 1; for (let n = el; n; n = n.parentElement) op *= parseFloat(getComputedStyle(n).opacity); if (op < 0.05) return;
     const name = (el.getAttribute('aria-label') || el.innerText || el.getAttribute('placeholder') || el.id || '').replace(/\\s+/g, ' ').trim().slice(0, 50);
     const key = name + '|' + Math.round(r.width) + 'x' + Math.round(r.height) + '|' + el.tagName;
@@ -407,7 +410,7 @@ async function sectionA() {
   probe('M02', 'workbook', 'go=M01&moment=endOfDay', /Workbook/, async (p) => { await tap(p, /Workbook: Roda da vida/); });
   probe('M02', 'áudio', 'go=M01&moment=endOfDay', /Áudio/, async (p) => { await tap(p, /Áudio: Autorresponsabilidade/); });
   probe('M02', 'vídeo', 'go=M01&moment=endOfDay', /Vídeo/, async (p) => { await tap(p, /Vídeo: resumo do Dia 1/); });
-  probe('U01', 'dados da compra, CPF mascarado', 'go=U01', /\*\*\*\.\d{3}\.\d{3}-\*\*/);
+  probe('U01', 'dados da compra, CPF mascarado (só os 2 últimos dígitos)', 'go=U01', /\*\*\*\.\*\*\*\.\*\*\*-\d{2}/);
   probe('U01', 'Meu perfil de Conexões', 'go=U01&connections=1', /Meu perfil de Conexões/);
   probe('U02', 'por categoria', 'go=U02', [/Avisos operacionais/, /Agenda e materiais/, /Conexões/]);
   probe('U02', 'permissão negada', 'go=U02&perm=denied', /Avisos do sistema desligados/);
@@ -417,6 +420,21 @@ async function sectionA() {
   probe('U04', 'pendente', 'go=U04&moment=endOfDay', /Pendente/, async (p) => { await tap(p, /Voltar/); });
   probe('U04', 'NPS final', 'go=U04&moment=after', /Como foi o Protagon/);
   probe('U05', 'FAQ + falar com o CS', 'go=U05', [/Perguntas frequentes/, /Falar com o CS/]);
+
+  // Ajustes da Etapa 4 (BUG-008, SEC-001 a SEC-008): o que a revisão de segurança pediu para o mockup
+  const toC01Step3 = async (p) => { await tap(p, /^Busco sócio/); await tap(p, /^Destravar/); await tap(p, /^Continuar/); await tap(p, /^Continuar/); };
+  probe('C01', 'SEC-001 texto de consentimento (dados, contatos, exportação, 90 dias, uso, política)', 'go=C01', [/Também aparecem: nicho e objetivo no Protagon/, /Não usamos para venda de outros produtos/, /salvar e exportar seus contatos/, /90 dias após o evento/, /pausar, desligar ou excluir/, /Política de privacidade/], toC01Step3);
+  probe('C01', 'SEC-002 uma chave por canal (WhatsApp, LinkedIn, Instagram)', 'go=C01', [/Depois do aceite, você compartilha/, /WhatsApp/, /LinkedIn/, /Instagram/], toC01Step3);
+  probe('C01', 'SEC-003 nicho, objetivo, foto e maior desafio em "O que fica visível"', 'go=C01', [/Nicho/, /Objetivo no Protagon/, /Foto/, /Maior desafio/], toC01Step3);
+  probe('U03', 'SEC-003 maior desafio e canais em Privacidade', 'go=U03', [/Maior desafio/, /Depois do aceite, você compartilha/, /WhatsApp/]);
+  probe('U03', 'BUG-008/SEC-004 aviso ao ligar o Instagram antes da conexão', 'go=U03', /bloquear e denunciar daqui não valem/, async (p) => { await tap(p, /Mostrar meu Instagram antes da conexão/); });
+  probe('U03', 'SEC-008 textos de pausar, excluir e política', 'go=U03', [/Suas conexões continuam/, /Cópias de segurança são apagadas em até/, /Seu perfil de Conexões só existe com a sua autorização/, /Política de privacidade/]);
+  probe('C11', 'SEC-005 motivo Assédio, bloquear também e caminho urgente', 'go=C11', [/Assédio ou comportamento inadequado/, /Bloquear Isabela também/], async (p) => { await tap(p, /^Denunciar/); });
+  probe('C11', 'SEC-005 depois de enviar: equipe no estande', 'go=C11', [/a equipe analisa no mesmo dia/, /Falar com a equipe no estande/], async (p) => { await tap(p, /^Denunciar/); await tap(p, /Enviar denúncia/); });
+  probe('C11', 'BUG-011 concordância ao bloquear', 'go=C11', /o perfil de Isabela/, async (p) => { await tap(p, /^Bloquear Isabela/); });
+  probe('C11', 'SEC-008 desfazer conexão não promete apagar o que foi salvo fora', 'go=C11', /O que já foi salvo fora do app não é apagado/, async (p) => { await tap(p, /^Desfazer conexão/); });
+  probe('C09', 'SEC-007 aviso de uso responsável na exportação', 'go=C09&moment=after', [/listas de transmissão/, /só os contatos que cada pessoa liberou/, /Neste arquivo: 5 WhatsApp, 3 LinkedIn, 4 Instagram/]);
+  probe('C03', 'SEC-002 conectado mostra só os canais liberados (Larissa: sem LinkedIn)', 'go=C09&moment=break', [/WhatsApp/, /Instagram/, /Só os canais que Larissa liberou/], async (p) => { await tap(p, /Abrir perfil de Larissa Antunes/); const ov = await p.locator('.z-overlay').innerText(); if (/LinkedIn/.test(ov)) throw new Error('LinkedIn aparece no perfil de quem não o liberou'); });
 
   const unreachable = [];
   for (const pr of P) {
@@ -456,8 +474,8 @@ async function sectionBC() {
     for (const it of r.items) {
       if (!it.ok && !it.disabled) fails.push({ screen: id, ...it });
       if (it.fs < 16) {
-        const bucket = it.island ? 'chrome' : it.ctl && it.ctlLen <= 40 ? 'action' : it.len >= 45 ? 'body' : 'meta';
-        small[bucket].push({ screen: id, t: it.t, fs: it.fs, ctl: it.ctl });
+        const bucket = it.island ? 'chrome' : /^\d+$/.test(it.t) ? 'meta' : it.ctl && it.ctlLen <= 40 ? 'action' : it.len >= 45 ? 'body' : 'meta';
+        small[bucket].push({ screen: id, t: it.t, fs: it.fs, fw: it.fw, ctl: it.ctl });
       }
     }
   }
@@ -479,9 +497,11 @@ async function sectionBC() {
   };
   check('c', 'texto corrido (>= 45 caracteres) com fonte >= 16px', small.body.length === 0, `${small.body.length} ocorrências, tamanhos ${sizes(small.body)}`);
   small.body.slice(0, 40).forEach((x) => console.log(`   corpo<16 [${x.screen}] ${x.fs}px "${x.t}"`));
-  const actU = uniq(small.action, (x) => `${x.t}|${x.fs}`);
-  check('c', 'rótulos de ação (botões, chips, abas, links) >= 16px', actU.length === 0, `${actU.length} rótulos únicos, tamanhos ${sizes(actU)}`);
-  actU.slice(0, 60).forEach((x) => console.log(`   ação<16 [${x.screen}] ${x.fs}px ${x.ctl} "${x.t}"`));
+  // Decisão do CEO (Etapa 4): rótulo de ação (chip, filtro, aba, botão) pode ficar abaixo de 16 px, mas nunca abaixo de 14 px
+  // e com peso 500 a 600 (contraste AA já é varrido na seção b). Acima de 16 px o peso é livre.
+  const actU = uniq(small.action.filter((x) => x.fs < 14 || x.fw < 500 || x.fw > 600), (x) => `${x.t}|${x.fs}|${x.fw}`);
+  check('c', 'rótulos de ação (botões, chips, abas, links) >= 14px e peso 500-600 quando < 16px', actU.length === 0, `${actU.length} rótulos únicos, tamanhos ${sizes(actU)}`);
+  actU.slice(0, 60).forEach((x) => console.log(`   ação ${x.fs}px/${x.fw} ${x.ctl} "${x.t}" [${x.screen}]`));
   const metaU = uniq(small.meta, (x) => `${x.t}|${x.fs}`);
   console.log(`   (legendas/metadados < 16px, permitidos como caption pelo design system: ${metaU.length} textos únicos; tamanhos ${sizes(metaU)})`);
   const under13 = uniq([...small.body, ...small.action, ...small.meta].filter((x) => x.fs < 13), (x) => `${x.t}|${x.fs}`);
@@ -528,7 +548,7 @@ async function sectionD() {
   const CONTACT_RX = /(?:\(\d{2}\)\s?9?\d{4}-\d{4}|\+55\s?\d|@[\w.]+\.exemplo|linkedin\.com\/in\/[\w-]+|[\w.]+@[\w.]+\.\w{2,})/i;
   // telas antes do aceite: nada de contato de OUTRA pessoa (e-mail/telefone do aluno e do suporte são esperados)
   const PRE_ACCEPT = new Set(['C00-exec', 'C00-convite', 'C02', 'C02-limite', 'C02-before', 'C03-sugestao', 'C04', 'C04-limite', 'C05', 'C06', 'C10', 'A01-live-vip', 'A01-break-vip', 'A01-before-vip', 'A01-after-vip', 'A01-endOfDay']);
-  const ME_CONTACTS = /rafael\.moraes@exemplo\.com\.br|@rafaelmoraes\.exemplo|suporte@protagon\.exemplo/i;
+  const ME_CONTACTS = /rafael\.moraes@exemplo\.com\.br|@rafaelmoraes\.exemplo|suporte@protagon\.exemplo|\(51\) 90000-0000|linkedin\.com\/in\/rafaelmoraes-exemplo/i;
 
   await eachScreen(async (id, page) => {
     const t = await text(page);
@@ -631,7 +651,8 @@ async function sectionD() {
     await ctx.close();
   }
   keep('d', 'blur', blur);
-  const stray = blur.filter((x) => !(x.nav || x.dialog) && x.bf);
+  // Push e tela bloqueada (.system-glass) são cromo do iOS simulado, não UI do app: a regra 7 vale para o app (aceito na revisão da Etapa 4)
+  const stray = blur.filter((x) => !(x.nav || x.dialog) && x.bf && !/\bsystem-glass\b/.test(x.cls));
   check('d', 'backdrop-filter (vidro) só na tab bar e em bottom sheets', stray.length === 0, JSON.stringify(stray.slice(0, 5)));
   const filt = blur.filter((x) => x.f);
   keep('d', 'filter', filt);
@@ -660,7 +681,7 @@ async function sectionF() {
     ['C08 encontro', 'go=C08&moment=break', null],
     ['A05 Wi-Fi', 'go=A05', null],
     ['C00 convite', 'go=C00', async (p) => { await tap(p, /Quero me conectar/); }],
-    ['U03 excluir', 'go=U03', async (p) => { await tap(p, /^Excluir meus dados/); }],
+    ['U03 aviso do Instagram', 'go=U03', async (p) => { await tap(p, /Mostrar meu Instagram antes da conexão/); }],
     ['E04 permissão', 'go=E04', null],
   ];
   for (const [name, q, steps] of sheets) {
@@ -739,7 +760,8 @@ async function sectionF() {
       if (!info.ring) noRing.push(info.name + ' <' + info.tag + '>');
     }
     keep('f', `tab ${name}`, { focados: seen.length, semAnel: noRing });
-    check('f', `${name}: anel de foco visível em todo controle alcançado por Tab`, noRing.length === 0 && seen.length > 3, `${seen.length} controles, sem anel: ${noRing.join('; ')}`);
+    // O Login só tem 1 controle habilitado até o campo ser preenchido (o botão nasce desabilitado): mínimo de 1 nele, 4 nas demais
+    check('f', `${name}: anel de foco visível em todo controle alcançado por Tab`, noRing.length === 0 && seen.length >= (name === 'Login' ? 1 : 4), `${seen.length} controles, sem anel: ${noRing.join('; ')}`);
     await page.screenshot({ path: join(OUT_DIR, `foco-${name.replace(/\W+/g, '-')}.png`), clip: await frameOf(page).boundingBox() });
     await ctx.close();
   }
@@ -860,14 +882,17 @@ async function sectionI() {
   for (const [id, title] of opts) {
     await page.reload({ waitUntil: 'networkidle' });
     await settle(page, 500);
+    // a semeadura inicial já pode ter itens em espera: compara a contagem antes e depois do disparo
+    const heldNow = async () => Number(/(\d+) em espera/.exec(await panelOf(page).innerText())?.[1] ?? 0);
+    const before = await heldNow();
     await panelOf(page).locator('select#tpl').selectOption(id);
     await panelOf(page).getByRole('button', { name: /Disparar notificação/ }).click();
     await settle(page, 600);
     const pushVisible = await frameOf(page).getByText(title, { exact: false }).filter({ visible: true }).count();
-    const heldTxt = /(\d+) em espera/.exec(await panelOf(page).innerText());
-    (pushVisible > 0 && !heldTxt ? delivered : held).push(title);
+    const after = await heldNow();
+    (pushVisible > 0 && after === before ? delivered : held).push(title);
     const tpl = id;
-    keep('i', tpl, { pushVisible, emEspera: heldTxt ? heldTxt[1] : 0 });
+    keep('i', tpl, { pushVisible, emEsperaAntes: before, emEsperaDepois: after });
   }
   keep('i', 'entregues', delivered);
   keep('i', 'emEspera', held);
@@ -881,13 +906,13 @@ async function sectionI() {
     const { ctx: c2, page: p2 } = await open(`${A}&moment=live&overlay=notifications`);
     const list = (await p2.locator('.z-overlay').innerText()).replace(/\s+/g, ' ');
     keep('i', 'listaBoasVindasLive', list);
-    check('i', 'lista de notificações em sessão ao vivo sem Conexões/material não operacional', !/Conexões abertas|Conexões liberadas|Novo pedido|Material liberado/.test(list), list.slice(0, 500));
+    check('i', 'lista de notificações em sessão ao vivo sem Conexões/material não operacional', !/Conexões abertas|Conexões liberadas|Novo pedido|Material liberado/.test(list.replace(/\d+ notificações? em espera/, '')), list.slice(0, 500));
     await c2.close();
   }
   // Badge da tab bar e do sino durante palestra: contadores de Conexões não aparecem
   {
     const { ctx: c3, page: p3 } = await open(`${A}&moment=live&connections=1&profile=full`);
-    const t = await frameOf(p3).getByRole('tab', { name: /Conexões/ }).getAttribute('aria-label');
+    const t = await frameOf(p3).getByRole('navigation', { name: 'Navegação principal' }).getByRole('button', { name: /Conexões/ }).getAttribute('aria-label');
     check('i', 'tab bar sem badge de pedidos durante a palestra', !/pedidos/.test(t ?? ''), t ?? '');
     const home = await text(p3);
     keep('i', 'homeLiveVipAtivo', home.slice(0, 900));

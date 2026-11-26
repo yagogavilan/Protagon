@@ -28,15 +28,15 @@ function buildItems(tier: Tier): MapItem[] {
   const mine = SECTORS[tier];
   const items: MapItem[] = [
     { id: 'sector', label: 'Meu setor', kind: 'sector', x: mine.x + mine.w - 28, y: mine.y + mine.h / 2, text: `${edition.sectorByTier[tier]}. Entre pelas portas laterais da plenária.` },
-    { id: 'checkin', label: 'Credenciamento', kind: 'service', x: 72, y: 296, text: 'Credenciamento no foyer térreo. Retire pulseira e kit com a credencial do app.' },
-    { id: 'booth', label: 'Estande', kind: 'service', x: 196, y: 296, text: `${boothLocation}. O time explica o upgrade e tira suas dúvidas.` },
-    { id: 'wc', label: 'Banheiros', kind: 'service', x: 298, y: 296, text: 'Banheiros no foyer, ao lado do estande. Há opção acessível.' },
-    { id: 'food', label: 'Almoço', kind: 'service', x: 130, y: 382, text: 'Praça de alimentação no 2º andar, pela escada B. Almoço das 12h30 às 13h30.' },
+    { id: 'checkin', label: 'Credenciamento', kind: 'service', x: 84, y: 295, text: 'Credenciamento no foyer térreo. Retire pulseira e kit com a credencial do app.' },
+    { id: 'booth', label: 'Estande', kind: 'service', x: 198, y: 295, text: `${boothLocation}. O time explica o upgrade e tira suas dúvidas.` },
+    { id: 'wc', label: 'Banheiros', kind: 'service', x: 294, y: 295, text: 'Banheiros no foyer, ao lado do estande. Há opção acessível.' },
+    { id: 'food', label: 'Almoço', kind: 'service', x: 130, y: 398, text: 'Praça de alimentação no 2º andar, pela escada B. Almoço das 12h30 às 13h30.' },
     { id: 'exit-n', label: 'Saída', kind: 'exit', x: 346, y: 122, text: 'Saída lateral da plenária, para a calçada da Av. Praia de Belas.' },
-    { id: 'exit-s', label: 'Saída', kind: 'exit', x: 340, y: 396, text: 'Saída de emergência da praça de alimentação.' },
+    { id: 'exit-s', label: 'Saída', kind: 'exit', x: 336, y: 406, text: 'Saída de emergência da praça de alimentação.' },
   ];
   if (tier !== 'executivo') {
-    const pos: Record<string, [number, number]> = { A: [72, 328], B: [138, 296], C: [276, 382] };
+    const pos: Record<string, [number, number]> = { A: [110, 337], B: [170, 337], C: [284, 404] };
     for (const p of connectionPoints) {
       const [x, y] = pos[p.id] ?? [0, 0];
       items.push({ id: `pt-${p.id}`, label: p.name, kind: 'point', x, y, text: `${p.name}: ${p.where}. Combinem o encontro pelo chat.` });
@@ -44,6 +44,9 @@ function buildItems(tier: Tier): MapItem[] {
   }
   return items;
 }
+
+/** Largura dos rótulos do foyer (texto de 15 unidades, legível a brilho baixo) */
+const PILL_W = { checkin: 134, booth: 84, wc: 96 } as const;
 
 const FILTER_ORDER = ['sector', 'checkin', 'booth', 'wc', 'food', 'pt-A', 'pt-B', 'pt-C', 'exit-n'];
 
@@ -55,7 +58,7 @@ function itemFor(focus: string, tier: Tier): string {
   return 'sector';
 }
 
-function Hit({ item, sel, onSelect, children }: { item: MapItem; sel: string; onSelect: (id: string) => void; children: ReactNode }) {
+function Hit({ item, sel, onSelect, children, w = 52 }: { item: MapItem; sel: string; onSelect: (id: string) => void; children: ReactNode; w?: number }) {
   const onKey = (e: KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -72,7 +75,7 @@ function Hit({ item, sel, onSelect, children }: { item: MapItem; sel: string; on
       onKeyDown={onKey}
       className="cursor-pointer outline-none"
     >
-      <rect className="fill-transparent stroke-transparent" x={item.x - 24} y={item.y - 24} width="48" height="48" rx="12" />
+      <rect className="fill-transparent stroke-transparent" x={item.x - w / 2} y={item.y - 26} width={w} height="52" rx="12" />
       {children}
     </g>
   );
@@ -95,14 +98,14 @@ export function MapScreen() {
     <OverlayPage title="Mapa do local">
       <div className="flex flex-col gap-3">
         <div className="rounded-lg border border-border-subtle bg-surface-1 p-2">
-          <svg viewBox="0 0 360 424" role="group" aria-label={`Mapa do ${edition.venue.name}. Seu setor: ${edition.sectorByTier[tier]}.`} className="block w-full">
+          <svg viewBox="0 0 360 446" role="group" aria-label={`Mapa do ${edition.venue.name}. Seu setor: ${edition.sectorByTier[tier]}.`} className="block w-full">
             {/* plenária */}
             <rect x="16" y="16" width="328" height="224" rx="20" className="fill-surface-2 stroke-border-strong" strokeWidth="1.5" />
-            <text x="180" y="36" textAnchor="middle" className="fill-text-secondary" fontSize="12" fontWeight="600">
+            <text x="180" y="38" textAnchor="middle" className="fill-text-primary" fontSize="15" fontWeight="600">
               Plenária principal
             </text>
-            <rect x="110" y="44" width="140" height="18" rx="6" className="fill-surface-3" />
-            <text x="180" y="57" textAnchor="middle" className="fill-text-secondary" fontSize="11">
+            <rect x="110" y="46" width="140" height="22" rx="6" className="fill-surface-3" />
+            <text x="180" y="62" textAnchor="middle" className="fill-text-primary" fontSize="15" fontWeight="600">
               Palco
             </text>
             {(['diamond', 'vip', 'executivo'] as const).map((t) => {
@@ -120,7 +123,7 @@ export function MapScreen() {
                     strokeWidth={mine ? 2.5 : 1}
                     strokeDasharray={mine ? undefined : '4 4'}
                   />
-                  <text x={sec.x + 14} y={sec.y + sec.h / 2 + 4} className={mine ? 'fill-gold-200' : 'fill-text-secondary'} fontSize="12" fontWeight="600">
+                  <text x={sec.x + 14} y={sec.y + sec.h / 2 + 4} className={mine ? 'fill-gold-200' : 'fill-text-primary'} fontSize="15" fontWeight="600">
                     {sec.label}
                     {mine ? ' · seu setor' : ''}
                   </text>
@@ -135,16 +138,16 @@ export function MapScreen() {
             </Hit>
 
             {/* foyer */}
-            <rect x="16" y="250" width="328" height="88" rx="16" className="fill-surface-1 stroke-border-strong" strokeWidth="1" />
-            <text x="28" y="266" className="fill-text-secondary" fontSize="11">
+            <rect x="16" y="250" width="328" height="108" rx="16" className="fill-surface-1 stroke-border-strong" strokeWidth="1" />
+            <text x="28" y="270" className="fill-text-primary" fontSize="15" fontWeight="600">
               Foyer
             </text>
             {(['checkin', 'booth', 'wc'] as const).map((id) => {
               const it = items.find((i) => i.id === id)!;
               return (
-                <Hit key={id} item={it} sel={selectedId} onSelect={select}>
-                  <rect x={it.x - 46} y={it.y - 16} width="92" height="32" rx="8" className={cn(selectedId === id ? 'fill-tint-gold stroke-gold-200' : 'fill-surface-3 stroke-border-strong')} strokeWidth="1.5" />
-                  <text x={it.x} y={it.y + 4} textAnchor="middle" className="fill-text-primary" fontSize="10.5" fontWeight="600">
+                <Hit key={id} item={it} sel={selectedId} onSelect={select} w={PILL_W[id]}>
+                  <rect x={it.x - PILL_W[id] / 2} y={it.y - 16} width={PILL_W[id]} height="32" rx="8" className={cn(selectedId === id ? 'fill-tint-gold stroke-gold-200' : 'fill-surface-3 stroke-border-strong')} strokeWidth="1.5" />
+                  <text x={it.x} y={it.y + 5} textAnchor="middle" className="fill-text-primary" fontSize="15" fontWeight="600">
                     {it.label}
                   </text>
                 </Hit>
@@ -152,10 +155,10 @@ export function MapScreen() {
             })}
 
             {/* praça de alimentação */}
-            <rect x="16" y="350" width="250" height="64" rx="16" className="fill-surface-1 stroke-border-strong" strokeWidth="1" />
-            <Hit item={items.find((i) => i.id === 'food')!} sel={selectedId} onSelect={select}>
-              <rect x="34" y="366" width="192" height="32" rx="8" className={cn(selectedId === 'food' ? 'fill-tint-gold stroke-gold-200' : 'fill-surface-3 stroke-border-strong')} strokeWidth="1.5" />
-              <text x="130" y="386" textAnchor="middle" className="fill-text-primary" fontSize="11" fontWeight="600">
+            <rect x="16" y="370" width="250" height="68" rx="16" className="fill-surface-1 stroke-border-strong" strokeWidth="1" />
+            <Hit item={items.find((i) => i.id === 'food')!} sel={selectedId} onSelect={select} w={200}>
+              <rect x="30" y="382" width="200" height="32" rx="8" className={cn(selectedId === 'food' ? 'fill-tint-gold stroke-gold-200' : 'fill-surface-3 stroke-border-strong')} strokeWidth="1.5" />
+              <text x="130" y="403" textAnchor="middle" className="fill-text-primary" fontSize="15" fontWeight="600">
                 Praça de alimentação
               </text>
             </Hit>
@@ -177,7 +180,7 @@ export function MapScreen() {
               .map((it) => (
                 <Hit key={it.id} item={it} sel={selectedId} onSelect={select}>
                   <circle cx={it.x} cy={it.y} r="13" className={cn(selectedId === it.id ? 'fill-gold-200' : 'fill-gold-500')} />
-                  <text x={it.x} y={it.y + 4.5} textAnchor="middle" className="fill-bg" fontSize="13" fontWeight="700">
+                  <text x={it.x} y={it.y + 5} textAnchor="middle" className="fill-bg" fontSize="15" fontWeight="700">
                     {it.id.slice(-1)}
                   </text>
                   {selectedRing(it)}
@@ -201,7 +204,7 @@ export function MapScreen() {
         </section>
 
         {tier === 'executivo' ? (
-          <p className="text-caption text-text-secondary">Pontos de Conexão aparecem para VIP e Diamond.</p>
+          <p className="text-body text-text-secondary">Pontos de Conexão aparecem para VIP e Diamond.</p>
         ) : null}
       </div>
     </OverlayPage>

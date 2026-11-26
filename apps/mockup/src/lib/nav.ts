@@ -31,6 +31,7 @@ export const SCREEN_CODES: ScreenCode[] = [
   { code: 'T02', label: 'Detalhe da sessão', group: 'Trilha' },
   { code: 'C00', label: 'Cadeado (Executivo)', group: 'Conexões' },
   { code: 'C01', label: 'Ativar perfil', group: 'Conexões' },
+  { code: 'C01b', label: 'Complete seu perfil', group: 'Conexões' },
   { code: 'C02', label: 'Sugestões', group: 'Conexões' },
   { code: 'C03', label: 'Perfil da pessoa', group: 'Conexões' },
   { code: 'C04', label: 'Pedido de conexão', group: 'Conexões' },
@@ -123,6 +124,9 @@ export function goTo(code: string): void {
       vip();
       st.setState({ connectionsActive: false, consent: false });
       return overlay('activate', undefined, 'conexoes');
+    case 'C01b':
+      active();
+      return overlay('profile', undefined, 'conexoes');
     case 'C02': return conn('sugestoes');
     case 'C03':
       withNetwork();

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { OverlayPage } from '@/components/shell/OverlayPage';
 import { Button } from '@/components/ui/Button';
 import { FilterChip } from '@/components/ui/FilterChip';
+import { Switch } from '@/components/ui/Switch';
 import { goalsList, topicIds, topics } from '@/data/participants';
 import type { TopicId } from '@/data/types';
 import { haptic } from '@/lib/haptics';
@@ -24,6 +25,8 @@ function normalizeHandle(v: string): string {
 export function ProfileEditScreen() {
   const profile = useDemo((s) => s.profile);
   const instagramEarly = useDemo((s) => s.instagramEarly);
+  const showChallenge = useDemo((s) => s.privacy.challenge);
+  const setPrivacy = useDemo((s) => s.setPrivacy);
   const setProfile = useDemo((s) => s.setProfile);
   const closeOverlay = useDemo((s) => s.closeOverlay);
   const showToast = useDemo((s) => s.showToast);
@@ -34,6 +37,8 @@ export function ProfileEditScreen() {
   const [niche, setNiche] = useState(profile.niche);
   const [goal, setGoal] = useState(profile.goal);
   const [instagram, setInstagram] = useState(profile.instagram);
+  const [whatsapp, setWhatsapp] = useState(profile.whatsapp);
+  const [linkedin, setLinkedin] = useState(profile.linkedin);
 
   const toggleExpertise = (t: TopicId) =>
     setExpertise((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : cur.length >= MAX_EXPERTISE ? cur : [...cur, t]));
@@ -47,7 +52,7 @@ export function ProfileEditScreen() {
           block
           disabled={!canSave}
           onClick={() => {
-            setProfile({ challenge, expertise, niche: niche.trim(), goal, instagram });
+            setProfile({ challenge, expertise, niche: niche.trim(), goal, instagram, whatsapp: whatsapp.trim(), linkedin: linkedin.trim() });
             haptic('success', 'perfil salvo');
             showToast({ text: 'Perfil salvo. As sugestões já usam essas respostas.', tone: 'success' });
             closeOverlay();
@@ -72,6 +77,14 @@ export function ProfileEditScreen() {
                 {topics[t].challenge}
               </FilterChip>
             ))}
+          </div>
+          <div className="mt-2 rounded-lg border border-border-subtle bg-surface-1 p-1">
+            <Switch
+              label="Mostrar meu maior desafio"
+              hint="Desligado, ele continua melhorando as suas sugestões, mas ninguém o vê nem recebe motivo derivado dele."
+              checked={showChallenge}
+              onChange={(v) => setPrivacy('challenge', v)}
+            />
           </div>
         </section>
 
@@ -109,8 +122,17 @@ export function ProfileEditScreen() {
         </section>
 
         <section className="flex flex-col gap-2" aria-label="Contatos">
-          <label htmlFor="pe-instagram" className="text-body-strong text-text-primary">
-            Seu Instagram
+          <h2 className="text-body-strong text-text-primary">Seus contatos</h2>
+          <label htmlFor="pe-whatsapp" className="text-body text-text-secondary">
+            WhatsApp (vem da sua compra, você pode trocar)
+          </label>
+          <input id="pe-whatsapp" value={whatsapp} inputMode="tel" autoComplete="tel" onChange={(e) => setWhatsapp(e.target.value.replace(/[^\d()+\-\s]/g, '').slice(0, 20))} placeholder="(00) 90000-0000" className={INPUT} />
+          <label htmlFor="pe-linkedin" className="mt-2 text-body text-text-secondary">
+            LinkedIn
+          </label>
+          <input id="pe-linkedin" value={linkedin} inputMode="url" autoCapitalize="none" autoCorrect="off" onChange={(e) => setLinkedin(e.target.value.slice(0, 80))} placeholder="linkedin.com/in/seunome" className={INPUT} />
+          <label htmlFor="pe-instagram" className="mt-2 text-body text-text-secondary">
+            Instagram
           </label>
           <input
             id="pe-instagram"
@@ -122,10 +144,11 @@ export function ProfileEditScreen() {
             placeholder="@seuusuario"
             className={INPUT}
           />
-          <p className="text-caption text-text-secondary">
+          <p className="text-body text-text-secondary">
             {instagramEarly
               ? 'Seu @ aparece para VIP e Diamond antes da conexão, porque você liberou em Privacidade.'
-              : 'Junto com WhatsApp e LinkedIn, só aparece depois que os dois aceitam a conexão. Para mudar isso, veja Privacidade em Eu.'}          </p>
+              : 'WhatsApp, LinkedIn e Instagram só aparecem depois que os dois aceitam a conexão, e só os canais que você ligar em Privacidade, em Eu.'}
+          </p>
         </section>
       </div>
     </OverlayPage>

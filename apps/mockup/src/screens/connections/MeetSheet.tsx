@@ -61,7 +61,7 @@ export function MeetSheet() {
             <Button block icon={<CalendarClock size={20} aria-hidden />} onClick={propose}>
               Propor {meetingLabel({ point, slot: chosen.slot }, clock)}
             </Button>
-            <p className="text-center text-caption text-text-secondary">{person ? `${firstName(person.name)} confirma ou sugere outro horário.` : ''}</p>
+            <p className="text-center text-body text-text-secondary">{person ? `${firstName(person.name)} confirma ou sugere outro horário.` : ''}</p>
           </>
         ) : null
       }

@@ -129,9 +129,11 @@ export function ExplorePanel() {
               type="button"
               onClick={() => setFilters((f) => ({ ...f, [c.key]: null }))}
               aria-label={`Remover filtro ${c.label}`}
-              className="flex h-9 items-center gap-1.5 rounded-pill border border-gold-500 bg-tint-gold px-3 text-[15px] text-text-primary"
+              className="flex min-h-touch items-center"
             >
-              {c.label} <X size={14} aria-hidden />
+              <span className="flex h-9 items-center gap-1.5 rounded-pill border border-gold-500 bg-tint-gold px-3 text-label text-text-primary">
+                {c.label} <X size={14} aria-hidden />
+              </span>
             </button>
           ))}
         </div>

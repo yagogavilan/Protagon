@@ -197,17 +197,21 @@ function ConnectionsTile({ moment, clock }: { moment: Moment; clock: EventClock 
   if (!online) {
     return (
       <BentoTile icon={icon} heading={heading} disabled>
-        <p className="text-body text-text-secondary">Conexões voltam quando a internet voltar</p>
+        <p className="flex items-start gap-2 text-body text-text-secondary">
+          <WifiOff size={20} aria-hidden className="mt-0.5 shrink-0" /> Conexões voltam quando a internet voltar
+        </p>
       </BentoTile>
     );
   }
   if (!active) {
     return (
-      <BentoTile icon={icon} heading={heading} onPress={open} pressLabel="Conexões: ative seu perfil">
+      <BentoTile icon={icon} heading={heading} onPress={open} pressLabel={moment === 'live' ? 'Conexões: ative seu perfil no intervalo' : 'Conexões: ative seu perfil'}>
         {moment === 'before' ? <Chip variant="proposal" className="mb-2 self-start" /> : null}
-        <p className="text-body text-text-primary">Ative seu perfil e veja quem tem interesses em comum com você.</p>
+        <p className="text-body text-text-primary">
+          {moment === 'live' ? 'No intervalo, ative seu perfil e veja quem tem interesses em comum com você.' : 'Ative seu perfil e veja quem tem interesses em comum com você.'}
+        </p>
         <p className="mt-2 flex min-h-touch items-center gap-1 text-body-strong text-gold-200">
-          Ativar perfil <ChevronRight size={18} aria-hidden />
+          {moment === 'live' ? 'Ativar no intervalo' : 'Ativar perfil'} <ChevronRight size={18} aria-hidden />
         </p>
       </BentoTile>
     );
@@ -234,8 +238,10 @@ function ConnectionsTile({ moment, clock }: { moment: Moment; clock: EventClock 
     } else line = `${parts} para ver agora`;
   }
 
+  // Na palestra o texto manda esperar: o botão também (CLAUDE.md §8.5)
+  const cta = moment === 'live' ? 'Ver no intervalo' : 'Ver agora';
   return (
-    <BentoTile icon={icon} heading={heading} onPress={open} pressLabel={`Conexões: ${line}. Ver agora`}>
+    <BentoTile icon={icon} heading={heading} onPress={open} pressLabel={`Conexões: ${line}. ${cta}`}>
       {moment === 'before' ? (
         <span className="mb-2 flex items-center gap-2">
           <Chip variant="proposal" />
@@ -251,7 +257,7 @@ function ConnectionsTile({ moment, clock }: { moment: Moment; clock: EventClock 
         {line}
       </p>
       <p className="mt-1 flex min-h-touch items-center gap-1 text-body-strong text-gold-200">
-        Ver agora <ChevronRight size={18} aria-hidden />
+        {cta} <ChevronRight size={18} aria-hidden />
       </p>
     </BentoTile>
   );
@@ -259,7 +265,15 @@ function ConnectionsTile({ moment, clock }: { moment: Moment; clock: EventClock 
 
 /* ---------- Atalhos ---------- */
 
-function Shortcuts({ nextSlot }: { nextSlot: ReactNode | null }) {
+/** Texto do card Mapa por momento (BUG-012): nunca diz onde a pessoa "está" */
+function mapHint(moment: Moment): string {
+  if (moment === 'live') return 'Plenária principal';
+  if (moment === 'break') return 'Café no foyer';
+  if (moment === 'lunch') return 'Almoço no 2º andar';
+  return 'Ver o local do evento';
+}
+
+function Shortcuts({ nextSlot, moment }: { nextSlot: ReactNode | null; moment: Moment }) {
   const tier = useDemo((s) => s.tier);
   const openOverlay = useDemo((s) => s.openOverlay);
   const openMap = useDemo((s) => s.openMap);
@@ -274,7 +288,7 @@ function Shortcuts({ nextSlot }: { nextSlot: ReactNode | null }) {
       <BentoTile onPress={() => openMap('sector')} pressLabel="Mapa do local, abrir" className="min-h-[112px]">
         <MapIcon size={24} aria-hidden className="text-gold-500" />
         <p className="mt-auto text-body-strong text-text-primary">Mapa</p>
-        <p className="text-caption text-text-secondary">Você está na Plenária</p>
+        <p className="text-caption text-text-secondary">{mapHint(moment)}</p>
       </BentoTile>
     </div>
   );
@@ -573,7 +587,7 @@ function ShareSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
         <Link2 size={20} aria-hidden className="shrink-0 text-gold-500" />
         <span className="select-all break-all">{link}</span>
       </p>
-      <p className="mt-2 text-caption text-text-secondary">Benefício de indicação: proposta, ainda não definido pela diretoria.</p>
+      <p className="mt-2 text-body text-text-secondary">Benefício de indicação: proposta, ainda não definido pela diretoria.</p>
     </BottomSheet>
   );
 }
@@ -602,7 +616,7 @@ function AfterCards() {
       </section>
       <BentoTile icon={<FolderOpen size={16} className="text-gold-500" />} heading="Materiais" onPress={() => setTab('materiais')} pressLabel="Materiais: todos liberados. Ver">
         <p className="tabular text-body text-text-primary">Todos os {materials.length} materiais liberados</p>
-        <p className="mt-1 text-caption text-text-secondary">Ficam no app por 90 dias. Baixe para ler sem internet.</p>
+        <p className="mt-1 text-body text-text-secondary">Ficam no app por 90 dias. Baixe para ler sem internet.</p>
       </BentoTile>
       <NpsCard npsKey="final" question="Como foi o Protagon?" />
       <section className="rounded-lg border border-border-gold bg-surface-2 p-card shadow-card" aria-label="Indique o Protagon">
@@ -653,7 +667,7 @@ export function HomeScreen() {
       {moment === 'endOfDay' ? <EndOfDayCard clock={clock} /> : null}
       {moment === 'after' ? <AfterCards /> : null}
 
-      <Shortcuts nextSlot={moment === 'lunch' ? <WhereToEatTile /> : hasNextToday ? <NextTile clock={clock} /> : null} />
+      <Shortcuts moment={moment} nextSlot={moment === 'lunch' ? <WhereToEatTile /> : hasNextToday ? <NextTile clock={clock} /> : null} />
 
       {during ? <WifiTile /> : null}
       {moment !== 'after' ? <PinnedTile /> : null}

@@ -8,11 +8,11 @@ export function OverlayHeader({ title, onBack, action, backLabel = 'Voltar' }: {
       <button
         type="button"
         onClick={onBack}
-        className="flex h-11 items-center gap-0.5 justify-self-start rounded-pill pr-2 text-body text-text-secondary active:bg-surface-3"
+        className="flex h-12 items-center gap-0.5 justify-self-start rounded-pill pr-2 text-body text-text-secondary active:bg-surface-3"
       >
         <ChevronLeft size={22} aria-hidden /> {backLabel}
       </button>
-      <h1 className="truncate text-center text-h2 text-text-primary">{title}</h1>
+      <h1 tabIndex={-1} className="truncate text-center text-h2 text-text-primary outline-none">{title}</h1>
       <div className="flex justify-end whitespace-nowrap">{action}</div>
     </header>
   );

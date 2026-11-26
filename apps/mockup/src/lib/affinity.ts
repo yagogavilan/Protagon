@@ -84,7 +84,8 @@ function crossReason(theyHelpMe: TopicId | null, iHelpThem: TopicId | null, othe
 
 export function computeAffinity(me: AffinityProfile, other: Participant): Affinity {
   const theyHelpMe = me.challenge && other.expertise.includes(me.challenge) ? me.challenge : null;
-  const iHelpThem = me.expertise?.includes(other.challenge) ? other.challenge : null;
+  // Desafio oculto pela pessoa (SEC-003): não vira motivo de sugestão para os outros
+  const iHelpThem = other.challengeVisible && me.expertise?.includes(other.challenge) ? other.challenge : null;
   const crossCount = Number(Boolean(theyHelpMe)) + Number(Boolean(iHelpThem));
   const sharedInterests = other.interests.filter((t) => me.interests.includes(t));
 

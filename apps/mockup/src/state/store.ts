@@ -5,6 +5,8 @@ import { demoUser } from '@/data/participants';
 import type {
   ChatMessage,
   Connection,
+  ContactChannel,
+  ContactShares,
   DayNumber,
   Meeting,
   Moment,
@@ -86,6 +88,9 @@ export interface ConnProfile {
   challenge: TopicId | null;
   expertise: TopicId[];
   instagram: string;
+  /** Pré-preenchidos com os dados da compra; editáveis (SEC-002) */
+  whatsapp: string;
+  linkedin: string;
 }
 
 export function initialProfile(complete = false): ConnProfile {
@@ -97,6 +102,8 @@ export function initialProfile(complete = false): ConnProfile {
     challenge: complete ? demoUser.challenge : null,
     expertise: complete ? [...demoUser.expertise] : [],
     instagram: demoUser.instagram,
+    whatsapp: demoUser.whatsapp,
+    linkedin: demoUser.linkedin,
   };
 }
 
@@ -106,6 +113,12 @@ export interface Privacy {
   city: boolean;
   objectives: boolean;
   interests: boolean;
+  /** Nicho e objetivo no Protagon (DEC-002) e foto (SEC-003) */
+  niche: boolean;
+  goal: boolean;
+  photo: boolean;
+  /** Chave própria do maior desafio (SEC-003) */
+  challenge: boolean;
 }
 
 const TIER_RANK: Record<Tier, number> = { executivo: 0, vip: 1, diamond: 2 };
@@ -165,6 +178,7 @@ interface DemoState {
   connectionsPaused: boolean;
   consent: boolean;
   privacy: Privacy;
+  contactShare: ContactShares;
   profile: ConnProfile;
   /** Proposta (DEC-002): mostrar o Instagram antes da conexão. Desligado por padrão */
   instagramEarly: boolean;
@@ -231,6 +245,7 @@ interface DemoState {
   setConnectionsPaused: (v: boolean) => void;
   setConsent: (v: boolean) => void;
   setPrivacy: (k: keyof Privacy, v: boolean) => void;
+  setContactShare: (c: ContactChannel, v: boolean) => void;
   setProfile: (p: Partial<ConnProfile>) => void;
   setInstagramEarly: (v: boolean) => void;
   setProfileCardDismissed: (v: boolean) => void;
@@ -250,7 +265,10 @@ interface DemoState {
   deleteMyData: () => void;
 }
 
-export const defaultPrivacy: Privacy = { company: true, role: true, city: true, objectives: true, interests: true };
+export const defaultPrivacy: Privacy = { company: true, role: true, city: true, objectives: true, interests: true, niche: true, goal: true, photo: true, challenge: true };
+
+/** Canais de contato liberados após o aceite (SEC-002): todos desligados até a pessoa escolher */
+export const defaultContactShare: ContactShares = { whatsapp: false, linkedin: false, instagram: false };
 
 const initialApp = {
   auth: 'login' as AuthStep,
@@ -284,6 +302,7 @@ const initialApp = {
   connectionsPaused: false,
   consent: false,
   privacy: defaultPrivacy,
+  contactShare: defaultContactShare,
   profile: initialProfile(),
   instagramEarly: false,
   profileCardDismissed: false,
@@ -341,6 +360,24 @@ function welcomeNotifications(tier: Tier, time: string): AppNotification[] {
     });
   }
   return list;
+}
+
+/** Aviso operacional (nunca fica em espera). Os de boas-vindas são operacionais, menos o de Conexões. */
+function isOperationalNotification(n: AppNotification): boolean {
+  const template = notificationTemplates.find((t) => t.id === n.templateId);
+  return template ? template.operational : true;
+}
+
+/**
+ * Regra de CLAUDE.md §8.5: em sessão ao vivo, Conexões e materiais (não operacionais) não ficam entregues nem
+ * não lidos: esperam o intervalo. Separa a lista entre entregues e em espera conforme o momento.
+ */
+function deliverableNotifications(list: AppNotification[], moment: Moment): { notifications: AppNotification[]; held: AppNotification[] } {
+  if (moment !== 'live') return { notifications: list, held: [] };
+  return {
+    notifications: list.filter((n) => n.read || isOperationalNotification(n)),
+    held: list.filter((n) => !n.read && !isOperationalNotification(n)),
+  };
 }
 
 /**
@@ -417,7 +454,9 @@ export const useDemo = create<DemoState>()((set, get) => ({
   justReconnected: false,
   ...urlState,
   // Entrada direta por URL (auth=app) simula um aluno que já fez login: traz as notificações de boas-vindas
-  notifications: urlState.auth === 'app' ? welcomeNotifications(urlState.tier, computeClock(urlState.moment, urlState.day, urlState.pausePhase).time) : [],
+  ...(urlState.auth === 'app'
+    ? deliverableNotifications(welcomeNotifications(urlState.tier, computeClock(urlState.moment, urlState.day, urlState.pausePhase).time), urlState.moment)
+    : { notifications: [] as AppNotification[], held: [] as AppNotification[] }),
 
   setTier: (tier) => set({ tier }),
 
@@ -426,6 +465,12 @@ export const useDemo = create<DemoState>()((set, get) => ({
     // Chegou o intervalo/almoço/fim do dia: o que estava em espera é entregue.
     if (moment !== 'live' && held.length > 0) {
       set({ moment, pausePhase: 'start', held: [], notifications: [...held, ...notifications] });
+      return;
+    }
+    // Voltou a palestra: o que é de Conexões ou material e ainda não foi lido volta para a espera.
+    if (moment === 'live') {
+      const split = deliverableNotifications(notifications, moment);
+      set({ moment, pausePhase: 'start', notifications: split.notifications, held: [...split.held, ...held] });
       return;
     }
     set({ moment, pausePhase: 'start' });
@@ -486,6 +531,7 @@ export const useDemo = create<DemoState>()((set, get) => ({
       downloaded: { 'm-d1-1': true, 'm-d1-3': true },
       completed: { 'm-d1-3': true },
       privacy: defaultPrivacy,
+      contactShare: defaultContactShare,
       profile: initialProfile(),
       instagramEarly: false,
       profileCardDismissed: false,
@@ -529,13 +575,14 @@ export const useDemo = create<DemoState>()((set, get) => ({
   submitIdentifier: (identifier) => set({ loginIdentifier: identifier, auth: 'code' }),
   backToLogin: () => set({ auth: 'login' }),
   completeLogin: () => {
-    const { tier, moment, day, pausePhase, notifications } = get();
+    const { tier, moment, day, pausePhase, notifications, held } = get();
     const clock = computeClock(moment, day, pausePhase);
+    const seeded = notifications.length > 0 || held.length > 0 ? { notifications, held } : deliverableNotifications(welcomeNotifications(tier, clock.time), moment);
     set({
       auth: 'onboarding',
       tab: 'agora',
       ...withStack([]),
-      notifications: notifications.length > 0 ? notifications : welcomeNotifications(tier, clock.time),
+      ...seeded,
     });
   },
   finishOnboarding: () => set({ auth: 'app', tab: 'agora', ...withStack([]) }),
@@ -586,6 +633,7 @@ export const useDemo = create<DemoState>()((set, get) => ({
   setConnectionsPaused: (connectionsPaused) => set({ connectionsPaused }),
   setConsent: (consent) => set({ consent }),
   setPrivacy: (k, v) => set((s) => ({ privacy: { ...s.privacy, [k]: v } })),
+  setContactShare: (c, v) => set((s) => ({ contactShare: { ...s.contactShare, [c]: v } })),
   setProfile: (patch) => set((s) => ({ profile: { ...s.profile, ...patch } })),
   setInstagramEarly: (instagramEarly) => set({ instagramEarly }),
   setProfileCardDismissed: (profileCardDismissed) => set({ profileCardDismissed }),

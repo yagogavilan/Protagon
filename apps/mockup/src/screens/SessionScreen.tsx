@@ -158,7 +158,7 @@ export function SessionScreen() {
             onChange={(e) => setNote(session.id, e.target.value)}
             className="w-full resize-none rounded-md border border-border-strong bg-surface-3 p-3 text-body text-text-primary placeholder:text-text-secondary focus:border-gold-200 focus:outline-none"
           />
-          <p className={cn('flex items-center gap-1 text-caption', note ? 'text-live' : 'text-text-secondary')} role="status">
+          <p className={cn('flex items-center gap-1 text-body', note ? 'text-live' : 'text-text-secondary')} role="status">
             {note ? (
               <>
                 <Check size={14} aria-hidden /> Salvo neste aparelho

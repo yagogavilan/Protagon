@@ -24,6 +24,12 @@ export function NetworkPanel() {
     .map((id) => findParticipant(id))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
   const canExport = moment === 'after';
+  // Só os canais que cada pessoa liberou entram no arquivo (SEC-007)
+  const exported = {
+    whatsapp: people.filter((p) => p.shares.whatsapp).length,
+    linkedin: people.filter((p) => p.shares.linkedin).length,
+    instagram: people.filter((p) => p.shares.instagram).length,
+  };
 
   if (people.length === 0) {
     return <EmptyState icon={<ShieldCheck size={48} strokeWidth={1.5} />} title="Sua rede começa no primeiro aceite" text="Contatos aparecem aqui quando os dois aceitam a conexão." />;
@@ -44,9 +50,11 @@ export function NetworkPanel() {
                 <span className="block truncate text-caption text-text-secondary">
                   {p.role} · {p.company}
                 </span>
-                <span className="block truncate text-caption text-gold-200" aria-label={`Instagram ${p.instagram}`}>
-                  {p.instagram}
-                </span>
+                {p.shares.instagram ? (
+                  <span className="block truncate text-caption text-gold-200" aria-label={`Instagram ${p.instagram}`}>
+                    {p.instagram}
+                  </span>
+                ) : null}
               </span>
               {connected[p.id]?.via === 'qr' ? <Chip>QR</Chip> : null}
             </button>
@@ -76,7 +84,10 @@ export function NetworkPanel() {
       <section className="rounded-lg border border-border-subtle bg-surface-1 p-card" aria-label="Exportar contatos">
         <p className="text-body-strong text-text-primary">Exportar contatos</p>
         <p className="mt-1 text-body text-text-secondary">
-          {canExport ? 'Gere um arquivo com nome, empresa, WhatsApp, LinkedIn, Instagram e suas notas.' : 'Disponível no dia seguinte ao fim do evento, para você fazer o acompanhamento com calma.'}
+          {canExport ? 'Gere um arquivo com nome, empresa, os canais que cada pessoa liberou e suas notas.' : 'Disponível no dia seguinte ao fim do evento, para você fazer o acompanhamento com calma.'}
+        </p>
+        <p className="tabular mt-2 text-body text-text-secondary">
+          Neste arquivo: {exported.whatsapp} WhatsApp, {exported.linkedin} LinkedIn, {exported.instagram} Instagram.
         </p>
         <Button
           block
@@ -87,11 +98,14 @@ export function NetworkPanel() {
           icon={<Download size={18} aria-hidden />}
           onClick={() => {
             haptic('success', 'contatos exportados');
-            showToast({ text: 'Arquivo rede-protagon.csv gerado (simulado)', tone: 'success' });
+            showToast({ text: `Arquivo rede-protagon.csv gerado com ${plural(people.length, 'contato', 'contatos')} (simulado)`, tone: 'success' });
           }}
         >
           Exportar contatos
         </Button>
+        <p className="mt-3 text-body text-text-secondary">
+          O arquivo traz só os contatos que cada pessoa liberou e as suas notas. Use para falar com essas pessoas; não adicione a listas de transmissão ou de vendas. Conexões desfeitas, bloqueadas ou excluídas não entram.
+        </p>
       </section>
 
       <BottomSheet
@@ -124,7 +138,7 @@ export function NetworkPanel() {
           placeholder="Combinados, ideias, próximos passos."
           className="w-full resize-none rounded-md border border-border-strong bg-surface-3 p-3 text-body text-text-primary placeholder:text-text-secondary focus:border-gold-200 focus:outline-none"
         />
-        <p className="mt-2 text-caption text-text-secondary">Só você vê esta nota.</p>
+        <p className="mt-2 text-body text-text-secondary">Só você vê esta nota.</p>
       </BottomSheet>
     </div>
   );

@@ -33,7 +33,7 @@ export function CheckoutScreen() {
               </li>
             ))}
           </ul>
-          <p className="mt-4 text-caption text-text-secondary">Valor e forma de pagamento: decisão da diretoria.</p>
+          <p className="mt-4 text-body text-text-secondary">Valor e forma de pagamento: decisão da diretoria.</p>
         </section>
         <div className="mt-auto">
           <Button

@@ -78,12 +78,12 @@ export function QrScreen() {
             <ScanLine size={56} aria-hidden className="text-text-tertiary" />
           </div>
           <p className="text-center text-body text-text-primary">Aponte para o QR da credencial da outra pessoa.</p>
-          <p className="text-center text-caption text-text-secondary">Os dois confirmam a conexão. Pedidos pelo QR não contam no limite do dia.</p>
+          <p className="text-center text-body text-text-secondary">Os dois confirmam a conexão. Pedidos pelo QR não contam no limite do dia.</p>
           <div className="mt-auto flex w-full flex-col gap-2">
             <Button block onClick={() => setStage('found')}>
               Simular leitura de um QR
             </Button>
-            <p className="text-center text-caption text-text-secondary">Neste mockup não há câmera; o botão simula a leitura.</p>
+            <p className="text-center text-body text-text-secondary">Neste mockup não há câmera; o botão simula a leitura.</p>
           </div>
         </div>
       </div>
@@ -140,7 +140,7 @@ export function QrScreen() {
             <p className="flex items-center justify-center gap-2 text-body-strong text-live" role="status">
               <Check size={20} aria-hidden /> Você e {firstName(person.name)} estão conectados
             </p>
-            <p className="text-caption text-text-secondary">Os contatos de {firstName(person.name)} já aparecem no perfil.</p>
+            <p className="text-body text-text-secondary">Os contatos de {firstName(person.name)} já aparecem no perfil.</p>
             <div className="flex gap-3">
               <Button variant="secondary" className="flex-1 px-3" onClick={() => { closeOverlay(); setMeetFor({ id: person.id, mode: 'new' }); }}>
                 Vamos nos ver?

@@ -60,7 +60,7 @@ export function LockScreen() {
               </span>
             </div>
             <p className="mt-2 text-[17px] font-semibold leading-6 text-text-primary">{activity.detail}</p>
-            <p className="text-[14px] leading-5 text-text-secondary">{activity.extra}</p>
+            <p className="text-body text-text-secondary">{activity.extra}</p>
           </div>
         ) : null}
 
@@ -77,7 +77,7 @@ export function LockScreen() {
                 <span className="truncate text-[15px] font-semibold text-text-primary">{n.title}</span>
                 <span className="tabular shrink-0 text-caption text-text-tertiary">{n.time}</span>
               </span>
-              <span className="mt-0.5 block text-[14px] leading-5 text-text-secondary">{n.body}</span>
+              <span className="mt-0.5 block text-body text-text-secondary">{n.body}</span>
             </span>
           </button>
         ))}
@@ -86,7 +86,7 @@ export function LockScreen() {
       <button
         type="button"
         onClick={() => unlockTo(false)}
-        className="mt-auto self-center rounded-pill px-4 py-2 text-caption text-text-secondary"
+        className="mt-auto self-center rounded-pill px-4 py-3 text-label-sm text-text-secondary"
       >
         Toque para desbloquear
       </button>

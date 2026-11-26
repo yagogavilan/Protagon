@@ -24,7 +24,7 @@ function MenuRow({ icon, label, hint, tag, onClick }: { icon: ReactNode; label: 
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-body text-text-primary">{label}</span>
-          {hint ? <span className="block text-caption text-text-secondary">{hint}</span> : null}
+          {hint ? <span className="block text-body text-text-secondary">{hint}</span> : null}
         </span>
         {tag}
         <ChevronRight size={18} aria-hidden className="shrink-0 text-text-secondary" />
@@ -84,7 +84,7 @@ export function EuScreen() {
             </div>
           ))}
         </dl>
-        <p className="mt-3 text-caption text-text-secondary">Dados da compra. Para corrigir, fale com o suporte.</p>
+        <p className="mt-3 text-body text-text-secondary">Dados da compra. Para corrigir, fale com o suporte.</p>
       </section>
 
       {tier !== 'executivo' && active ? (
@@ -97,6 +97,8 @@ export function EuScreen() {
                 ['Objetivo no Protagon', profile.goal],
                 ['Maior desafio', profile.challenge ? topics[profile.challenge].challenge : null],
                 ['Domina', profile.expertise.length > 0 ? profile.expertise.map((t) => topics[t].know).join(', ') : null],
+                ['WhatsApp', profile.whatsapp || null],
+                ['LinkedIn', profile.linkedin || null],
                 ['Instagram', profile.instagram || null],
               ] as [string, string | null][]
             ).map(([k, v]) => (

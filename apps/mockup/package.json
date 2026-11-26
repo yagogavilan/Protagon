@@ -9,7 +9,8 @@
     "typecheck": "tsc -p tsconfig.json",
     "preview": "vite preview",
     "build:single": "tsc -p tsconfig.json && vite build --mode single",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "qa": "node scripts/qa.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -13,7 +13,7 @@ export function FilterChip({ selected, onClick, children, className }: { selecte
     >
       <span
         className={cn(
-          'flex h-9 items-center gap-1.5 rounded-pill border px-3 text-[15px] transition-colors duration-fast',
+          'flex h-9 items-center gap-1.5 rounded-pill border px-3 text-label transition-colors duration-fast',
           selected ? 'border-gold-500 bg-tint-gold text-text-primary' : 'border-border-strong text-text-secondary',
         )}
       >

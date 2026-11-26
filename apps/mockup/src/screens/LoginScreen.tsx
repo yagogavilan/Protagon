@@ -125,7 +125,7 @@ export function LoginScreen() {
         <Button type="submit" block disabled={!valid || status === 'sending'} aria-busy={status === 'sending'}>
           {status === 'sending' ? 'Enviando código...' : 'Receber código'}
         </Button>
-        <p className="text-center text-caption text-text-tertiary">Sem senha. O código vale por 10 minutos.</p>
+        <p className="text-center text-body text-text-tertiary">Sem senha. O código vale por 10 minutos.</p>
       </form>
     </div>
   );

@@ -77,7 +77,10 @@ export const demoUser: DemoUser = {
   id: 'me',
   name: 'Rafael Moraes',
   email: 'rafael.moraes@exemplo.com.br',
-  cpfMasked: '***.482.917-**',
+  // Máscara da recomendação de stack: só os 2 últimos dígitos (o resto nunca chega ao app)
+  cpfMasked: '***.***.***-35',
+  whatsapp: '(51) 90000-0000',
+  linkedin: 'linkedin.com/in/rafaelmoraes-exemplo',
   company: 'Rede Movimento Academias',
   role: 'Sócio-fundador',
   city: 'Porto Alegre, RS',
@@ -183,6 +186,20 @@ const extras: Record<string, Extra> = {
   'Paulo Rocha': ['Software para academias', 'Organizar o comercial e vender mais', 'comercial', ['retencao', 'crm'], '@paulorocha.exemplo'],
 };
 
+const ALL_CHANNELS = { whatsapp: true, linkedin: true, instagram: true };
+
+/** Quem libera só alguns canais (SEC-002): o C03 e a exportação mostram só o que cada pessoa liberou */
+const CHANNELS_BY_NAME: Record<string, Participant['shares']> = {
+  'Larissa Antunes': { whatsapp: true, linkedin: false, instagram: true },
+  'Felipe Correa': { whatsapp: true, linkedin: true, instagram: false },
+  'Marcos Vieira': { whatsapp: true, linkedin: false, instagram: true },
+  'Fernanda Lopes': { whatsapp: true, linkedin: false, instagram: false },
+  'Bruno Lacerda': { whatsapp: true, linkedin: true, instagram: false },
+};
+
+/** Quem mantém o maior desafio oculto (SEC-003) */
+const CHALLENGE_HIDDEN = new Set(['Fernanda Lopes', 'Thiago Brandão', 'Patrícia Kuhn']);
+
 export const participants: Participant[] = rows.map(
   ([name, company, role, city, segment, tier, objectives, interests, visible], i) => {
     const extra = extras[name];
@@ -205,6 +222,8 @@ export const participants: Participant[] = rows.map(
       instagram,
       // Proposta: 2 em cada 3 liberam o @ antes da conexão (só vale se o aluno também liberar o dele)
       instagramEarly: i % 3 !== 2,
+      shares: CHANNELS_BY_NAME[name] ?? ALL_CHANNELS,
+      challengeVisible: !CHALLENGE_HIDDEN.has(name),
       visible: visible ?? true,
     };
   },

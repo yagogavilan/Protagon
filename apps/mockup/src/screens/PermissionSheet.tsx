@@ -11,7 +11,7 @@ function SystemDialog({ onAllow, onDeny }: { onAllow: () => void; onDeny: () => 
     <div role="alertdialog" aria-label="Pedido do sistema" className="mx-auto w-full max-w-[290px] overflow-hidden rounded-xl border border-border-subtle bg-surface-3 text-center">
       <div className="px-4 pb-4 pt-5">
         <p className="text-body-strong text-text-primary">“Protagon” quer enviar notificações</p>
-        <p className="mt-1 text-[14px] leading-5 text-text-secondary">Alertas, sons e selos podem ser configurados em Ajustes.</p>
+        <p className="mt-1 text-body text-text-secondary">Alertas, sons e selos podem ser configurados em Ajustes.</p>
       </div>
       <div className="grid grid-cols-2 border-t border-border-strong">
         <button type="button" onClick={onDeny} className="min-h-touch border-r border-border-strong text-body text-info active:bg-surface-2">
@@ -70,7 +70,7 @@ export function PermissionSheet() {
             </li>
           ))}
         </ol>
-        <p className="mt-4 flex items-center gap-2 text-caption text-text-secondary">
+        <p className="mt-4 flex items-center gap-2 text-body text-text-secondary">
           <Settings size={16} aria-hidden /> Você também encontra este passo em Eu, Notificações.
         </p>
       </BottomSheet>
@@ -126,7 +126,7 @@ export function PermissionSheet() {
               setPermission('denied');
             }}
           />
-          <p className="mt-3 text-center text-caption text-text-secondary">Simulação do diálogo do iPhone.</p>
+          <p className="mt-3 text-center text-body text-text-secondary">Simulação do diálogo do iPhone.</p>
         </div>
       )}
     </BottomSheet>

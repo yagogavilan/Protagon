@@ -29,7 +29,6 @@ export function BentoTile({ variant = 'default', icon, heading, onPress, pressLa
         'relative rounded-lg border p-card shadow-card transition-[transform,background-color] duration-fast ease-protagon',
         variant === 'emphasis' ? 'border-border-gold bg-surface-2' : 'border-border-subtle bg-surface-1',
         pressable && 'has-[>button:active]:scale-press has-[>button:active]:bg-surface-3',
-        disabled && 'opacity-60',
         className,
       )}
     >

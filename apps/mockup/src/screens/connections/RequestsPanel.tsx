@@ -18,7 +18,7 @@ function RequestCard({ r, onAccept, onNotNow, onOpen }: { r: PendingRequest; onA
   return (
     <article className={cn('rounded-lg border bg-surface-2 p-card shadow-card', diamond ? 'border-border-gold' : 'border-border-subtle')} aria-label={`Pedido de ${r.from.name}, ${r.from.company}`}>
       {diamond ? (
-        <p className="mb-3 flex items-center gap-2 text-caption text-text-secondary">
+        <p className="mb-3 flex items-center gap-2 text-body text-text-secondary">
           <Chip variant="proposal" /> Destaque Diamond
         </p>
       ) : null}
@@ -69,8 +69,8 @@ export function RequestsPanel() {
 
   return (
     <div className="flex flex-col gap-3">
-      {moment === 'live' ? <p className="text-caption text-text-secondary">Palestra em andamento. Responda com calma no intervalo.</p> : null}
-      {hasDiamond ? <p className="text-caption text-text-secondary">Pedidos de participantes Diamond aparecem primeiro.</p> : null}
+      {moment === 'live' ? <p className="text-body text-text-secondary">Palestra em andamento. Responda com calma no intervalo.</p> : null}
+      {hasDiamond ? <p className="text-body text-text-secondary">Pedidos de participantes Diamond aparecem primeiro.</p> : null}
       {pending.length === 0 ? <p className="text-body text-text-secondary">Você respondeu a todos os pedidos.</p> : null}
 
       <AnimatePresence initial={false}>

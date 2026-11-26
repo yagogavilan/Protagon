@@ -235,7 +235,7 @@ export function MaterialViewer() {
 
   const header = (
     <header className="flex items-center justify-between gap-2 px-3 pb-2 pt-[58px]">
-      <button type="button" onClick={closeOverlay} className="flex h-11 items-center gap-1 rounded-pill pr-2 text-body text-text-secondary active:bg-surface-3">
+      <button type="button" onClick={closeOverlay} className="flex h-12 items-center gap-1 rounded-pill pr-2 text-body text-text-secondary active:bg-surface-3">
         <X size={22} aria-hidden /> Fechar
       </button>
       {m ? <p className="text-caption text-text-secondary">{MATERIAL_LABEL[m.type]}</p> : null}

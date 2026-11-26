@@ -198,7 +198,7 @@ export function TrilhaScreen() {
           {state === 'done' ? `Encerrado · ${dayTotal} de ${dayTotal} blocos` : state === 'now' ? `Hoje · ${dayDone} de ${dayTotal} blocos` : clock.dayIndex === 0 ? 'Em breve' : `Começa no Dia ${viewDay}`}
         </p>
       </div>
-      {!online ? <p className="text-caption text-text-secondary">Agenda salva no aparelho. Funciona sem internet.</p> : null}
+      {!online ? <p className="text-body text-text-secondary">Agenda salva no aparelho. Funciona sem internet.</p> : null}
 
       <ol className="relative flex flex-col gap-3 pb-4" aria-label={`Programação do Dia ${viewDay}`}>
         <span aria-hidden className="absolute bottom-4 left-[7px] top-3 w-px bg-border-strong" />

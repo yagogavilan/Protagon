@@ -30,7 +30,7 @@ export function Switch({
     >
       <span className="min-w-0">
         <span className="block text-body text-text-primary">{label}</span>
-        {hint ? <span className="block text-caption text-text-secondary">{hint}</span> : null}
+        {hint ? <span className="block text-body text-text-secondary">{hint}</span> : null}
       </span>
       <span
         aria-hidden

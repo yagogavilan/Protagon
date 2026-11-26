@@ -71,7 +71,7 @@ async function tapDialog(name) {
 }
 
 async function tab(name) {
-  await frame().getByRole('tab', { name: new RegExp(`^${name}`) }).click();
+  await frame().getByRole('navigation', { name: 'Navegação principal' }).getByRole('button', { name: new RegExp(`^${name}`) }).click();
   await wait();
 }
 
@@ -157,7 +157,16 @@ async function vipDay(baseUrl) {
   await shot('vip-07-c01-passo-2');
   await tap('Continuar');
   await shot('vip-08-c01-passo-3-consentimento');
-  await frame().getByRole('switch', { name: /Autorizo mostrar meu perfil/ }).click();
+  // SEC-001/SEC-002: o texto do consentimento e as chaves por canal nascem desligados
+  const consentSwitch = frame().getByRole('switch', { name: /Autorizo mostrar meu perfil/ });
+  if ((await consentSwitch.getAttribute('aria-checked')) !== 'false') throw new Error('Consentimento deveria começar desligado');
+  for (const canal of ['WhatsApp', 'LinkedIn', 'Instagram']) {
+    if ((await frame().getByRole('switch', { name: new RegExp(`^${canal}`) }).first().getAttribute('aria-checked')) !== 'false') throw new Error(`Canal ${canal} deveria começar desligado`);
+  }
+  await expectText('Não usamos para venda de outros produtos');
+  await consentSwitch.evaluate((el) => el.scrollIntoView({ block: 'center' }));
+  await shot('vip-08b-c01-passo-3-autorizacao');
+  await consentSwitch.click();
   await tap('Ativar perfil');
   await expectText('Seu perfil está no ar');
   await shot('vip-09-c01-concluido');
@@ -371,6 +380,11 @@ async function vipDay(baseUrl) {
   await shot('vip-57-u03-privacidade');
   // Ligando a opção, quem também liberou mostra o @ antes do aceite (Juliana Prates libera; sem aceite entre vocês)
   await igSwitch.click();
+  // SEC-004: ligar pede confirmação com o aviso de que o Instagram fica fora do app; a chave só liga ao confirmar
+  await expectText('bloquear e denunciar daqui não valem', frame());
+  if ((await igSwitch.getAttribute('aria-checked')) !== 'false') throw new Error('A chave só deve ligar depois de confirmar o aviso');
+  await shot('vip-57a-u03-aviso-instagram');
+  await tapDialog('Mostrar meu Instagram');
   await wait(4800); // o aviso da opção some antes das próximas capturas
   await tap('Voltar');
   await tab('Conexões');

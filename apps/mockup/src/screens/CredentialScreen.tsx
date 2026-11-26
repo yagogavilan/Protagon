@@ -121,7 +121,7 @@ export function CredentialScreen() {
             Ler QR de outra pessoa
           </Button>
           {!online && !walletAdded ? (
-            <p className="mt-2 text-center text-caption text-text-tertiary">Para adicionar à Wallet, conecte-se à internet.</p>
+            <p className="mt-2 text-center text-body text-text-tertiary">Para adicionar à Wallet, conecte-se à internet.</p>
           ) : null}
         </div>
       </div>

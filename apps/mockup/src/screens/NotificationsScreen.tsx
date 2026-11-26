@@ -53,7 +53,7 @@ export function NotificationsScreen() {
       title="Notificações"
       action={
         visibleAll.length > 0 ? (
-          <button type="button" onClick={clearAll} className="h-11 rounded-pill px-1 text-body-strong text-gold-200 active:bg-surface-3">
+          <button type="button" onClick={clearAll} className="h-12 rounded-pill px-1 text-body-strong text-gold-200 active:bg-surface-3">
             Limpar tudo
           </button>
         ) : null

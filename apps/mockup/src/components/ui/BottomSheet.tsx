@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useDragControls, useReducedMotion, type PanInf
 import { X } from 'lucide-react';
 import { useDemo } from '@/state/store';
 import { cn } from '@/lib/cn';
+import { lockBackground } from '@/lib/inert';
 
 export const SHEET_ROOT_ID = 'sheet-root';
 
@@ -21,6 +22,8 @@ interface BottomSheetProps {
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
+const FOCUSABLE = 'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 /**
  * BottomSheet (design-system §BottomSheet): glass.sheet + shadow.sheet, raio xl no topo, alça, título h2 e X 48.
  * Fecha por X, véu, arrastar para baixo e Esc. Foco vai ao título e volta ao gatilho.
@@ -33,19 +36,44 @@ export function BottomSheet({ open, onClose, title, subtitle, closeLabel = 'Fech
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
   const dragControls = useDragControls();
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     returnFocus.current = document.activeElement as HTMLElement | null;
     useDemo.getState().hideToast(); // o aviso não pode cobrir os botões da sheet
     const t = window.setTimeout(() => titleRef.current?.focus(), 30);
+    const owner = Symbol('sheet');
+    lockBackground(SHEET_ROOT_ID, owner, true);
+    // Focus trap: Tab e Shift+Tab giram dentro do sheet (o resto da moldura também está inert)
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onCloseRef.current();
+      if (e.key !== 'Tab') return;
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      const nodes = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((n) => n.offsetParent !== null || n === document.activeElement);
+      if (nodes.length === 0) {
+        e.preventDefault();
+        titleRef.current?.focus();
+        return;
+      }
+      const first = nodes[0]!;
+      const last = nodes[nodes.length - 1]!;
+      const active = document.activeElement;
+      const outside = !active || !dialog.contains(active);
+      if (e.shiftKey && (outside || active === first || active === titleRef.current)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (outside || active === last)) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => {
       window.clearTimeout(t);
       window.removeEventListener('keydown', onKey);
+      lockBackground(SHEET_ROOT_ID, owner, false);
       returnFocus.current?.focus?.();
     };
   }, [open]);
@@ -75,6 +103,7 @@ export function BottomSheet({ open, onClose, title, subtitle, closeLabel = 'Fech
             aria-hidden
           />
           <motion.div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
@@ -111,7 +140,7 @@ export function BottomSheet({ open, onClose, title, subtitle, closeLabel = 'Fech
                 <h2 id={titleId} ref={titleRef} tabIndex={-1} className="text-h2 text-text-primary outline-none">
                   {title}
                 </h2>
-                {subtitle ? <p className="text-caption text-text-secondary">{subtitle}</p> : null}
+                {subtitle ? <p className="text-body text-text-secondary">{subtitle}</p> : null}
               </div>
               <button
                 type="button"

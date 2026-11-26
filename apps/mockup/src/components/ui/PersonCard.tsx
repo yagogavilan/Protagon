@@ -38,7 +38,7 @@ export function PersonCard({ suggestion, state = 'default', limitReached, onConn
 
   return (
     <article
-      aria-label={`${p.company}, ${p.niche.toLowerCase()}. Objetivo no Protagon: ${p.goal}. Maior desafio: ${topics[p.challenge].challenge}. ${p.name}, ${p.role.toLowerCase()}, ingresso ${TIER_LABEL[p.tier]}. Afinidade ${high ? 'alta' : 'boa'}. ${affinity.reason}.`}
+      aria-label={`${p.company}, ${p.niche.toLowerCase()}. Objetivo no Protagon: ${p.goal}. ${p.challengeVisible ? `Maior desafio: ${topics[p.challenge].challenge}. ` : ''}${p.name}, ${p.role.toLowerCase()}, ingresso ${TIER_LABEL[p.tier]}. Afinidade ${high ? 'alta' : 'boa'}. ${affinity.reason}.`}
       className="flex flex-col rounded-lg border border-border-subtle bg-surface-2 p-4 shadow-card"
     >
       <div className="flex items-center justify-between">
@@ -52,10 +52,10 @@ export function PersonCard({ suggestion, state = 'default', limitReached, onConn
       </div>
 
       <h3 className="mt-3 text-h2 text-text-primary">{p.company}</h3>
-      <p className="text-caption text-text-secondary">
+      <p className="text-body text-text-secondary">
         {p.niche} · {p.city.replace(/, [A-Z]{2}$/, '')}
       </p>
-      <p className="mt-1 line-clamp-1 text-caption text-text-secondary">
+      <p className="line-clamp-1 text-body text-text-secondary">
         <span className="text-text-primary">No Protagon:</span> {p.goal}
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
@@ -80,11 +80,13 @@ export function PersonCard({ suggestion, state = 'default', limitReached, onConn
         </div>
       ) : null}
 
-      <div className="mt-2 flex flex-col gap-0.5 text-caption text-text-primary">
-        <p className="line-clamp-1">
-          <span className="text-text-secondary">Maior desafio: </span>
-          <span className={affinity.iHelpThem ? 'text-gold-200' : undefined}>{topics[p.challenge].challenge}</span>
-        </p>
+      <div className="mt-2 flex flex-col text-body text-text-primary">
+        {p.challengeVisible ? (
+          <p className="line-clamp-1">
+            <span className="text-text-secondary">Maior desafio: </span>
+            <span className={affinity.iHelpThem ? 'text-gold-200' : undefined}>{topics[p.challenge].challenge}</span>
+          </p>
+        ) : null}
         <p className="line-clamp-1">
           <span className="text-text-secondary">Domina: </span>
           {domina.map((t, i) => (

@@ -62,6 +62,9 @@ const config: Config = {
         h2: ['20px', { lineHeight: '28px', fontWeight: '600' }],
         body: ['16px', { lineHeight: '24px', fontWeight: '400' }],
         'body-strong': ['16px', { lineHeight: '24px', fontWeight: '600' }],
+        // Rótulos de ação (chips, filtros, abas): >= 14 px, peso 500-600 (Etapa 4, BUG-003). Proposta ao designer: entram em tokens.json.
+        label: ['15px', { lineHeight: '20px', fontWeight: '500' }],
+        'label-sm': ['14px', { lineHeight: '20px', fontWeight: '600' }],
         caption: ['13px', { lineHeight: '18px', fontWeight: '500' }],
       },
       borderRadius: {

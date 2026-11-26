@@ -95,6 +95,15 @@ export type TopicId =
   | 'operacao'
   | 'atendimento';
 
+/** Canais de contato que a pessoa liberou para quem aceitar a conexão (SEC-002). Cada um tem sua própria chave. */
+export interface ContactShares {
+  whatsapp: boolean;
+  linkedin: boolean;
+  instagram: boolean;
+}
+
+export type ContactChannel = keyof ContactShares;
+
 export interface Participant {
   id: string;
   name: string;
@@ -117,6 +126,10 @@ export interface Participant {
   instagram: string;
   /** Proposta (DEC-002): a pessoa liberou o @ antes da conexão */
   instagramEarly: boolean;
+  /** Canais liberados após o aceite (SEC-002) */
+  shares: ContactShares;
+  /** Chave própria do maior desafio (SEC-003): desligada, o desafio não aparece nem gera motivo para os outros */
+  challengeVisible: boolean;
   /** Perfil visível nas Conexões (pausado = false) */
   visible: boolean;
 }
@@ -127,6 +140,9 @@ export interface DemoUser {
   email: string;
   /** Sempre mascarado; o CPF completo nunca entra no mockup */
   cpfMasked: string;
+  /** Telefone da compra: só pré-preenche o WhatsApp, editável (SEC-002) */
+  whatsapp: string;
+  linkedin: string;
   company: string;
   role: string;
   city: string;

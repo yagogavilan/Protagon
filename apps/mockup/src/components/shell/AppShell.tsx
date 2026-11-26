@@ -1,4 +1,4 @@
-import { useEffect, type ComponentType, type ReactElement } from 'react';
+import { useEffect, useRef, type ComponentType, type ReactElement } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { TopBar } from './TopBar';
 import { TabBar, TABS } from './TabBar';
@@ -34,6 +34,7 @@ import { WifiSheet } from '@/screens/WifiSheet';
 import { PermissionSheet } from '@/screens/PermissionSheet';
 import { haptic } from '@/lib/haptics';
 import { cn } from '@/lib/cn';
+import { inertProps } from '@/lib/inert';
 
 const SCREENS: Record<TabId, () => ReactElement> = {
   agora: HomeScreen,
@@ -88,28 +89,53 @@ export function AppShell() {
     if (stage === 'now') haptic('error', 'volte agora');
   }, [stage, moment]);
 
+  // Página empilhada: o foco vai para ela e volta ao gatilho ao fechar (WCAG 2.4.3)
+  const pageRef = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLElement | null>(null);
+  const overlayKey = overlay ? `${overlay}:${overlayId ?? ''}` : '';
+  useEffect(() => {
+    if (!overlayKey) {
+      if (trigger.current && document.contains(trigger.current)) trigger.current.focus();
+      trigger.current = null;
+      return;
+    }
+    if (!trigger.current && document.activeElement instanceof HTMLElement && document.activeElement !== document.body) trigger.current = document.activeElement;
+    const t = window.setTimeout(() => {
+      const page = pageRef.current;
+      (page?.querySelector<HTMLElement>('h1') ?? page)?.focus();
+    }, 60);
+    return () => window.clearTimeout(t);
+  }, [overlayKey]);
+
   return (
     <div className={cn('absolute inset-0 flex flex-col', tab === 'agora' && 'bg-radial-top bg-no-repeat')}>
-      {tab === 'agora' ? (
-        <TopBar variant="home" greeting={greetingFor(clock)} context={contextFor(clock)} />
-      ) : tab === 'conexoes' ? (
-        <TopBar variant="icons" />
-      ) : (
-        <TopBar variant="title" title={title} />
-      )}
-      {/* Agora e Conexões tratam o offline no próprio conteúdo (prioridade de banner da spec) */}
-      {tab !== 'agora' && tab !== 'conexoes' && tab !== 'materiais' ? <OfflineBanner /> : null}
-      <main className="no-scrollbar relative flex-1 overflow-y-auto pb-[110px]">
-        <Screen key={tab} />
-      </main>
-      <TabBar />
+      {/* O que fica atrás da página empilhada sai da ordem de foco e do leitor de tela (inert) */}
+      <div className="contents" {...inertProps(Boolean(Overlay))}>
+        {tab === 'agora' ? (
+          <TopBar variant="home" greeting={greetingFor(clock)} context={contextFor(clock)} />
+        ) : tab === 'conexoes' ? (
+          <TopBar variant="icons" />
+        ) : (
+          <TopBar variant="title" title={title} />
+        )}
+        {/* Agora e Conexões tratam o offline no próprio conteúdo (prioridade de banner da spec) */}
+        {tab !== 'agora' && tab !== 'conexoes' && tab !== 'materiais' ? <OfflineBanner /> : null}
+        <main className="no-scrollbar relative flex-1 overflow-y-auto pb-[110px]">
+          <Screen key={tab} />
+        </main>
+      </div>
+      <div className="contents" {...inertProps(Boolean(Overlay) && immersive)}>
+        <TabBar />
+      </div>
       <ToastHost bottom={TOAST_BOTTOM} />
 
       <AnimatePresence mode="popLayout" initial={false}>
         {Overlay ? (
           <motion.div
             key={`${overlay}:${overlayId ?? ''}`}
-            className="absolute inset-x-0 top-0 z-overlay bg-bg"
+            ref={pageRef}
+            tabIndex={-1}
+            className="absolute inset-x-0 top-0 z-overlay bg-bg outline-none"
             style={{ bottom: immersive ? 0 : TABBAR_SPACE }}
             initial={{ x: '100%' }}
             animate={{ x: 0 }}

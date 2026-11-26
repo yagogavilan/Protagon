@@ -79,7 +79,7 @@ export function ProfileScreen() {
         <Button block disabled>
           Limite de hoje atingido
         </Button>
-        <p className="text-center text-caption text-text-secondary">Você usou os {limit} pedidos de hoje. Pelo QR da credencial, os pedidos continuam liberados.</p>
+        <p className="text-center text-body text-text-secondary">Você usou os {limit} pedidos de hoje. Pelo QR da credencial, os pedidos continuam liberados.</p>
       </>
     ) : (
       <Button block onClick={() => setRequestFor(person.id)} aria-label={`Conectar com ${person.name}`}>
@@ -179,7 +179,7 @@ export function ProfileScreen() {
 
         {incoming ? (
           <section className="rounded-lg border border-border-gold bg-surface-2 p-card" aria-label="Mensagem do pedido">
-            <p className="text-caption text-text-secondary">{firstName(person.name)} quer se conectar com você</p>
+            <p className="text-body text-text-secondary">{firstName(person.name)} quer se conectar com você</p>
             <p className="mt-1 text-body text-text-primary">{incoming.message}</p>
           </section>
         ) : null}
@@ -192,10 +192,12 @@ export function ProfileScreen() {
         ) : null}
 
         <section aria-label="Desafio e conhecimento" className="flex flex-col gap-3">
-          <div>
-            <h3 className="text-body-strong text-text-primary">Maior desafio</h3>
-            <p className={affinity.iHelpThem ? 'mt-1 text-body text-gold-200' : 'mt-1 text-body text-text-primary'}>{topics[person.challenge].challenge}</p>
-          </div>
+          {person.challengeVisible ? (
+            <div>
+              <h3 className="text-body-strong text-text-primary">Maior desafio</h3>
+              <p className={affinity.iHelpThem ? 'mt-1 text-body text-gold-200' : 'mt-1 text-body text-text-primary'}>{topics[person.challenge].challenge}</p>
+            </div>
+          ) : null}
           <div>
             <h3 className="text-body-strong text-text-primary">Domina</h3>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -231,10 +233,11 @@ export function ProfileScreen() {
             <section aria-label="Contatos" className="rounded-lg border border-border-gold bg-surface-2 p-card">
               <h3 className="text-body-strong text-text-primary">Contatos</h3>
               <ul className="mt-3 flex flex-col gap-3">
-                <ContactRow icon={<Phone size={20} />} label="WhatsApp" value={contacts.whatsapp} />
-                <ContactRow icon={<Briefcase size={20} />} label="LinkedIn" value={contacts.linkedin} />
-                <ContactRow icon={<AtSign size={20} />} label="Instagram" value={contacts.instagram} />
+                {contacts.whatsapp ? <ContactRow icon={<Phone size={20} />} label="WhatsApp" value={contacts.whatsapp} /> : null}
+                {contacts.linkedin ? <ContactRow icon={<Briefcase size={20} />} label="LinkedIn" value={contacts.linkedin} /> : null}
+                {contacts.instagram ? <ContactRow icon={<AtSign size={20} />} label="Instagram" value={contacts.instagram} /> : null}
               </ul>
+              <p className="mt-3 text-body text-text-secondary">Só os canais que {firstName(person.name)} liberou aparecem aqui.</p>
             </section>
             <section aria-label="Nota privada" className="flex flex-col gap-2">
               <label htmlFor="private-note" className="text-body-strong text-text-primary">
@@ -267,14 +270,14 @@ export function ProfileScreen() {
                   </>
                 ) : (
                   <>
-                    <span className="text-text-primary">Telefone e redes aparecem depois do aceite.</span> Quando os dois aceitam, você vê WhatsApp, LinkedIn e Instagram de {firstName(person.name)}.
+                    <span className="text-text-primary">Telefone e redes aparecem depois do aceite.</span> Quando os dois aceitam, você vê os canais que {firstName(person.name)} liberou.
                   </>
                 )}
               </p>
             </div>
           </section>
         )}
-        {!online && relation === 'none' ? <p className="text-caption text-text-secondary">Sem internet: o pedido fica salvo e sai quando a conexão voltar.</p> : null}
+        {!online && relation === 'none' ? <p className="text-body text-text-secondary">Sem internet: o pedido fica salvo e sai quando a conexão voltar.</p> : null}
       </div>
     </OverlayPage>
   );

@@ -36,7 +36,7 @@ export function PrefsScreen() {
             <Switch label="Conexões" hint="Pedidos e respostas, entregues no intervalo" checked={prefs.conexoes} onChange={(v) => setPref('conexoes', v)} />
           ) : null}
         </div>
-        <p className="text-caption text-text-secondary">Durante as palestras só chegam avisos operacionais. O resto espera o intervalo.</p>
+        <p className="text-body text-text-secondary">Durante as palestras só chegam avisos operacionais. O resto espera o intervalo.</p>
       </div>
     </OverlayPage>
   );

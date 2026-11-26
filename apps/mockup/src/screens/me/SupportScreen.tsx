@@ -51,7 +51,7 @@ export function SupportScreen() {
           <Button block className="mt-3" icon={<MessageSquare size={20} aria-hidden />} disabled={!online} onClick={() => setSheet(true)}>
             Enviar mensagem
           </Button>
-          {!online ? <p className="mt-2 text-center text-caption text-text-secondary">Sem internet: ligue para o número acima.</p> : null}
+          {!online ? <p className="mt-2 text-center text-body text-text-secondary">Sem internet: ligue para o número acima.</p> : null}
           <Button block variant="ghost" className="mt-1" icon={<MapPin size={18} aria-hidden />} onClick={() => openMap('checkin')}>
             Balcão de atendimento no mapa
           </Button>

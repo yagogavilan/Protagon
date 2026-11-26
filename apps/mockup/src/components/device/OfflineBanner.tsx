@@ -23,8 +23,8 @@ export function OfflineBanner() {
           <div
             className={
               online
-                ? 'mx-margin mb-2 flex items-center gap-2 rounded-md border border-live bg-surface-1 px-3 py-2 text-caption text-live'
-                : 'mx-margin mb-2 flex items-center gap-2 rounded-md border border-warning bg-surface-1 px-3 py-2 text-caption text-warning'
+                ? 'mx-margin mb-2 flex items-center gap-2 rounded-md border border-live bg-surface-1 px-3 py-2 text-body text-live'
+                : 'mx-margin mb-2 flex items-center gap-2 rounded-md border border-warning bg-surface-1 px-3 py-2 text-body text-warning'
             }
           >
             {online ? <Wifi size={16} aria-hidden /> : <WifiOff size={16} aria-hidden />}

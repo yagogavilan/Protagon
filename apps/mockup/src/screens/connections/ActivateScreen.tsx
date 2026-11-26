@@ -3,32 +3,24 @@ import { Camera, Check, Sparkles } from 'lucide-react';
 import { OverlayPage } from '@/components/shell/OverlayPage';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
+import { Chip } from '@/components/ui/Chip';
 import { FilterChip } from '@/components/ui/FilterChip';
 import { Switch } from '@/components/ui/Switch';
+import { ContactChannelSwitches, PrivacyPolicyLink, VisibilitySwitches } from './Visibility';
 import { demoUser, goalsList, interestTags, objectivesList } from '@/data/participants';
 import type { Objective } from '@/data/types';
-import { useDemo, type Privacy } from '@/state/store';
+import { useDemo } from '@/state/store';
 import { haptic } from '@/lib/haptics';
 
 const MAX_OBJECTIVES = 3;
 const MAX_INTERESTS = 8;
 
-const FIELD_LABEL: Record<keyof Privacy, string> = {
-  company: 'Empresa',
-  role: 'Cargo',
-  city: 'Cidade',
-  objectives: 'Objetivos',
-  interests: 'Interesses',
-};
-
 /** C01 · Ativar perfil em 3 passos (menos de 60 s): dados e objetivos, interesses, visibilidade e consentimento. */
 export function ActivateScreen() {
   const tier = useDemo((s) => s.tier);
   const profile = useDemo((s) => s.profile);
-  const privacy = useDemo((s) => s.privacy);
   const closeOverlay = useDemo((s) => s.closeOverlay);
   const setProfile = useDemo((s) => s.setProfile);
-  const setPrivacy = useDemo((s) => s.setPrivacy);
   const setConsent = useDemo((s) => s.setConsent);
   const setActive = useDemo((s) => s.setConnectionsActive);
   const setTab = useDemo((s) => s.setTab);
@@ -126,10 +118,10 @@ export function ActivateScreen() {
               <Avatar name={demoUser.name} size="lg" ring={photo ? 'gold' : 'none'} />
               <div className="min-w-0 flex-1">
                 <p className="text-body-strong text-text-primary">{demoUser.name}</p>
-                <p className="text-caption text-text-secondary">
+                <p className="text-body text-text-secondary">
                   {demoUser.role} · {demoUser.company}
                 </p>
-                <p className="text-caption text-text-secondary">
+                <p className="text-body text-text-secondary">
                   {demoUser.city} · {demoUser.segment}
                 </p>
                 <button
@@ -144,7 +136,7 @@ export function ActivateScreen() {
                 </button>
               </div>
             </div>
-            <p className="-mt-2 text-caption text-text-secondary">Dados vindos da sua compra. Para corrigir, fale com o suporte.</p>
+            <p className="-mt-2 text-body text-text-secondary">Dados vindos da sua compra. Para corrigir, fale com o suporte.</p>
 
             <div className="flex flex-col gap-2">
               <label htmlFor="c01-niche" className="text-body-strong text-text-primary">
@@ -204,20 +196,34 @@ export function ActivateScreen() {
           <>
             <h2 className="text-h1 text-text-primary">O que fica visível</h2>
             <div className="rounded-lg border border-border-subtle bg-surface-1 p-2">
-              {(Object.keys(FIELD_LABEL) as (keyof Privacy)[]).map((k) => (
-                <Switch key={k} label={FIELD_LABEL[k]} checked={privacy[k]} onChange={(v) => setPrivacy(k, v)} />
-              ))}
+              <Switch label="Nome e ingresso" hint="Sempre visíveis" checked disabled onChange={() => undefined} />
+              <VisibilitySwitches />
             </div>
-            <p className="text-caption text-text-secondary">Nome e ingresso ficam sempre visíveis. Telefone e redes só aparecem depois de um aceite mútuo.</p>
-            <div className="rounded-lg border border-border-strong p-2">
+            <p className="text-body text-text-secondary">Também aparecem: nicho e objetivo no Protagon; foto, desafio e conhecimentos, se você preencher.</p>
+
+            <section className="rounded-lg border border-border-subtle bg-surface-1 p-2" aria-label="Depois do aceite, você compartilha">
+              <h3 className="px-1 pt-2 text-body-strong text-text-primary">Depois do aceite, você compartilha</h3>
+              <p className="px-1 pb-1 text-body text-text-secondary">Só quem aceitar a conexão vê o que você ligar aqui. Todos começam desligados.</p>
+              <ContactChannelSwitches />
+            </section>
+
+            <section className="rounded-lg border border-border-strong p-2" aria-label="Autorização">
               <Switch
-                label="Autorizo mostrar meu perfil para participantes VIP e Diamond desta edição"
-                hint="Você pode pausar ou excluir quando quiser, em Eu."
+                label="Autorizo mostrar meu perfil de Conexões para participantes VIP e Diamond desta edição."
                 checked={consent}
                 onChange={setLocalConsent}
               />
-            </div>
-            {!consent ? <p className="text-caption text-text-secondary">Sem a autorização, o perfil não é ativado.</p> : null}
+              <ul className="mt-1 flex list-disc flex-col gap-2 pb-2 pl-8 pr-2 text-body text-text-secondary">
+                <li>
+                  Usamos esses dados só para sugerir conexões e marcar encontros. Não usamos para venda de outros produtos. <Chip variant="proposal" />
+                </li>
+                <li>WhatsApp, LinkedIn e Instagram só aparecem para quem aceitar a conexão com você. Essa pessoa pode salvar e exportar seus contatos.</li>
+                <li>Chat e Minha rede ficam 90 dias após o evento.</li>
+                <li>Você pode pausar, desligar ou excluir quando quiser, em Eu &gt; Privacidade.</li>
+              </ul>
+              <PrivacyPolicyLink />
+            </section>
+            {!consent ? <p className="text-body text-text-secondary">Sem a autorização, o perfil não é ativado.</p> : null}
           </>
         ) : null}
       </div>

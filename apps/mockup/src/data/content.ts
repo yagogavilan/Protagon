@@ -48,11 +48,11 @@ export const faq: { q: string; a: string }[] = [
   { q: 'Como funcionam as Conexões?', a: 'Você ativa o perfil, recebe sugestões por afinidade e envia pedidos. Telefone e redes só aparecem quando os dois aceitam.' },
   { q: 'O que muda do Executivo para o VIP?', a: 'O VIP libera as Conexões e o setor VIP na plenária. Agenda, materiais, mapa e credencial são iguais para todos.' },
   { q: 'Os materiais ficam disponíveis depois do evento?', a: 'Sim. Todos ficam no app por 90 dias. Baixe antes para ler sem internet.' },
-  { q: 'Como excluo meus dados?', a: 'Em Eu, Privacidade, use "Excluir meus dados". A exclusão acontece na hora e não pode ser desfeita.' },
+  { q: 'Como excluo meus dados?', a: 'Em Eu, Privacidade, use "Excluir meus dados". Apagamos do app na hora e não dá para desfazer. Cópias de segurança são apagadas em até 30 dias.' },
 ];
 
-/** Contatos só existem depois do aceite mútuo. Todos fictícios. */
-export function contactFor(p: Participant): { whatsapp: string; linkedin: string; instagram: string } {
+/** Contatos só existem depois do aceite mútuo. Todos fictícios. Só os canais que a pessoa liberou (SEC-002). */
+export function contactFor(p: Participant): Partial<{ whatsapp: string; linkedin: string; instagram: string }> {
   const n = Number(p.id.slice(1));
   const slug = p.name
     .toLowerCase()
@@ -60,8 +60,8 @@ export function contactFor(p: Participant): { whatsapp: string; linkedin: string
     .replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z]+/g, '');
   return {
-    whatsapp: `(51) 90000-${String(1000 + n).padStart(4, '0')}`,
-    linkedin: `linkedin.com/in/${slug}-exemplo`,
-    instagram: p.instagram,
+    ...(p.shares.whatsapp ? { whatsapp: `(51) 90000-${String(1000 + n).padStart(4, '0')}` } : {}),
+    ...(p.shares.linkedin ? { linkedin: `linkedin.com/in/${slug}-exemplo` } : {}),
+    ...(p.shares.instagram ? { instagram: p.instagram } : {}),
   };
 }

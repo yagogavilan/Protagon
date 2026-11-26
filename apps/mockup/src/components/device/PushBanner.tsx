@@ -44,7 +44,7 @@ export function PushBanner() {
                 <span className="truncate text-[15px] font-semibold text-text-primary">{push.title}</span>
                 <span className="tabular shrink-0 text-caption text-text-tertiary">agora</span>
               </span>
-              <span className="mt-0.5 block text-[14px] leading-5 text-text-secondary">{push.body}</span>
+              <span className="mt-0.5 block text-body text-text-secondary">{push.body}</span>
             </span>
           </motion.button>
         ) : null}

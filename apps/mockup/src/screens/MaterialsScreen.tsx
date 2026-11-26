@@ -113,7 +113,7 @@ export function MateriaisScreen() {
       ) : (
         groups.map(({ session, mats }) => (
           <section key={session.id} aria-label={session.title} className="flex flex-col gap-2">
-            <h2 className="tabular text-caption text-text-secondary">
+            <h2 className="tabular text-body-strong text-text-secondary">
               {formatHour(session.start)} · {session.title}
             </h2>
             {mats.map((m) => {

@@ -63,6 +63,7 @@ export function useRelation(id: string): Relation {
 export function useInstagramHandle(p: Participant): string | null {
   const relation = useRelation(p.id);
   const early = useDemo((s) => s.instagramEarly);
+  if (!p.shares.instagram) return null;
   if (relation === 'connected') return p.instagram;
   return early && p.instagramEarly ? p.instagram : null;
 }

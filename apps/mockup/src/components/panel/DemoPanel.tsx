@@ -29,7 +29,8 @@ export function DemoPanel() {
   const dayDisabled = s.moment === 'before' || s.moment === 'after';
   const pause = s.moment === 'break' || s.moment === 'lunch';
   const inApp = s.auth === 'app';
-  const templates = notificationTemplates.filter((t) => !t.minTier || s.tier !== 'executivo');
+  // Só os modelos que fazem sentido no momento atual (BUG-016): em sessão ao vivo não dá para disparar "Intervalo de 15 min"
+  const templates = notificationTemplates.filter((t) => t.moments.includes(s.moment) && (!t.minTier || s.tier !== 'executivo'));
 
   return (
     <aside
@@ -97,7 +98,7 @@ export function DemoPanel() {
         </label>
         <select
           id="tpl"
-          value={template}
+          value={templates.some((t) => t.id === template) ? template : ''}
           onChange={(e) => setTemplate(e.target.value)}
           className="min-h-[48px] w-full rounded-md border border-border-strong bg-surface-1 px-3 text-[15px] text-text-primary"
         >

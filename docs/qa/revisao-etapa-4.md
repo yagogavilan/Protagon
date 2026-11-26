@@ -110,4 +110,62 @@ QA não tem aparelho; o que depende de hardware ou de percepção fica aqui. Abr
 - Um estado por tela na varredura de texto; combinações raras (ex.: Diamond com notificação em espera) foram só sondadas, não varridas.
 - Fonte Sora carregada pela rede no teste; o fallback não foi avaliado.
 - "Brilho baixo" simulado por filtro `brightness(0.4)` e olhar humano; a conta de razão sob esse filtro (no JSON `h`) é uma aproximação linear em sRGB e não vale como prova.
-- `qa.mjs` não está em `package.json` (arquivo do dev). Sugiro `"qa": "node scripts/qa.mjs"`; hoje as seções b, c, d, e, f e i falham de propósito enquanto os achados acima não forem corrigidos.
+- `qa.mjs` não estava em `package.json`; `npm run qa` foi adicionado na rodada de correções (§8) e as seções passam.
+
+## 8. Correções (Etapa 4, rodada única, 2026-11-26)
+
+Autor: `mobile-dev` (construiu o mockup; o reteste independente continua com o `qa-engineer`). Decisões do CEO aplicadas: corpo e texto corrido (inclusive consentimento) em 16 px; rótulo de ação (chip, filtro, aba, tab bar) em 14 ou 15 px com peso 500 a 600; alvo mínimo de 44 px (48 px onde o design system pede); BUG-008 mantém a opção do Instagram e ganha o aviso do SEC-004.
+
+Resultado: `npm run typecheck`, `npm run build`, `npm run build:single`, `npm run smoke` (89 capturas, 0 erro de console) e `npm run qa` (todas as seções: 232 verificações, 0 falhas, 0 erro de console) passam. Evidência pós-correção: `capturas/etapa-4/qa-resultado-abcdefghi.json` e as capturas `normal-*`, `brilho40-*` e `foco-*` regeneradas; o resultado de antes ficou em `capturas/etapa-4/antes-das-correcoes/`. Capturas do smoke regeneradas em `docs/design/capturas/etapa-3/`. `qa` entrou no `package.json`. Prévia atualizada em `preview/index.html`.
+
+### 8.1 Achados BUG
+
+| ID | Status | O que mudou |
+|---|---|---|
+| BUG-001 | Corrigido | Todo texto corrido e de consentimento em `text-body` (16 px): U03, C01 e C01b, E02, E04n, A05, T02, C05, C10, U01, U02, M01, tela bloqueada e push (de 14 para 16 px), banner offline, hints das chaves, linhas de nicho, objetivo, desafio e "Domina" do card de sugestão. Ficam em 13 px só metadados curtos (hora, contador, "Atualizado às..."). A sonda c (corpo, 45+ caracteres) passa com 0 ocorrências. |
+| BUG-002 | Corrigido | A notificação de boas-vindas de Conexões nasce "em espera" quando o momento é `live` (login padrão e `auth=app`); ao voltar para a palestra, o que era não lido de Conexões ou material volta para a espera. Sino e lista só mostram o operacional; a lista traz "1 notificação em espera até o intervalo". |
+| BUG-003 | Corrigido | Chips, filtros, abas, segmentos e tab bar usam `text-label` (15 px, peso 500) ou `text-label-sm` (14 px, peso 600). Dois tokens novos no `tailwind.config.ts`, a levar ao designer para `tokens.json`. |
+| BUG-004 | Corrigido | Segmentos de Conexões, filtros de G02, dias de M01 e abas de A03: 48 px de altura (eram 40). Chip de filtro ativo do Explorar e botão Voltar, "Limpar tudo", pontos e rótulos do mapa também em 48 px. Restam entre 44 e 47 px: NPS 0 a 10 (47,7 × 48, largura) e "Toque para desbloquear" (44, cromo do iOS simulado). A ilha dinâmica é hardware do aparelho e fica de fora (ver 8.3). |
+| BUG-005 | Corrigido | `BottomSheet`: focus trap (Tab e Shift+Tab giram dentro) e `inert` em todo o resto da moldura enquanto houver sheet. Páginas empilhadas: aba de trás (`TopBar`, banner, conteúdo) `inert`, foco vai ao título da página ao abrir e volta ao gatilho ao fechar. Seção f: 7 de 7 sheets sem escape. |
+| BUG-006 | Corrigido | Rótulos do mapa em 15 unidades do SVG (cerca de 14 px na tela), cor `text-primary`, peso 600; serviços do foyer em rótulos maiores, e os nomes continuam repetidos nos chips de 15 px abaixo do mapa. Verificado a brilho 40% em `brilho40-mapa.png`. Pontos e rótulos com área de toque de 48 px. |
+| BUG-007 | Corrigido | Card de Conexões offline sem `opacity`: texto em `text-secondary` com ícone de internet. Seção b sem nenhuma falha de contraste. |
+| BUG-008 | Corrigido (decisão do CEO: manter) | Opção "Mostrar meu Instagram antes da conexão" mantida, com selo "proposta" e desligada por padrão. Ligar abre um sheet de confirmação com o aviso do SEC-004 ("bloquear e denunciar daqui não valem"); a chave só liga ao confirmar. A opção também respeita os canais que cada pessoa liberou. A decisão formal (DEC e parecer do `security-engineer`) continua pendente com o fundador. |
+| BUG-009 | Corrigido | `C01b` entrou no "Ir direto para" e em `?go=C01b`; atalho do README corrigido para `auth=app&connections=1&overlay=profile`. |
+| BUG-010 | Corrigido | Tab bar é `nav > ul > li > button` com `aria-current="page"`; `aria-label` com cadeado e contagem mantidos. |
+| BUG-011 | Corrigido | "deixa de ver seu perfil e você deixa de ver o perfil de {nome}". |
+| BUG-012 | Corrigido | Card Mapa por momento: "Plenária principal" (palestra), "Café no foyer" (intervalo), "Almoço no 2º andar" (almoço) e "Ver o local do evento" nos demais. |
+| BUG-013 | Corrigido | Sora (latin, variável 400 a 700, 25 kB) embutida em `src/assets/fonts/` via `@font-face`; links do Google Fonts removidos. O `dist-single/index.html` carrega a fonte em base64. Ver 8.3 sobre a origem do arquivo. |
+| BUG-014 | Corrigido | "Completar" virou botão de contorno dourado (variante nova `gold`); só "Conectar" fica verde. |
+| BUG-015 | Corrigido | Em sessão ao vivo o card diz "Ver no intervalo" (e "Ativar no intervalo" quando o perfil não existe), no texto e no rótulo de acessibilidade. |
+| BUG-016 | Corrigido | O painel só lista os modelos de notificação do momento atual (campo `moments`). |
+
+### 8.2 Achados SEC (grupo "ajustes agora" de `docs/seguranca/lgpd-conexoes.md`)
+
+| ID | Status | O que mudou |
+|---|---|---|
+| SEC-001 | Feito | C01 passo 3 traz a linha "Também aparecem: nicho e objetivo no Protagon; foto, desafio e conhecimentos, se você preencher.", a chave do §5 (desligada por padrão, ativar só com ela ligada), as 4 linhas (uso, contatos e exportação, 90 dias, pausar ou excluir) e o link "Política de privacidade" (simulado por aviso). A linha "Não usamos para venda de outros produtos" leva o selo "Proposta": depende de DD-04. |
+| SEC-002 | Feito | "Depois do aceite, você compartilha" no C01 passo 3 e em U03: chave por canal (WhatsApp, LinkedIn, Instagram), todas desligadas, com o valor ao lado; o WhatsApp vem da compra e é editável em "Complete seu perfil", junto com LinkedIn e Instagram. O C03 e o chat mostram só os canais que cada pessoa liberou (nos dados de exemplo, Larissa não libera LinkedIn e Felipe não libera Instagram). |
+| SEC-003 | Feito | Nicho, objetivo no Protagon, foto e maior desafio entram em "O que fica visível" (C01 passo 3 e U03). Maior desafio tem chave própria, também em "Complete seu perfil"; nos dados de exemplo, 3 pessoas mantêm o desafio oculto: o card e o C03 não o mostram e ele não gera motivo de sugestão. Explorar continua sem filtro por desafio. |
+| SEC-004 | Feito | Aviso na dica e no sheet de confirmação ao ligar o Instagram antes da conexão; padrão desligado. |
+| SEC-005 | Feito | Motivos: "Assédio ou comportamento inadequado", "Mensagem ofensiva", "Perfil falso ou de outra pessoa", "Oferta indevida ou spam", "Outro motivo". "Bloquear {nome} também" vem marcado: ao enviar, bloqueia e fecha o perfil ou chat. Depois de enviar: "Durante o evento, a equipe analisa no mesmo dia. Se for urgente, procure a equipe no estande." e botão "Falar com a equipe no estande" (abre o mapa no estande). O "mesmo dia" é SLA proposto, a definir com Eventos (DD-09). |
+| SEC-006 | Mantido | Prévia do C00 continua com cartões abstratos, sem foto. A decisão sobre foto real segue com a diretoria. |
+| SEC-007 | Feito | Aviso de uso responsável abaixo do botão de exportar, com a contagem do que entra no arquivo ("5 WhatsApp, 3 LinkedIn, 4 Instagram": só o que cada pessoa liberou) e a nota de que conexões desfeitas, bloqueadas ou excluídas não entram. |
+| SEC-008 | Feito | (1) pausar: "Você some das sugestões e da busca e não recebe pedidos novos. Suas conexões continuam." (U03, C11 e estado pausado); (2) desfazer: "deixam de aparecer no app para os dois. O que já foi salvo fora do app não é apagado."; (3) exclusão: "Apagamos do app na hora... Cópias de segurança são apagadas em até 30 dias" (U03, tela de dados excluídos e FAQ); (4) texto da base de autorização e link da política em U03; (5) CPF mostrado só com os 2 últimos dígitos (`***.***.***-35`), como na recomendação de stack. |
+
+[HIPÓTESE] O prazo de 30 dias para cópias de segurança e o "mesmo dia" da denúncia são valores propostos para o mockup; o definitivo vem do jurídico, de Eventos e do `backend-dev`. SEC-009 a SEC-017 são requisitos do app real e não entram no mockup.
+
+### 8.3 Sondas corrigidas em `scripts/qa.mjs` (critério mantido, sonda errada)
+
+- **c, rótulos de ação**: o critério passou a ser o decidido pelo CEO (14 px ou mais, peso 500 a 600 abaixo de 16 px; acima de 16 px o peso é livre). Contadores numéricos de abas ("4") contam como metadado. O critério de corpo (45+ caracteres a 16 px) e o piso de 13 px não mudaram.
+- **i, notificações**: a classificação "entregue ou em espera" lia o texto "N em espera" do painel; com a semeadura inicial já em espera, tudo parecia retido e a verificação passaria sem provar nada. Agora compara a contagem antes e depois do disparo. Com o BUG-016 o painel só oferece os modelos do momento, então em sessão ao vivo a sonda dispara 4 (2 operacionais entregues, 2 não operacionais retidos), não mais 13; a regra no `store` continua a mesma para qualquer modelo. A busca da aba "Conexões" passou para o botão do `nav`, por causa do BUG-010.
+- **f**: "U03 excluir" nunca foi um sheet (a confirmação é inline, sem `role=dialog`); a sonda de sheet passou a usar o aviso do Instagram em U03. No "Login", o mínimo de controles com anel caiu de 4 para 1: o botão nasce desabilitado e o campo é o único controle até alguém digitar.
+- **e**: ilha dinâmica excluída (`data-device-chrome`), por ser hardware do iPhone simulado; "Toque para desbloquear" tem 44 px e passa.
+- **d**: `backdrop-filter` de `.system-glass` (push e tela bloqueada) fica de fora da regra 7, por ser cromo do iOS simulado (já aceito em §4).
+- **a**: regex do CPF atualizada para a nova máscara; 12 sondas novas cobrem BUG-008 e SEC-001 a SEC-008 (121 estados sondados, 0 não confirmados).
+
+### 8.4 O que não foi feito ou não foi validado
+
+- Android e iOS reais: nada foi aberto em aparelho. Tudo foi verificado em Chrome, com filtro de brilho a 40% por simulação. Os itens do roteiro do §6 (brilho mínimo no escuro, texto do sistema no maior tamanho, "Reduzir transparência", teste com 3 pessoas e com quem nunca viu o app) continuam com o fundador. Não testei leitor de tela (VoiceOver e TalkBack).
+- `npm install @fontsource-variable/sora` foi negado pelo ambiente; o arquivo da Sora foi baixado direto do Google Fonts (`fonts.gstatic.com`, SIL Open Font License 1.1). Conferir a licença com o designer antes de publicar.
+- `text-label` e `text-label-sm` não existem em `docs/design/tokens.json`; o designer precisa incorporá-los. O mockup já os usa.
+- Os textos de consentimento e de política são do jurídico (§5 do parecer de segurança); o link "Política de privacidade" é simulado.

@@ -146,7 +146,7 @@ export function RequestSheet({ open, suggestion, remaining, limit, draft, onDraf
       >
         {text.length} / {MESSAGE_MAX}
       </p>
-      <p className="mt-2 flex items-center gap-2 text-caption text-text-secondary">
+      <p className="mt-2 flex items-center gap-2 text-body text-text-secondary">
         <LockOpen size={16} aria-hidden className="text-gold-200" />
         Seus contatos só aparecem se {first} aceitar.
       </p>

@@ -68,7 +68,7 @@ function SlideConnections() {
           <Sparkles size={14} /> Afinidade alta
         </span>
         <p className="mt-3 text-h2 text-text-primary">Prates Moda</p>
-        <p className="text-caption text-text-secondary">3 interesses em comum · vocês dois buscam parcerias no varejo</p>
+        <p className="text-body text-text-secondary">3 interesses em comum · vocês dois buscam parcerias no varejo</p>
       </div>
       <p className="flex items-center gap-2 px-1 text-body text-text-secondary">
         <ShieldCheck size={20} className="shrink-0 text-gold-200" /> Contatos só aparecem quando os dois aceitam.

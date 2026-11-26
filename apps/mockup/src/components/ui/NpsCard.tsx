@@ -20,7 +20,7 @@ export function NpsCard({ npsKey, question, className }: { npsKey: NpsKey; quest
   return (
     <section className={cn('rounded-lg border border-border-subtle bg-surface-1 p-card shadow-card', className)} aria-label={question}>
       <p className="text-body-strong text-text-primary">{question}</p>
-      <p className="text-caption text-text-secondary">De 0 a 10. Leva 10 segundos.</p>
+      <p className="text-body text-text-secondary">De 0 a 10. Leva 10 segundos.</p>
       {answered && saved ? (
         <div className="mt-3 flex items-center justify-between gap-2" role="status">
           <p className="flex items-start gap-2 text-body text-live">
