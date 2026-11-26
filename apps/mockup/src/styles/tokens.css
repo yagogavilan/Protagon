@@ -1,0 +1,86 @@
+/*
+ * Tokens do Protagon (fonte: docs/00-visao/brief.md §6).
+ * Provisório até o product-designer publicar docs/design/tokens.json;
+ * quando ele existir, este arquivo passa a espelhá-lo (os nomes já seguem o brief).
+ */
+:root {
+  /* Superfícies */
+  --color-bg-base: #020111;
+  --color-surface-1: #0e0d24;
+  --color-surface-2: #16153a;
+  --color-surface-3: #1e1d48;
+
+  /* Bordas */
+  --color-border-subtle: rgba(240, 206, 153, 0.12);
+  --color-border-strong: #6b6994;
+
+  /* Texto */
+  --color-text-primary: #f5f3ee;
+  --color-text-secondary: #a8a6b8;
+  --color-text-tertiary: #8a8899;
+
+  /* Dourado (luz, nunca fundo de texto branco) */
+  --color-gold-500: #cc8f4e;
+  --color-gold-200: #f0ce99;
+  --gradient-gold: linear-gradient(135deg, #cc8f4e, #f0ce99);
+
+  /* CTA: texto sempre #020111 */
+  --gradient-cta: linear-gradient(135deg, #33ec74, #1fcf58);
+  --color-on-cta: #020111;
+  --color-on-gold: #020111;
+
+  /* Estados */
+  --color-state-live: #33ec74;
+  --color-state-warning: #ffb547;
+  --color-state-danger: #ff5c6c;
+  --color-state-info: #5ab8ff;
+  --color-state-locked-overlay: rgba(2, 1, 17, 0.72);
+
+  /* Ingressos */
+  --tier-executivo: #a8a6b8;
+  --tier-vip: var(--gradient-gold);
+  --tier-diamond: linear-gradient(135deg, #f0ce99, #ffffff 50%, #5ab8ff);
+
+  /* Tipografia */
+  --font-sans: 'Sora', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Raios */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 9999px;
+
+  /* Espaço: grid 4pt, margem de tela 20 */
+  --space-margin: 20px;
+
+  /* Sombras e brilhos */
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(240, 206, 153, 0.08);
+  --glow-gold: 0 0 24px rgba(204, 143, 78, 0.35);
+  --glow-live: 0 0 16px rgba(51, 236, 116, 0.45);
+
+  /* Vidro: só tab bar e bottom sheets */
+  --glass-nav-bg: rgba(14, 13, 36, 0.72);
+  --glass-blur: 24px;
+
+  /* Movimento */
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+  --motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+    --motion-slow: 0ms;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-nav-bg: rgba(14, 13, 36, 0.98);
+    --glass-blur: 0px;
+  }
+}

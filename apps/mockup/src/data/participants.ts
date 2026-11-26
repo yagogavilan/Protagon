@@ -1,0 +1,113 @@
+import type { DemoUser, Objective, Participant, Tier } from './types';
+
+// Pessoas, empresas e contatos fictícios. Qualquer semelhança é coincidência.
+
+export const objectivesList: Objective[] = [
+  'Busco sócio',
+  'Busco clientes',
+  'Contrato serviços',
+  'Ofereço serviços',
+  'Quero mentorar',
+  'Quero ser mentorado',
+  'Parcerias',
+  'Investimento',
+];
+
+export const interestTags = [
+  'Liderança',
+  'Gestão de equipes',
+  'Vendas',
+  'Marketing digital',
+  'Franquias',
+  'Varejo',
+  'Finanças',
+  'Tecnologia',
+  'Inovação',
+  'Saúde e bem-estar',
+  'Educação',
+  'Imóveis',
+  'Agronegócio',
+  'Indústria',
+  'Expansão',
+  'Cultura organizacional',
+  'E-commerce',
+  'Atendimento',
+  'Investimentos',
+  'Sucessão familiar',
+  'Mentalidade',
+  'Alimentação',
+] as const;
+
+export const demoUser: DemoUser = {
+  id: 'me',
+  name: 'Rafael Moraes',
+  email: 'rafael.moraes@exemplo.com.br',
+  cpfMasked: '***.482.917-**',
+  company: 'Rede Movimento Academias',
+  role: 'Sócio-fundador',
+  city: 'Porto Alegre, RS',
+  segment: 'Fitness e bem-estar',
+  objectives: ['Parcerias', 'Investimento', 'Quero ser mentorado'],
+  interests: ['Liderança', 'Gestão de equipes', 'Franquias', 'Expansão', 'Saúde e bem-estar', 'Marketing digital', 'Varejo', 'Vendas'],
+  credentialCode: 'PTG-POA27-04829',
+};
+
+type Row = [name: string, company: string, role: string, city: string, segment: string, tier: Tier, objectives: Objective[], interests: string[], visible?: boolean];
+
+const rows: Row[] = [
+  ['Juliana Prates', 'Prates Moda', 'Diretora comercial', 'Porto Alegre, RS', 'Varejo', 'vip', ['Parcerias', 'Busco clientes'], ['Varejo', 'Marketing digital', 'E-commerce', 'Vendas']],
+  ['Bruno Lacerda', 'Lacerda Suplementos', 'CEO', 'Canoas, RS', 'Saúde e bem-estar', 'diamond', ['Parcerias', 'Busco clientes'], ['Saúde e bem-estar', 'Varejo', 'Franquias', 'Vendas', 'Expansão']],
+  ['Carolina Mendes', 'Mendes & Rocha Advocacia', 'Sócia', 'Porto Alegre, RS', 'Serviços jurídicos', 'vip', ['Ofereço serviços', 'Busco clientes'], ['Sucessão familiar', 'Liderança', 'Gestão de equipes']],
+  ['Diego Fontana', 'Fontana Construtora', 'Diretor', 'Caxias do Sul, RS', 'Construção civil', 'diamond', ['Investimento', 'Busco sócio'], ['Imóveis', 'Investimentos', 'Expansão', 'Liderança']],
+  ['Patrícia Kuhn', 'Kuhn Contabilidade', 'Fundadora', 'Novo Hamburgo, RS', 'Contabilidade', 'vip', ['Ofereço serviços', 'Quero mentorar'], ['Finanças', 'Gestão de equipes', 'Sucessão familiar']],
+  ['Leonardo Bastos', 'Bastos Tech', 'CTO', 'Porto Alegre, RS', 'Tecnologia', 'vip', ['Ofereço serviços', 'Parcerias'], ['Tecnologia', 'Inovação', 'E-commerce', 'Marketing digital']],
+  ['Fernanda Lopes', 'Clínica Viva Bem', 'Diretora clínica', 'Pelotas, RS', 'Saúde', 'diamond', ['Parcerias', 'Investimento'], ['Saúde e bem-estar', 'Expansão', 'Liderança', 'Atendimento']],
+  ['Gustavo Rech', 'Rech Alimentos', 'Gerente geral', 'Bento Gonçalves, RS', 'Indústria', 'executivo', ['Busco clientes'], ['Indústria', 'Alimentação', 'Vendas']],
+  ['Aline Schmitt', 'Schmitt Educação', 'Mantenedora', 'Santa Cruz do Sul, RS', 'Educação', 'vip', ['Quero ser mentorado', 'Parcerias'], ['Educação', 'Liderança', 'Cultura organizacional', 'Gestão de equipes']],
+  ['Marcos Vieira', 'Vieira Imóveis', 'Corretor e sócio', 'Porto Alegre, RS', 'Imóveis', 'vip', ['Busco clientes', 'Parcerias'], ['Imóveis', 'Vendas', 'Investimentos', 'Marketing digital']],
+  ['Renata Coelho', 'Coelho Marketing', 'Sócia-diretora', 'Florianópolis, SC', 'Marketing e comunicação', 'diamond', ['Ofereço serviços', 'Busco clientes'], ['Marketing digital', 'Varejo', 'Franquias', 'Inovação']],
+  ['Thiago Brandão', 'Brandão Logística', 'CEO', 'Gravataí, RS', 'Logística', 'vip', ['Parcerias', 'Investimento'], ['Expansão', 'Gestão de equipes', 'Tecnologia', 'Indústria']],
+  ['Vanessa Dias', 'Doce Dias Confeitaria', 'Proprietária', 'Porto Alegre, RS', 'Alimentação', 'executivo', ['Quero ser mentorado'], ['Alimentação', 'Varejo', 'Mentalidade']],
+  ['Eduardo Mello', 'Mello Agro', 'Diretor', 'Passo Fundo, RS', 'Agronegócio', 'diamond', ['Investimento', 'Quero mentorar'], ['Agronegócio', 'Investimentos', 'Sucessão familiar', 'Liderança']],
+  ['Camila Torres', 'Torres RH', 'Consultora', 'Porto Alegre, RS', 'Consultoria', 'vip', ['Ofereço serviços', 'Busco clientes'], ['Gestão de equipes', 'Cultura organizacional', 'Liderança']],
+  ['Ricardo Pacheco', 'Pacheco Franquias', 'Fundador', 'Curitiba, PR', 'Franquias', 'diamond', ['Quero mentorar', 'Parcerias'], ['Franquias', 'Expansão', 'Varejo', 'Vendas', 'Liderança']],
+  ['Larissa Antunes', 'Studio Antunes Pilates', 'Proprietária', 'Porto Alegre, RS', 'Fitness e bem-estar', 'vip', ['Parcerias', 'Quero ser mentorado'], ['Saúde e bem-estar', 'Marketing digital', 'Atendimento']],
+  ['Henrique Paz', 'Paz Seguros', 'Corretor', 'Canoas, RS', 'Serviços financeiros', 'executivo', ['Busco clientes'], ['Finanças', 'Vendas']],
+  ['Isabela Ramos', 'Ramos Ótica', 'Sócia', 'São Leopoldo, RS', 'Varejo', 'vip', ['Parcerias', 'Busco clientes'], ['Varejo', 'Atendimento', 'Expansão', 'Franquias']],
+  ['Felipe Correa', 'Correa Investimentos', 'Assessor', 'Porto Alegre, RS', 'Serviços financeiros', 'diamond', ['Investimento', 'Ofereço serviços'], ['Investimentos', 'Finanças', 'Expansão']],
+  ['Mariana Goulart', 'Goulart Arquitetura', 'Arquiteta e sócia', 'Porto Alegre, RS', 'Arquitetura', 'vip', ['Busco clientes', 'Parcerias'], ['Imóveis', 'Inovação', 'Marketing digital']],
+  ['André Zanella', 'Zanella Móveis', 'Diretor industrial', 'Bento Gonçalves, RS', 'Indústria', 'vip', ['Busco clientes', 'Contrato serviços'], ['Indústria', 'Varejo', 'E-commerce', 'Vendas']],
+  ['Beatriz Nunes', 'Nunes Nutrição', 'Nutricionista e fundadora', 'Porto Alegre, RS', 'Saúde', 'vip', ['Parcerias', 'Busco clientes'], ['Saúde e bem-estar', 'Alimentação', 'Marketing digital']],
+  ['Rodrigo Kessler', 'Kessler Energia Solar', 'CEO', 'Lajeado, RS', 'Energia', 'executivo', ['Busco clientes', 'Investimento'], ['Inovação', 'Vendas', 'Expansão']],
+  ['Tatiane Moura', 'Moura Eventos', 'Produtora', 'Porto Alegre, RS', 'Eventos', 'vip', ['Ofereço serviços', 'Parcerias'], ['Marketing digital', 'Atendimento', 'Vendas']],
+  ['Lucas Werner', 'Werner Sistemas', 'Fundador', 'Joinville, SC', 'Tecnologia', 'diamond', ['Busco sócio', 'Investimento'], ['Tecnologia', 'Inovação', 'Expansão', 'Finanças']],
+  ['Simone Battisti', 'Battisti Vinhos', 'Diretora comercial', 'Garibaldi, RS', 'Alimentação', 'vip', ['Busco clientes', 'Parcerias'], ['Alimentação', 'Varejo', 'Vendas', 'E-commerce']],
+  ['Gabriel Duarte', 'Academia Força Total', 'Proprietário', 'Viamão, RS', 'Fitness e bem-estar', 'executivo', ['Quero ser mentorado'], ['Saúde e bem-estar', 'Gestão de equipes']],
+  ['Natália Fraga', 'Fraga Odontologia', 'Sócia', 'Porto Alegre, RS', 'Saúde', 'vip', ['Quero ser mentorado', 'Contrato serviços'], ['Saúde e bem-estar', 'Gestão de equipes', 'Marketing digital']],
+  ['Otávio Lemos', 'Lemos Distribuidora', 'CEO', 'Esteio, RS', 'Distribuição', 'diamond', ['Parcerias', 'Busco clientes'], ['Varejo', 'Expansão', 'Gestão de equipes', 'Vendas']],
+  ['Priscila Amaral', 'Amaral Cosméticos', 'Fundadora', 'Porto Alegre, RS', 'Beleza', 'vip', ['Parcerias', 'Investimento'], ['E-commerce', 'Varejo', 'Franquias', 'Marketing digital']],
+  ['Sérgio Pinheiro', 'Pinheiro Transportes', 'Diretor', 'Santa Maria, RS', 'Logística', 'executivo', ['Contrato serviços'], ['Gestão de equipes', 'Finanças']],
+  ['Daniela Weber', 'Weber Consultoria Financeira', 'Consultora', 'Porto Alegre, RS', 'Consultoria', 'vip', ['Ofereço serviços', 'Quero mentorar'], ['Finanças', 'Investimentos', 'Sucessão familiar']],
+  ['Vinícius Hoffmann', 'Hoffmann Café', 'Sócio', 'Porto Alegre, RS', 'Alimentação', 'vip', ['Busco sócio', 'Parcerias'], ['Alimentação', 'Franquias', 'Expansão', 'Varejo']],
+  ['Luana Castro', 'Castro Moda Fitness', 'CEO', 'Novo Hamburgo, RS', 'Moda', 'diamond', ['Parcerias', 'Busco clientes'], ['Saúde e bem-estar', 'E-commerce', 'Varejo', 'Marketing digital']],
+  ['Fábio Monteiro', 'Monteiro Engenharia', 'Diretor técnico', 'Porto Alegre, RS', 'Construção civil', 'vip', ['Contrato serviços', 'Busco clientes'], ['Imóveis', 'Gestão de equipes', 'Liderança'], false],
+  ['Cristiane Silveira', 'Silveira Educação Corporativa', 'Fundadora', 'Porto Alegre, RS', 'Educação', 'diamond', ['Quero mentorar', 'Ofereço serviços'], ['Liderança', 'Cultura organizacional', 'Educação', 'Mentalidade']],
+  ['Jonas Becker', 'Becker Agropecuária', 'Sócio', 'Cruz Alta, RS', 'Agronegócio', 'executivo', ['Investimento'], ['Agronegócio', 'Sucessão familiar']],
+  ['Elisa Marques', 'Marques Farma', 'Diretora', 'Porto Alegre, RS', 'Saúde', 'vip', ['Parcerias', 'Contrato serviços'], ['Saúde e bem-estar', 'Varejo', 'Expansão'], false],
+  ['Paulo Rocha', 'Rocha Tecnologia Fitness', 'Fundador', 'Porto Alegre, RS', 'Tecnologia', 'vip', ['Busco clientes', 'Busco sócio'], ['Tecnologia', 'Saúde e bem-estar', 'Inovação', 'Franquias'], false],
+];
+
+export const participants: Participant[] = rows.map(
+  ([name, company, role, city, segment, tier, objectives, interests, visible], i) => ({
+    id: `p${String(i + 1).padStart(2, '0')}`,
+    name,
+    company,
+    role,
+    city,
+    segment,
+    tier,
+    objectives,
+    interests,
+    visible: visible ?? true,
+  }),
+);
