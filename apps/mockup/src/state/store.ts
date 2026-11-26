@@ -13,6 +13,7 @@ import type {
   NpsKey,
   Objective,
   Tier,
+  TopicId,
 } from '@/data/types';
 import { computeClock, pauseStage, type EventClock, type PausePhase } from '@/lib/clock';
 
@@ -31,6 +32,7 @@ export type OverlayName =
   | 'person'
   | 'chat'
   | 'activate'
+  | 'profile'
   | 'prefs'
   | 'privacy'
   | 'nps'
@@ -73,6 +75,29 @@ export interface AppNotification {
   /** HH:MM do relógio do evento quando chegou */
   time: string;
   read: boolean;
+}
+
+/** Perfil de Conexões do aluno (C01 e "Complete seu perfil"). Desafio e conhecimento começam vazios: são opcionais. */
+export interface ConnProfile {
+  objectives: Objective[];
+  interests: string[];
+  niche: string;
+  goal: string;
+  challenge: TopicId | null;
+  expertise: TopicId[];
+  instagram: string;
+}
+
+export function initialProfile(complete = false): ConnProfile {
+  return {
+    objectives: [...demoUser.objectives],
+    interests: [...demoUser.interests],
+    niche: demoUser.niche,
+    goal: demoUser.goal,
+    challenge: complete ? demoUser.challenge : null,
+    expertise: complete ? [...demoUser.expertise] : [],
+    instagram: demoUser.instagram,
+  };
 }
 
 export interface Privacy {
@@ -140,7 +165,10 @@ interface DemoState {
   connectionsPaused: boolean;
   consent: boolean;
   privacy: Privacy;
-  profile: { objectives: Objective[]; interests: string[] };
+  profile: ConnProfile;
+  /** Proposta (DEC-002): mostrar o Instagram antes da conexão. Desligado por padrão */
+  instagramEarly: boolean;
+  profileCardDismissed: boolean;
   justUpgraded: boolean;
   connPanel: ConnPanel;
   requestsSentByDay: Record<DayNumber, number>;
@@ -203,7 +231,9 @@ interface DemoState {
   setConnectionsPaused: (v: boolean) => void;
   setConsent: (v: boolean) => void;
   setPrivacy: (k: keyof Privacy, v: boolean) => void;
-  setProfile: (p: { objectives: Objective[]; interests: string[] }) => void;
+  setProfile: (p: Partial<ConnProfile>) => void;
+  setInstagramEarly: (v: boolean) => void;
+  setProfileCardDismissed: (v: boolean) => void;
   setConnPanel: (p: ConnPanel) => void;
   setSuggestionOutcome: (id: string, outcome: SuggestionOutcome | null) => void;
   sendConnectionRequest: () => boolean;
@@ -254,7 +284,9 @@ const initialApp = {
   connectionsPaused: false,
   consent: false,
   privacy: defaultPrivacy,
-  profile: { objectives: [...demoUser.objectives], interests: [...demoUser.interests] },
+  profile: initialProfile(),
+  instagramEarly: false,
+  profileCardDismissed: false,
   justUpgraded: false,
   connPanel: 'sugestoes' as ConnPanel,
   requestsSentByDay: { 1: 0, 2: 0, 3: 0 } as Record<DayNumber, number>,
@@ -324,7 +356,7 @@ function fromUrl() {
   const dayParam = Number(q.get('day'));
   const sentParam = Math.max(0, Math.min(25, Number(q.get('sent')) || 0));
   const overlay = pick<OverlayName>('overlay', [
-    'credential', 'notifications', 'checkout', 'map', 'qrscan', 'break', 'eat', 'activate', 'prefs', 'privacy', 'nps', 'support',
+    'credential', 'notifications', 'checkout', 'map', 'qrscan', 'break', 'eat', 'activate', 'profile', 'prefs', 'privacy', 'nps', 'support',
   ]);
   return {
     tier: pick<Tier>('tier', ['executivo', 'vip', 'diamond']) ?? 'vip',
@@ -338,6 +370,8 @@ function fromUrl() {
     ...(overlay ? withStack([{ name: overlay }]) : {}),
     connectionsActive: q.get('connections') === '1',
     consent: q.get('connections') === '1',
+    // ?profile=full abre com o perfil completo (desafio e conhecimento preenchidos), sem o card "Complete seu perfil"
+    profile: initialProfile(q.get('profile') === 'full'),
     requestsSentByDay: { 1: sentParam, 2: sentParam, 3: sentParam } as Record<DayNumber, number>,
     notifPermission: pick<NotifPermission>('perm', ['unknown', 'granted', 'denied']) ?? 'unknown',
     permissionAsked: q.get('perm') === 'granted' || q.get('perm') === 'denied',
@@ -452,7 +486,9 @@ export const useDemo = create<DemoState>()((set, get) => ({
       downloaded: { 'm-d1-1': true, 'm-d1-3': true },
       completed: { 'm-d1-3': true },
       privacy: defaultPrivacy,
-      profile: { objectives: [...demoUser.objectives], interests: [...demoUser.interests] },
+      profile: initialProfile(),
+      instagramEarly: false,
+      profileCardDismissed: false,
       notifPrefs: { avisos: true, agenda: true, conexoes: true },
       pausePhase: 'start',
       online: true,
@@ -550,7 +586,9 @@ export const useDemo = create<DemoState>()((set, get) => ({
   setConnectionsPaused: (connectionsPaused) => set({ connectionsPaused }),
   setConsent: (consent) => set({ consent }),
   setPrivacy: (k, v) => set((s) => ({ privacy: { ...s.privacy, [k]: v } })),
-  setProfile: (profile) => set({ profile }),
+  setProfile: (patch) => set((s) => ({ profile: { ...s.profile, ...patch } })),
+  setInstagramEarly: (instagramEarly) => set({ instagramEarly }),
+  setProfileCardDismissed: (profileCardDismissed) => set({ profileCardDismissed }),
   setConnPanel: (connPanel) => set({ connPanel }),
   setSuggestionOutcome: (id, outcome) =>
     set((s) => {

@@ -9,9 +9,9 @@ import { contactFor } from '@/data/content';
 import { objectiveLabel } from '@/lib/affinity';
 import { receivedRequests } from '@/data/requests';
 import { useDemo, DAILY_REQUEST_LIMIT } from '@/state/store';
-import { findParticipant, firstName, useRelation, useSuggestionFor } from '@/lib/connections';
+import { findParticipant, firstName, useInstagramHandle, useRelation, useSuggestionFor } from '@/lib/connections';
 import { haptic } from '@/lib/haptics';
-import { participants } from '@/data/participants';
+import { participants, topics } from '@/data/participants';
 
 function ContactRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   const showToast = useDemo((s) => s.showToast);
@@ -62,6 +62,7 @@ export function ProfileScreen() {
   const showToast = useDemo((s) => s.showToast);
   const online = useDemo((s) => s.online);
 
+  const instagramEarly = useInstagramHandle(person);
   const { affinity } = suggestion;
   const high = affinity.level === 'alta';
   const limit = DAILY_REQUEST_LIMIT[tier];
@@ -145,6 +146,16 @@ export function ProfileScreen() {
           <p className="text-body text-text-secondary">
             {person.segment} · {person.city}
           </p>
+          <dl className="mt-3 flex flex-col gap-2">
+            <div>
+              <dt className="text-caption text-text-secondary">Nicho</dt>
+              <dd className="text-body text-text-primary">{person.niche}</dd>
+            </div>
+            <div>
+              <dt className="text-caption text-text-secondary">Objetivo no Protagon</dt>
+              <dd className="text-body text-text-primary">{person.goal}</dd>
+            </div>
+          </dl>
           <div className="mt-3 flex flex-wrap gap-2">
             {person.objectives.map((o) => (
               <Chip key={o} variant="objective">
@@ -179,6 +190,27 @@ export function ProfileScreen() {
             <p className="mt-1 text-body text-text-primary">{affinity.reason}</p>
           </section>
         ) : null}
+
+        <section aria-label="Desafio e conhecimento" className="flex flex-col gap-3">
+          <div>
+            <h3 className="text-body-strong text-text-primary">Maior desafio</h3>
+            <p className={affinity.iHelpThem ? 'mt-1 text-body text-gold-200' : 'mt-1 text-body text-text-primary'}>{topics[person.challenge].challenge}</p>
+          </div>
+          <div>
+            <h3 className="text-body-strong text-text-primary">Domina</h3>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {person.expertise.map((t) =>
+                t === affinity.theyHelpMe ? (
+                  <Chip key={t} variant="common">
+                    {topics[t].know}
+                  </Chip>
+                ) : (
+                  <Chip key={t}>{topics[t].know}</Chip>
+                ),
+              )}
+            </div>
+          </div>
+        </section>
 
         <section aria-label="Interesses">
           <h3 className="text-body-strong text-text-primary">Interesses</h3>
@@ -220,11 +252,26 @@ export function ProfileScreen() {
             </section>
           </>
         ) : (
-          <section className="flex items-start gap-3 rounded-lg border border-border-subtle bg-surface-1 p-card" aria-label="Contatos">
-            <ShieldCheck size={24} aria-hidden className="mt-0.5 shrink-0 text-gold-500" />
-            <p className="text-body text-text-secondary">
-              <span className="text-text-primary">Telefone e redes aparecem depois do aceite.</span> Quando os dois aceitam, você vê WhatsApp, LinkedIn e Instagram de {firstName(person.name)}.
-            </p>
+          <section className="flex flex-col gap-3 rounded-lg border border-border-subtle bg-surface-1 p-card" aria-label="Contatos">
+            {instagramEarly ? (
+              <ul>
+                <ContactRow icon={<AtSign size={20} />} label="Instagram" value={instagramEarly} />
+              </ul>
+            ) : null}
+            <div className="flex items-start gap-3">
+              <ShieldCheck size={24} aria-hidden className="mt-0.5 shrink-0 text-gold-500" />
+              <p className="text-body text-text-secondary">
+                {instagramEarly ? (
+                  <>
+                    <span className="text-text-primary">Telefone e LinkedIn aparecem depois do aceite.</span> O Instagram está aberto porque você liberou o seu em Privacidade.
+                  </>
+                ) : (
+                  <>
+                    <span className="text-text-primary">Telefone e redes aparecem depois do aceite.</span> Quando os dois aceitam, você vê WhatsApp, LinkedIn e Instagram de {firstName(person.name)}.
+                  </>
+                )}
+              </p>
+            </div>
           </section>
         )}
         {!online && relation === 'none' ? <p className="text-caption text-text-secondary">Sem internet: o pedido fica salvo e sai quando a conexão voltar.</p> : null}

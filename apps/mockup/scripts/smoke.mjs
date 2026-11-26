@@ -91,6 +91,20 @@ async function expectText(text, scope = frame()) {
   await scope.getByText(text, { exact: false }).first().waitFor({ state: 'visible', timeout: 6000 });
 }
 
+const IG = /@[\w.]+\.exemplo/;
+
+/** Instagram é contato: nenhum @ de outra pessoa pode estar na tela (antes do aceite, com a opção desligada) */
+async function expectNoInstagram(where) {
+  const n = await frame().getByText(IG).count();
+  if (n > 0) throw new Error(`Instagram apareceu antes do aceite (${where}): ${n} ocorrência(s)`);
+}
+
+async function expectInstagram(where) {
+  await frame().getByText(IG).first().waitFor({ state: 'visible', timeout: 6000 }).catch(() => {
+    throw new Error(`Instagram não apareceu (${where})`);
+  });
+}
+
 async function openPage(url) {
   const ctx = await browser.newContext({ viewport: { width: 1100, height: 940 }, locale: 'pt-BR' });
   page = await ctx.newPage();
@@ -151,7 +165,30 @@ async function vipDay(baseUrl) {
 
   // C02 sugestões e C04 pedido
   await expectText('Afinidade');
+  await expectText('Complete seu perfil');
+  await expectNoInstagram('C02, card sem desafio e conhecimento');
   await shot('vip-10-c02-sugestoes');
+
+  // DEC-002: perfil sem desafio/conhecimento usa o motivo antigo; ao completar, o motivo passa a ser o cruzamento
+  await tap('Completar');
+  await expectText('Qual é o seu maior desafio hoje?');
+  await shot('vip-10a-c01-complete-seu-perfil');
+  await tap('Reter clientes depois do 3º mês');
+  await tap('Expansão por franquia');
+  await tap('Liderança de equipes');
+  await tap('Salvar perfil');
+  await expectText(/Vocês podem se ajudar:|Domina .+, seu maior desafio hoje|Você domina /);
+  await expectNoInstagram('C02, depois de completar o perfil');
+  await wait(4800); // o aviso "Perfil salvo" some antes da captura
+  await shot('vip-10b-c02-motivo-por-desafio-e-conhecimento');
+
+  // C03 antes do aceite: nicho, objetivo, desafio e "Domina" completos; nenhum Instagram
+  await tap(/^Ver perfil de /);
+  await expectText('Por que vale conversar');
+  await expectText('Objetivo no Protagon');
+  await expectNoInstagram('C03 antes do aceite');
+  await shot('vip-10c-c03-perfil-antes-do-aceite');
+  await tap('Voltar');
   await tap(/^Conectar com /);
   await expectText('Escolha uma mensagem', frame());
   await shot('vip-11-c04-pedido');
@@ -213,6 +250,7 @@ async function vipDay(baseUrl) {
   await shot('vip-24-c05-aceito');
   await tap('Conversar');
   await expectText('Comece com uma mensagem');
+  await expectInstagram('chat depois do aceite');
   await shot('vip-25-c07-primeira-mensagem');
   await frame().getByRole('button', { name: /Vamos nos ver no próximo intervalo/ }).click();
   await tap('Enviar mensagem');
@@ -230,13 +268,21 @@ async function vipDay(baseUrl) {
   // Perfil e segurança
   await tab('Conexões');
   await tap(/^Minha rede/, { role: 'tab' });
+  await expectInstagram('Minha rede');
   await shot('vip-29-c09-minha-rede');
+  await tap(/^Abrir perfil de /);
+  await frame().getByRole('region', { name: 'Contatos', exact: true }).getByText('Instagram', { exact: true }).waitFor({ state: 'visible', timeout: 6000 });
+  await frame().getByRole('region', { name: 'Contatos', exact: true }).evaluate((el) => el.scrollIntoView({ block: 'center' }));
+  await shot('vip-29b-c03-conectados-contatos-com-instagram');
+  await tap('Voltar');
   await tap(/^Explorar/, { role: 'tab' });
   await shot('vip-30-c06-explorar');
   await tap(/^Filtros/);
   await tapDialog(/^Varejo$|Varejo/).catch(() => {});
+  await tapDialog('Tráfego pago');
   await shot('vip-31-c06-filtros');
   await tapDialog(/^Ver /);
+  await expectText('Domina tráfego pago');
   await shot('vip-32-c06-resultados-filtrados');
 
   // C10 QR
@@ -318,7 +364,28 @@ async function vipDay(baseUrl) {
   await shot('vip-56-u04-avaliacao');
   await tab('Eu');
   await tap(/^Privacidade/);
+  const igSwitch = frame().getByRole('switch', { name: /Mostrar meu Instagram antes da conexão/ });
+  await igSwitch.waitFor({ state: 'visible', timeout: 6000 });
+  if ((await igSwitch.getAttribute('aria-checked')) !== 'false') throw new Error('Opção de Instagram antes da conexão deveria começar desligada');
+  await expectText('Proposta');
   await shot('vip-57-u03-privacidade');
+  // Ligando a opção, quem também liberou mostra o @ antes do aceite (Juliana Prates libera; sem aceite entre vocês)
+  await igSwitch.click();
+  await wait(4800); // o aviso da opção some antes das próximas capturas
+  await tap('Voltar');
+  await tab('Conexões');
+  await tap(/^Explorar/, { role: 'tab' });
+  await frame().getByLabel('Buscar por nome, empresa, nicho ou interesse').fill('Prates Moda');
+  await wait();
+  await tap(/^Prates Moda, /);
+  await expectText('@julianaprates.exemplo');
+  await frame().getByRole('region', { name: 'Contatos', exact: true }).evaluate((el) => el.scrollIntoView({ block: 'center' }));
+  await shot('vip-57b-c03-instagram-liberado-por-opcao-ligada');
+  await tap('Voltar');
+  await tab('Eu');
+  await tap(/^Privacidade/);
+  await igSwitch.click();
+  await wait(4800); // o aviso da opção some antes das próximas capturas
   await tap('Voltar');
   await tap(/^Notificações/);
   await shot('vip-58-u02-preferencias');

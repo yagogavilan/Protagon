@@ -5,7 +5,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { FilterChip } from '@/components/ui/FilterChip';
 import { Switch } from '@/components/ui/Switch';
-import { demoUser, interestTags, objectivesList } from '@/data/participants';
+import { demoUser, goalsList, interestTags, objectivesList } from '@/data/participants';
 import type { Objective } from '@/data/types';
 import { useDemo, type Privacy } from '@/state/store';
 import { haptic } from '@/lib/haptics';
@@ -37,6 +37,8 @@ export function ActivateScreen() {
   const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
   const [objectives, setObjectives] = useState<Objective[]>(profile.objectives);
   const [interests, setInterests] = useState<string[]>(profile.interests);
+  const [niche, setNiche] = useState(profile.niche);
+  const [goal, setGoal] = useState(profile.goal);
   const [consent, setLocalConsent] = useState(false);
   const [photo, setPhoto] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -56,7 +58,7 @@ export function ActivateScreen() {
   const activate = () => {
     setSaving(true);
     window.setTimeout(() => {
-      setProfile({ objectives, interests });
+      setProfile({ objectives, interests, niche: niche.trim(), goal });
       setConsent(true);
       setActive(true);
       setSeconds(Math.max(1, Math.round((Date.now() - started.current) / 1000)));
@@ -78,15 +80,16 @@ export function ActivateScreen() {
             Pronto em <span className="tabular text-text-primary">{seconds} s</span>. Você já recebe sugestões de pessoas com interesses em comum.
           </p>
           <ul className="mt-2 w-full rounded-lg border border-border-subtle bg-surface-1 p-card text-left text-body text-text-primary">
-            <li>{objectives.length} objetivos · {interests.length} interesses</li>
+            <li>{niche.trim()} · {objectives.length} objetivos · {interests.length} interesses</li>
             <li className="text-text-secondary">Visível para VIP e Diamond desta edição. Telefone e redes só depois do aceite.</li>
+            <li className="text-text-secondary">Opcional: complete seu perfil na aba Conexões para sugestões ainda melhores.</li>
           </ul>
         </div>
       </OverlayPage>
     );
   }
 
-  const canContinue = step === 0 ? objectives.length > 0 : step === 1 ? interests.length > 0 : consent;
+  const canContinue = step === 0 ? objectives.length > 0 && niche.trim().length > 0 && goal.length > 0 : step === 1 ? interests.length > 0 : consent;
 
   return (
     <OverlayPage
@@ -143,12 +146,37 @@ export function ActivateScreen() {
             </div>
             <p className="-mt-2 text-caption text-text-secondary">Dados vindos da sua compra. Para corrigir, fale com o suporte.</p>
 
+            <div className="flex flex-col gap-2">
+              <label htmlFor="c01-niche" className="text-body-strong text-text-primary">
+                Qual é o seu nicho?
+              </label>
+              <input
+                id="c01-niche"
+                value={niche}
+                maxLength={60}
+                onChange={(e) => setNiche(e.target.value)}
+                placeholder="Ex.: academias de bairro"
+                className="h-12 w-full rounded-md border border-border-strong bg-surface-1 px-3 text-body text-text-primary placeholder:text-text-secondary focus:border-gold-200 focus:outline-none"
+              />
+            </div>
+
             <div>
               <p className="text-body-strong text-text-primary">O que você busca? <span className="tabular text-caption text-text-secondary">(até {MAX_OBJECTIVES})</span></p>
               <div className="mt-1 flex flex-wrap gap-x-2">
                 {objectivesList.map((o) => (
                   <FilterChip key={o} selected={objectives.includes(o)} onClick={() => toggleObjective(o)}>
                     {o}
+                  </FilterChip>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-body-strong text-text-primary">Qual é o seu objetivo no Protagon?</p>
+              <div className="mt-1 flex flex-wrap gap-x-2">
+                {goalsList.map((g) => (
+                  <FilterChip key={g} selected={goal === g} onClick={() => setGoal(g)}>
+                    {g}
                   </FilterChip>
                 ))}
               </div>

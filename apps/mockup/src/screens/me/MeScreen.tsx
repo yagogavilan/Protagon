@@ -3,7 +3,7 @@ import { Bell, ChevronRight, LifeBuoy, LogOut, QrCode, ShieldCheck, Star } from 
 import { Avatar } from '@/components/ui/Avatar';
 import { TierBadge } from '@/components/ui/TierBadge';
 import { Button } from '@/components/ui/Button';
-import { demoUser } from '@/data/participants';
+import { demoUser, topics } from '@/data/participants';
 import { edition } from '@/data/edition';
 import { hideEmail } from '@/lib/format';
 import { useClock, useDemo } from '@/state/store';
@@ -39,6 +39,8 @@ export function EuScreen() {
   const nps = useDemo((s) => s.nps);
   const moment = useDemo((s) => s.moment);
   const openOverlay = useDemo((s) => s.openOverlay);
+  const active = useDemo((s) => s.connectionsActive);
+  const profile = useDemo((s) => s.profile);
   const clock = useClock();
   const key = npsKeyFor(clock, moment);
   const open = npsAvailable(key, clock, moment);
@@ -84,6 +86,31 @@ export function EuScreen() {
         </dl>
         <p className="mt-3 text-caption text-text-secondary">Dados da compra. Para corrigir, fale com o suporte.</p>
       </section>
+
+      {tier !== 'executivo' && active ? (
+        <section aria-label="Meu perfil de Conexões" className="rounded-lg border border-border-subtle bg-surface-1 p-card">
+          <h2 className="text-body-strong text-text-primary">Meu perfil de Conexões</h2>
+          <dl className="mt-3 flex flex-col gap-3">
+            {(
+              [
+                ['Nicho', profile.niche],
+                ['Objetivo no Protagon', profile.goal],
+                ['Maior desafio', profile.challenge ? topics[profile.challenge].challenge : null],
+                ['Domina', profile.expertise.length > 0 ? profile.expertise.map((t) => topics[t].know).join(', ') : null],
+                ['Instagram', profile.instagram || null],
+              ] as [string, string | null][]
+            ).map(([k, v]) => (
+              <div key={k} className="min-w-0">
+                <dt className="text-caption text-text-secondary">{k}</dt>
+                <dd className={v ? 'break-words text-body text-text-primary' : 'text-body text-text-secondary'}>{v ?? 'Não informado'}</dd>
+              </div>
+            ))}
+          </dl>
+          <Button block size="compact" variant="secondary" className="mt-4" onClick={() => openOverlay('profile')}>
+            {profile.challenge && profile.expertise.length > 0 ? 'Editar perfil' : 'Completar perfil'}
+          </Button>
+        </section>
+      ) : null}
 
       <ul className="flex flex-col rounded-lg border border-border-subtle bg-surface-1 py-1" aria-label="Menu Eu">
         <MenuRow icon={<QrCode size={22} />} label="Credencial" hint="QR, setor e Wallet" onClick={() => openOverlay('credential')} />

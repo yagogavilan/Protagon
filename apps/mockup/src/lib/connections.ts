@@ -56,6 +56,17 @@ export function useRelation(id: string): Relation {
   return useDemo((s) => relationOf(s, id));
 }
 
+/**
+ * Instagram (DEC-002, regra de contato): só depois do aceite mútuo. Exceção proposta: se o aluno liga "Mostrar meu
+ * Instagram antes da conexão" em Privacidade, vê o @ de quem também liberou. Retorna null quando não pode aparecer.
+ */
+export function useInstagramHandle(p: Participant): string | null {
+  const relation = useRelation(p.id);
+  const early = useDemo((s) => s.instagramEarly);
+  if (relation === 'connected') return p.instagram;
+  return early && p.instagramEarly ? p.instagram : null;
+}
+
 export function useSuggestionFor(p: Participant): Suggestion {
   const profile = useDemo((s) => s.profile);
   return useMemo(() => ({ participant: p, affinity: computeAffinity(profile, p) }), [p, profile]);

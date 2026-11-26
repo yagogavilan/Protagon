@@ -173,6 +173,9 @@ export function ChatScreen() {
           <p className="text-caption text-text-secondary">
             {person.name} · {person.role}
           </p>
+          <p className="text-caption text-gold-200" aria-label={`Instagram ${person.instagram}`}>
+            {person.instagram}
+          </p>
         </div>
 
         {moment === 'live' ? (

@@ -6,8 +6,8 @@ import { Chip } from '@/components/ui/Chip';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { FilterChip } from '@/components/ui/FilterChip';
 import { TierBadge, TIER_LABEL } from '@/components/ui/TierBadge';
-import { participants, objectivesList } from '@/data/participants';
-import type { Objective, Participant, Tier } from '@/data/types';
+import { participants, objectivesList, topicIds, topics } from '@/data/participants';
+import type { Objective, Participant, Tier, TopicId } from '@/data/types';
 import { computeAffinity, connectionsPool, objectiveLabel } from '@/lib/affinity';
 import { plural, relationOf } from '@/lib/connections';
 import { useDemo } from '@/state/store';
@@ -16,9 +16,11 @@ interface Filters {
   segment: string | null;
   city: string | null;
   objective: Objective | null;
+  /** "Domina": conhecimento (DEC-002) */
+  expertise: TopicId | null;
   tier: Tier | null;
 }
-const EMPTY: Filters = { segment: null, city: null, objective: null, tier: null };
+const EMPTY: Filters = { segment: null, city: null, objective: null, expertise: null, tier: null };
 const PAGE = 8;
 
 const cityOf = (p: Participant) => p.city.replace(/, [A-Z]{2}$/, '');
@@ -38,7 +40,7 @@ function Section<T extends string>({ title, options, value, onChange, label }: {
   );
 }
 
-/** C06 · Explorar: busca e filtros por segmento, cidade, objetivo e ingresso; resultados e sem resultados. */
+/** C06 · Explorar: busca e filtros por segmento, cidade, objetivo, "Domina" e ingresso; resultados e sem resultados. */
 export function ExplorePanel() {
   const profile = useDemo((s) => s.profile);
   const blocked = useDemo((s) => s.blocked);
@@ -62,8 +64,9 @@ export function ExplorePanel() {
           (!f.segment || p.segment === f.segment) &&
           (!f.city || cityOf(p) === f.city) &&
           (!f.objective || p.objectives.includes(f.objective)) &&
+          (!f.expertise || p.expertise.includes(f.expertise)) &&
           (!f.tier || p.tier === f.tier) &&
-          (!q || [p.name, p.company, p.segment, p.city, ...p.interests].some((t) => t.toLowerCase().includes(q))),
+          (!q || [p.name, p.company, p.segment, p.niche, p.city, ...p.interests, ...p.expertise.map((t) => topics[t].know)].some((t) => t.toLowerCase().includes(q))),
       );
     return apply(filters)
       .map((p) => ({ p, a: computeAffinity(profile, p) }))
@@ -71,13 +74,14 @@ export function ExplorePanel() {
   }, [pool, filters, q, profile]);
 
   const draftCount = pool.filter(
-    (p) => (!draft.segment || p.segment === draft.segment) && (!draft.city || cityOf(p) === draft.city) && (!draft.objective || p.objectives.includes(draft.objective)) && (!draft.tier || p.tier === draft.tier),
+    (p) => (!draft.segment || p.segment === draft.segment) && (!draft.city || cityOf(p) === draft.city) && (!draft.objective || p.objectives.includes(draft.objective)) && (!draft.expertise || p.expertise.includes(draft.expertise)) && (!draft.tier || p.tier === draft.tier),
   ).length;
 
   const activeChips: { key: keyof Filters; label: string }[] = [];
   if (filters.segment) activeChips.push({ key: 'segment', label: filters.segment });
   if (filters.city) activeChips.push({ key: 'city', label: filters.city });
   if (filters.objective) activeChips.push({ key: 'objective', label: objectiveLabel(filters.objective) });
+  if (filters.expertise) activeChips.push({ key: 'expertise', label: `Domina: ${topics[filters.expertise].know}` });
   if (filters.tier) activeChips.push({ key: 'tier', label: TIER_LABEL[filters.tier] });
   const clear = () => {
     setFilters(EMPTY);
@@ -91,7 +95,7 @@ export function ExplorePanel() {
         <div className="relative min-w-0 flex-1">
           <Search size={18} aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
           <label htmlFor="explore-q" className="sr-only">
-            Buscar por nome, empresa ou interesse
+            Buscar por nome, empresa, nicho ou interesse
           </label>
           <input
             id="explore-q"
@@ -100,7 +104,7 @@ export function ExplorePanel() {
               setQuery(e.target.value);
               setLimit(PAGE);
             }}
-            placeholder="Nome, empresa ou interesse"
+            placeholder="Nome, empresa, nicho ou tema"
             className="h-12 w-full rounded-md border border-border-strong bg-surface-1 pl-10 pr-3 text-body text-text-primary placeholder:text-text-secondary focus:border-gold-200 focus:outline-none"
           />
         </div>
@@ -174,6 +178,9 @@ export function ExplorePanel() {
                       <span className="truncate">{p.name}</span>
                       <TierBadge tier={p.tier} />
                     </span>
+                    {filters.expertise ? (
+                      <span className="truncate text-caption text-gold-200">Domina {topics[filters.expertise].know.replace(/^./, (c) => c.toLowerCase())}</span>
+                    ) : null}
                     <span className="flex flex-wrap gap-2">
                       {p.objectives.slice(0, 2).map((o) => (
                         <Chip key={o} variant="objective">
@@ -221,6 +228,7 @@ export function ExplorePanel() {
         <Section title="Segmento" options={segments} value={draft.segment} onChange={(v) => setDraft((d) => ({ ...d, segment: v }))} />
         <Section title="Cidade" options={cities} value={draft.city} onChange={(v) => setDraft((d) => ({ ...d, city: v }))} />
         <Section title="Objetivo" options={objectivesList} value={draft.objective} onChange={(v) => setDraft((d) => ({ ...d, objective: v }))} />
+        <Section<TopicId> title="Domina" options={topicIds} value={draft.expertise} onChange={(v) => setDraft((d) => ({ ...d, expertise: v }))} label={(t) => topics[t].know} />
         <Section<Tier> title="Ingresso" options={['vip', 'diamond']} value={draft.tier} onChange={(v) => setDraft((d) => ({ ...d, tier: v }))} label={(t) => TIER_LABEL[t]} />
       </BottomSheet>
     </div>

@@ -1,5 +1,21 @@
-import type { DemoUser, Objective, Participant } from '@/data/types';
-import { demoUser } from '@/data/participants';
+import type { Objective, Participant, TopicId } from '@/data/types';
+import { demoUser, topics } from '@/data/participants';
+
+/** O que a afinidade precisa saber de quem olha (o aluno da demo) */
+export interface AffinityProfile {
+  interests: string[];
+  objectives: Objective[];
+  /** Maior desafio atual (opcional, "Complete seu perfil") */
+  challenge?: TopicId | null;
+  /** Onde tem bastante conhecimento (opcional) */
+  expertise?: TopicId[];
+}
+
+/** Cruzamento desafio x conhecimento (DEC-002): peso alto, acima de interesses em comum e de objetivos */
+const CROSS_WEIGHT = 6;
+
+const lcFirst = (t: string) => t.charAt(0).toLowerCase() + t.slice(1);
+const firstOf = (name: string) => name.split(' ')[0] ?? name;
 
 /** Dois níveis visíveis (design-system §PersonCard): 'alta' e 'boa'. Abaixo de 'boa' a pessoa não é sugerida. */
 export type AffinityLevel = 'alta' | 'boa' | 'baixa' | 'nenhuma';
@@ -8,6 +24,10 @@ export interface Affinity {
   score: number;
   level: AffinityLevel;
   sharedInterests: string[];
+  /** Tema que a pessoa domina e é o maior desafio do aluno */
+  theyHelpMe: TopicId | null;
+  /** Tema que o aluno domina e é o maior desafio da pessoa */
+  iHelpThem: TopicId | null;
   /** Motivo em 1 linha: "3 interesses em comum · vocês dois buscam parcerias no varejo" */
   reason: string;
 }
@@ -54,7 +74,18 @@ const SEGMENT_CONTEXT: Record<string, string> = {
   Imóveis: 'no mercado imobiliário',
 };
 
-export function computeAffinity(me: Pick<DemoUser, 'interests' | 'objectives'>, other: Participant): Affinity {
+/** Motivo do cruzamento em uma linha; vazio se não há cruzamento */
+function crossReason(theyHelpMe: TopicId | null, iHelpThem: TopicId | null, other: Participant): string {
+  if (theyHelpMe && iHelpThem) return `Vocês podem se ajudar: ${lcFirst(topics[theyHelpMe].know)} ↔ ${lcFirst(topics[iHelpThem].know)}`;
+  if (theyHelpMe) return `Domina ${lcFirst(topics[theyHelpMe].know)}, seu maior desafio hoje`;
+  if (iHelpThem) return `Você domina ${lcFirst(topics[iHelpThem].know)}, maior desafio de ${firstOf(other.name)} hoje`;
+  return '';
+}
+
+export function computeAffinity(me: AffinityProfile, other: Participant): Affinity {
+  const theyHelpMe = me.challenge && other.expertise.includes(me.challenge) ? me.challenge : null;
+  const iHelpThem = me.expertise?.includes(other.challenge) ? other.challenge : null;
+  const crossCount = Number(Boolean(theyHelpMe)) + Number(Boolean(iHelpThem));
   const sharedInterests = other.interests.filter((t) => me.interests.includes(t));
 
   let objectivePhrase: string | undefined;
@@ -68,7 +99,7 @@ export function computeAffinity(me: Pick<DemoUser, 'interests' | 'objectives'>, 
     }
   }
 
-  const score = sharedInterests.length * 2 + objectiveMatches * 3;
+  const score = sharedInterests.length * 2 + objectiveMatches * 3 + crossCount * CROSS_WEIGHT;
   const level: AffinityLevel = score >= 9 ? 'alta' : score >= 5 ? 'boa' : score > 0 ? 'baixa' : 'nenhuma';
 
   const parts: string[] = [];
@@ -84,7 +115,9 @@ export function computeAffinity(me: Pick<DemoUser, 'interests' | 'objectives'>, 
     parts.push(context ? `${objectivePhrase} ${context}` : objectivePhrase);
   }
 
-  return { score, level, sharedInterests, reason: parts.join(' · ') };
+  // O cruzamento vem primeiro; sem ele, o motivo antigo (interesses + objetivos) segue valendo
+  const reason = crossReason(theyHelpMe, iHelpThem, other) || parts.join(' · ');
+  return { score, level, sharedInterests, theyHelpMe, iHelpThem, reason };
 }
 
 /** Quem pode aparecer nas Conexões: VIP/Diamond com perfil visível */
@@ -98,7 +131,7 @@ export interface Suggestion {
 }
 
 /** Sugestões ordenadas só por afinidade (F5: ingresso não altera a ordem). Só "alta" e "boa". */
-export function rankSuggestions(me: Pick<DemoUser, 'interests' | 'objectives'>, participants: Participant[]): Suggestion[] {
+export function rankSuggestions(me: AffinityProfile, participants: Participant[]): Suggestion[] {
   return connectionsPool(participants)
     .map((p) => ({ participant: p, affinity: computeAffinity(me, p) }))
     .filter((x) => x.affinity.level === 'alta' || x.affinity.level === 'boa')
@@ -142,8 +175,9 @@ export function requestTemplates(s: Suggestion): string[] {
   const t1 = objective
     ? `Oi, ${first}. Vi que você ${OBJECTIVE_VERB[objective]}. Tenho uma rede de academias em Porto Alegre e acho que podemos somar. Vamos conversar no próximo intervalo?`
     : `Oi, ${first}. Tenho uma rede de academias em Porto Alegre. Vamos conversar no próximo intervalo?`;
-  const t2 =
-    affinity.sharedInterests.length > 0
+  const t2 = affinity.theyHelpMe
+    ? `Oi, ${first}. Vi que você domina ${lcFirst(topics[affinity.theyHelpMe].know)}, meu maior desafio agora. Posso te contar mais no intervalo das 15h40?`
+    : affinity.sharedInterests.length > 0
       ? `Oi, ${first}. Temos ${affinity.sharedInterests.length === 1 ? '1 interesse' : `${affinity.sharedInterests.length} interesses`} em comum, entre eles ${interests.join(' e ')}. Que tal trocarmos uma ideia no intervalo das 15h40?`
       : `Oi, ${first}. Que tal trocarmos uma ideia no intervalo das 15h40?`;
   const t3 = `Oi, ${first}. Quero conhecer melhor a ${p.company}. Podemos nos encontrar em um Ponto de Conexão?`;

@@ -1,4 +1,4 @@
-import type { DemoUser, Objective, Participant, Tier } from './types';
+import type { DemoUser, Objective, Participant, Tier, TopicId } from './types';
 
 // Pessoas, empresas e contatos fictícios. Qualquer semelhança é coincidência.
 
@@ -38,6 +38,41 @@ export const interestTags = [
   'Alimentação',
 ] as const;
 
+/**
+ * Temas de "maior desafio" e "onde tenho bastante conhecimento" (DEC-002). Mesmo vocabulário nos dois lados:
+ * `know` é o nome do tema como conhecimento; `challenge` é como ele aparece como maior desafio.
+ */
+export const topics: Record<TopicId, { know: string; challenge: string }> = {
+  trafego: { know: 'Tráfego pago', challenge: 'Fazer o tráfego pago dar retorno' },
+  financas: { know: 'Gestão financeira de PME', challenge: 'Organizar o caixa e o financeiro' },
+  comercial: { know: 'Processo comercial B2B', challenge: 'Estruturar o processo comercial B2B' },
+  retencao: { know: 'Retenção de clientes', challenge: 'Reter clientes depois do 3º mês' },
+  vendedores: { know: 'Contratação de vendedores', challenge: 'Contratar e manter vendedores' },
+  lideranca: { know: 'Liderança de equipes', challenge: 'Fazer o time assumir mais responsabilidade' },
+  franquia: { know: 'Expansão por franquia', challenge: 'Formatar a operação para franquear' },
+  precificacao: { know: 'Precificação', challenge: 'Cobrar o preço certo sem perder cliente' },
+  conteudo: { know: 'Marketing de conteúdo', challenge: 'Gerar demanda com conteúdo' },
+  crm: { know: 'Automação e CRM', challenge: 'Organizar o funil de vendas e o CRM' },
+  sucessao: { know: 'Sucessão familiar', challenge: 'Preparar a sucessão na empresa' },
+  investimento: { know: 'Captação de investimento', challenge: 'Captar investimento para crescer' },
+  operacao: { know: 'Processos e operação', challenge: 'Tirar a operação das minhas costas' },
+  atendimento: { know: 'Atendimento ao cliente', challenge: 'Padronizar o atendimento' },
+};
+
+export const topicIds = Object.keys(topics) as TopicId[];
+
+/** Objetivo no Protagon (escolha única no C01) */
+export const goalsList = [
+  'Destravar a liderança do meu time',
+  'Estruturar a expansão por franquia',
+  'Organizar o comercial e vender mais',
+  'Aprender a escalar sem perder qualidade',
+  'Preparar a empresa para sócio ou investidor',
+  'Profissionalizar a gestão financeira',
+  'Resolver a sucessão na empresa',
+  'Conhecer empresários de outros segmentos',
+] as const;
+
 export const demoUser: DemoUser = {
   id: 'me',
   name: 'Rafael Moraes',
@@ -49,6 +84,11 @@ export const demoUser: DemoUser = {
   segment: 'Fitness e bem-estar',
   objectives: ['Parcerias', 'Investimento', 'Quero ser mentorado'],
   interests: ['Liderança', 'Gestão de equipes', 'Franquias', 'Expansão', 'Saúde e bem-estar', 'Marketing digital', 'Varejo', 'Vendas'],
+  niche: 'Academias de rede',
+  goal: 'Estruturar a expansão por franquia',
+  challenge: 'retencao',
+  expertise: ['franquia', 'lideranca'],
+  instagram: '@rafaelmoraes.exemplo',
   credentialCode: 'PTG-POA27-04829',
 };
 
@@ -97,17 +137,75 @@ const rows: Row[] = [
   ['Paulo Rocha', 'Rocha Tecnologia Fitness', 'Fundador', 'Porto Alegre, RS', 'Tecnologia', 'vip', ['Busco clientes', 'Busco sócio'], ['Tecnologia', 'Saúde e bem-estar', 'Inovação', 'Franquias'], false],
 ];
 
+type Extra = [niche: string, goal: (typeof goalsList)[number], challenge: TopicId, expertise: TopicId[], instagram: string];
+
+/** Perfil estendido (DEC-002), por nome. Desafios e conhecimentos cruzam entre as pessoas de propósito, para gerar sugestões fortes. */
+const extras: Record<string, Extra> = {
+  'Juliana Prates': ['E-commerce de moda', 'Organizar o comercial e vender mais', 'retencao', ['trafego', 'conteudo'], '@julianaprates.exemplo'],
+  'Bruno Lacerda': ['Suplementos esportivos', 'Estruturar a expansão por franquia', 'vendedores', ['franquia', 'precificacao'], '@brunolacerda.exemplo'],
+  'Carolina Mendes': ['Advocacia para empresas familiares', 'Resolver a sucessão na empresa', 'comercial', ['sucessao'], '@carolmendes.adv.exemplo'],
+  'Diego Fontana': ['Incorporação residencial', 'Preparar a empresa para sócio ou investidor', 'financas', ['investimento', 'operacao'], '@diegofontana.exemplo'],
+  'Patrícia Kuhn': ['Contabilidade para PME', 'Conhecer empresários de outros segmentos', 'trafego', ['financas', 'sucessao'], '@patriciakuhn.exemplo'],
+  'Leonardo Bastos': ['Software para varejo', 'Aprender a escalar sem perder qualidade', 'vendedores', ['crm', 'operacao'], '@leobastos.tech.exemplo'],
+  'Fernanda Lopes': ['Clínicas de estética', 'Estruturar a expansão por franquia', 'retencao', ['atendimento', 'lideranca'], '@fernandalopes.exemplo'],
+  'Gustavo Rech': ['Indústria de alimentos', 'Organizar o comercial e vender mais', 'comercial', ['operacao'], '@gustavorech.exemplo'],
+  'Aline Schmitt': ['Escolas de educação básica', 'Destravar a liderança do meu time', 'lideranca', ['retencao', 'atendimento'], '@alineschmitt.exemplo'],
+  'Marcos Vieira': ['Imobiliária de bairro', 'Organizar o comercial e vender mais', 'trafego', ['comercial', 'vendedores'], '@marcosvieira.imoveis.exemplo'],
+  'Renata Coelho': ['Agência de marketing para varejo', 'Conhecer empresários de outros segmentos', 'financas', ['trafego', 'conteudo', 'crm'], '@renatacoelho.exemplo'],
+  'Thiago Brandão': ['Logística de última milha', 'Preparar a empresa para sócio ou investidor', 'comercial', ['operacao', 'lideranca'], '@thiagobrandao.exemplo'],
+  'Vanessa Dias': ['Confeitaria artesanal', 'Profissionalizar a gestão financeira', 'precificacao', ['conteudo'], '@vanessadias.doce.exemplo'],
+  'Eduardo Mello': ['Grãos e pecuária', 'Resolver a sucessão na empresa', 'sucessao', ['investimento', 'financas'], '@eduardomello.exemplo'],
+  'Camila Torres': ['Consultoria de RH para PME', 'Conhecer empresários de outros segmentos', 'comercial', ['lideranca', 'vendedores'], '@camilatorres.rh.exemplo'],
+  'Ricardo Pacheco': ['Franquias de alimentação', 'Destravar a liderança do meu time', 'lideranca', ['franquia', 'precificacao'], '@ricardopacheco.exemplo'],
+  'Larissa Antunes': ['Estúdios de pilates', 'Aprender a escalar sem perder qualidade', 'trafego', ['retencao', 'atendimento'], '@larissa.pilates.exemplo'],
+  'Henrique Paz': ['Corretagem de seguros', 'Organizar o comercial e vender mais', 'crm', ['comercial'], '@henriquepaz.exemplo'],
+  'Isabela Ramos': ['Óticas de bairro', 'Estruturar a expansão por franquia', 'franquia', ['atendimento', 'vendedores'], '@isabelaramos.otica.exemplo'],
+  'Felipe Correa': ['Assessoria de investimentos', 'Conhecer empresários de outros segmentos', 'conteudo', ['investimento', 'financas'], '@felipecorrea.exemplo'],
+  'Mariana Goulart': ['Arquitetura residencial', 'Profissionalizar a gestão financeira', 'precificacao', ['conteudo', 'atendimento'], '@marianagoulart.arq.exemplo'],
+  'André Zanella': ['Móveis planejados', 'Organizar o comercial e vender mais', 'trafego', ['operacao', 'precificacao'], '@andrezanella.exemplo'],
+  'Beatriz Nunes': ['Nutrição esportiva', 'Aprender a escalar sem perder qualidade', 'retencao', ['conteudo', 'atendimento'], '@beatriznunes.nutri.exemplo'],
+  'Rodrigo Kessler': ['Energia solar residencial', 'Organizar o comercial e vender mais', 'vendedores', ['comercial'], '@rodrigokessler.exemplo'],
+  'Tatiane Moura': ['Eventos corporativos', 'Profissionalizar a gestão financeira', 'financas', ['operacao', 'atendimento'], '@tatianemoura.eventos.exemplo'],
+  'Lucas Werner': ['Software de gestão para PME', 'Preparar a empresa para sócio ou investidor', 'comercial', ['crm', 'investimento'], '@lucaswerner.exemplo'],
+  'Simone Battisti': ['Vinícolas e enoturismo', 'Organizar o comercial e vender mais', 'trafego', ['comercial', 'precificacao'], '@simonebattisti.vinhos.exemplo'],
+  'Gabriel Duarte': ['Academias de bairro', 'Destravar a liderança do meu time', 'retencao', ['operacao'], '@gabrielduarte.exemplo'],
+  'Natália Fraga': ['Clínicas odontológicas', 'Destravar a liderança do meu time', 'trafego', ['atendimento', 'retencao'], '@nataliafraga.odonto.exemplo'],
+  'Otávio Lemos': ['Distribuição de bebidas', 'Destravar a liderança do meu time', 'lideranca', ['operacao', 'vendedores'], '@otaviolemos.exemplo'],
+  'Priscila Amaral': ['Cosméticos naturais', 'Estruturar a expansão por franquia', 'financas', ['conteudo', 'trafego'], '@priscilaamaral.exemplo'],
+  'Sérgio Pinheiro': ['Transporte rodoviário de carga', 'Profissionalizar a gestão financeira', 'financas', ['operacao'], '@sergiopinheiro.exemplo'],
+  'Daniela Weber': ['Consultoria financeira para PME', 'Conhecer empresários de outros segmentos', 'conteudo', ['financas', 'precificacao', 'investimento'], '@danielaweber.exemplo'],
+  'Vinícius Hoffmann': ['Cafeterias', 'Estruturar a expansão por franquia', 'franquia', ['retencao', 'conteudo'], '@viniciushoffmann.cafe.exemplo'],
+  'Luana Castro': ['Moda fitness', 'Aprender a escalar sem perder qualidade', 'crm', ['trafego', 'conteudo'], '@luanacastro.exemplo'],
+  'Fábio Monteiro': ['Engenharia de obras comerciais', 'Profissionalizar a gestão financeira', 'financas', ['operacao'], '@fabiomonteiro.exemplo'],
+  'Cristiane Silveira': ['Treinamento corporativo', 'Organizar o comercial e vender mais', 'trafego', ['lideranca'], '@cristianesilveira.exemplo'],
+  'Jonas Becker': ['Agropecuária familiar', 'Resolver a sucessão na empresa', 'sucessao', ['operacao'], '@jonasbecker.exemplo'],
+  'Elisa Marques': ['Farmácias de manipulação', 'Estruturar a expansão por franquia', 'vendedores', ['atendimento'], '@elisamarques.exemplo'],
+  'Paulo Rocha': ['Software para academias', 'Organizar o comercial e vender mais', 'comercial', ['retencao', 'crm'], '@paulorocha.exemplo'],
+};
+
 export const participants: Participant[] = rows.map(
-  ([name, company, role, city, segment, tier, objectives, interests, visible], i) => ({
-    id: `p${String(i + 1).padStart(2, '0')}`,
-    name,
-    company,
-    role,
-    city,
-    segment,
-    tier,
-    objectives,
-    interests,
-    visible: visible ?? true,
-  }),
+  ([name, company, role, city, segment, tier, objectives, interests, visible], i) => {
+    const extra = extras[name];
+    if (!extra) throw new Error(`Perfil estendido ausente para ${name}`);
+    const [niche, goal, challenge, expertise, instagram] = extra;
+    return {
+      id: `p${String(i + 1).padStart(2, '0')}`,
+      name,
+      company,
+      role,
+      city,
+      segment,
+      tier,
+      objectives,
+      interests,
+      niche,
+      goal,
+      challenge,
+      expertise,
+      instagram,
+      // Proposta: 2 em cada 3 liberam o @ antes da conexão (só vale se o aluno também liberar o dele)
+      instagramEarly: i % 3 !== 2,
+      visible: visible ?? true,
+    };
+  },
 );

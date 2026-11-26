@@ -1,6 +1,8 @@
 import { ChevronRight, Clock3, QrCode, Sparkles } from 'lucide-react';
 import type { Suggestion } from '@/lib/affinity';
 import { objectiveLabel } from '@/lib/affinity';
+import { topics } from '@/data/participants';
+import { useInstagramHandle } from '@/lib/connections';
 import { Avatar } from './Avatar';
 import { Button } from './Button';
 import { Chip } from './Chip';
@@ -19,19 +21,25 @@ interface PersonCardProps {
 }
 
 /**
- * PersonCard (design-system §PersonCard). Ordem obrigatória: afinidade, empresa, objetivo, motivo,
- * interesses em comum, pessoa, ações. Sem foto grande, sem percentual, sem coração.
+ * PersonCard (design-system §PersonCard). Ordem obrigatória: afinidade, empresa (com nicho e objetivo no Protagon),
+ * objetivo, motivo, interesses em comum, maior desafio e "Domina", pessoa, ações. Sem foto grande, sem percentual, sem coração.
+ * Para o card não crescer (botões visíveis acima da tab bar): objetivo, desafio e "Domina" em 1 linha cada (completos no C03), no máximo 2 chips de interesse e 2 temas, o resto vira "e mais N".
  */
 export function PersonCard({ suggestion, state = 'default', limitReached, onConnect, onNotNow, onConnectByQr, onOpenProfile }: PersonCardProps) {
   const { participant: p, affinity } = suggestion;
-  const common = affinity.sharedInterests.slice(0, 3);
+  const instagram = useInstagramHandle(p);
+  const common = affinity.sharedInterests.slice(0, 2);
   const more = affinity.sharedInterests.length - common.length;
   const high = affinity.level === 'alta';
+  // "Domina": o tema que ajuda no desafio do aluno vem primeiro
+  const sorted = [...p.expertise].sort((a, b) => Number(b === affinity.theyHelpMe) - Number(a === affinity.theyHelpMe));
+  const domina = sorted.slice(0, 2);
+  const moreDomina = sorted.length - domina.length;
 
   return (
     <article
-      aria-label={`${p.company}, ${p.segment.toLowerCase()}. ${p.name}, ${p.role.toLowerCase()}, ingresso ${TIER_LABEL[p.tier]}. Afinidade ${high ? 'alta' : 'boa'}. ${affinity.reason}.`}
-      className="flex flex-col rounded-lg border border-border-subtle bg-surface-2 p-5 shadow-card"
+      aria-label={`${p.company}, ${p.niche.toLowerCase()}. Objetivo no Protagon: ${p.goal}. Maior desafio: ${topics[p.challenge].challenge}. ${p.name}, ${p.role.toLowerCase()}, ingresso ${TIER_LABEL[p.tier]}. Afinidade ${high ? 'alta' : 'boa'}. ${affinity.reason}.`}
+      className="flex flex-col rounded-lg border border-border-subtle bg-surface-2 p-4 shadow-card"
     >
       <div className="flex items-center justify-between">
         {high ? (
@@ -45,9 +53,12 @@ export function PersonCard({ suggestion, state = 'default', limitReached, onConn
 
       <h3 className="mt-3 text-h2 text-text-primary">{p.company}</h3>
       <p className="text-caption text-text-secondary">
-        {p.segment} · {p.city.replace(/, [A-Z]{2}$/, '')}
+        {p.niche} · {p.city.replace(/, [A-Z]{2}$/, '')}
       </p>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <p className="mt-1 line-clamp-1 text-caption text-text-secondary">
+        <span className="text-text-primary">No Protagon:</span> {p.goal}
+      </p>
+      <div className="mt-2 flex flex-wrap gap-2">
         {p.objectives.slice(0, 2).map((o) => (
           <Chip key={o} variant="objective">
             {objectiveLabel(o)}
@@ -55,7 +66,7 @@ export function PersonCard({ suggestion, state = 'default', limitReached, onConn
         ))}
       </div>
 
-      <hr className="my-4 border-border-subtle" />
+      <hr className="my-3 border-border-subtle" />
 
       <p className="line-clamp-2 text-body text-text-primary">{affinity.reason}</p>
       {common.length > 0 ? (
@@ -69,7 +80,24 @@ export function PersonCard({ suggestion, state = 'default', limitReached, onConn
         </div>
       ) : null}
 
-      <hr className="my-4 border-border-subtle" />
+      <div className="mt-2 flex flex-col gap-0.5 text-caption text-text-primary">
+        <p className="line-clamp-1">
+          <span className="text-text-secondary">Maior desafio: </span>
+          <span className={affinity.iHelpThem ? 'text-gold-200' : undefined}>{topics[p.challenge].challenge}</span>
+        </p>
+        <p className="line-clamp-1">
+          <span className="text-text-secondary">Domina: </span>
+          {domina.map((t, i) => (
+            <span key={t} className={t === affinity.theyHelpMe ? 'text-gold-200' : undefined}>
+              {i > 0 ? ', ' : ''}
+              {topics[t].know}
+            </span>
+          ))}
+          {moreDomina > 0 ? ` e mais ${moreDomina}` : ''}
+        </p>
+      </div>
+
+      <hr className="my-3 border-border-subtle" />
 
       <div className="flex items-center gap-3">
         <Avatar name={p.name} size="md" />
@@ -79,6 +107,11 @@ export function PersonCard({ suggestion, state = 'default', limitReached, onConn
             <TierBadge tier={p.tier} />
           </p>
           <p className="truncate text-caption text-text-secondary">{p.role}</p>
+          {instagram ? (
+            <p className="truncate text-caption text-gold-200" aria-label={`Instagram ${instagram}`}>
+              {instagram}
+            </p>
+          ) : null}
         </div>
         {onOpenProfile ? (
           <button

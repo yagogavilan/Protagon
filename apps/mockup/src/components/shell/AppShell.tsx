@@ -15,6 +15,7 @@ import { NpsScreen } from '@/screens/me/NpsScreen';
 import { SupportScreen } from '@/screens/me/SupportScreen';
 import { ConnectionsScreen } from '@/screens/connections';
 import { ActivateScreen } from '@/screens/connections/ActivateScreen';
+import { ProfileEditScreen } from '@/screens/connections/ProfileEditScreen';
 import { ProfileScreen } from '@/screens/connections/ProfileScreen';
 import { ChatScreen } from '@/screens/connections/ChatScreen';
 import { QrScreen } from '@/screens/connections/QrScreen';
@@ -55,6 +56,7 @@ const OVERLAYS: Record<OverlayName, ComponentType> = {
   person: ProfileScreen,
   chat: ChatScreen,
   activate: ActivateScreen,
+  profile: ProfileEditScreen,
   prefs: PrefsScreen,
   privacy: PrivacyScreen,
   nps: NpsScreen,

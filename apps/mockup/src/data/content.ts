@@ -62,6 +62,6 @@ export function contactFor(p: Participant): { whatsapp: string; linkedin: string
   return {
     whatsapp: `(51) 90000-${String(1000 + n).padStart(4, '0')}`,
     linkedin: `linkedin.com/in/${slug}-exemplo`,
-    instagram: `@${slug}.exemplo`,
+    instagram: p.instagram,
   };
 }

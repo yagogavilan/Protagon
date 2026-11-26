@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { CircleAlert, Compass, Ellipsis, PauseCircle, ScanLine, ShieldCheck, Sparkles, UserRound, WifiOff } from 'lucide-react';
+import { CircleAlert, Compass, Ellipsis, PauseCircle, ScanLine, ShieldCheck, Sparkles, UserRound, WifiOff, X } from 'lucide-react';
 import { useDemo, DAILY_REQUEST_LIMIT, type ConnPanel } from '@/state/store';
 import { countersVisible, firstName, plural, usePendingRequests, useSuggestionQueue } from '@/lib/connections';
 import { PersonCard } from '@/components/ui/PersonCard';
@@ -88,6 +88,36 @@ function SuggestionsPanel({ onExplore }: { onExplore: () => void }) {
         </motion.div>
       </AnimatePresence>
     </div>
+  );
+}
+
+/** Card opcional "Complete seu perfil" (DEC-002): desafio e conhecimento. Fechável; some quando o perfil está completo. */
+function CompleteProfileCard() {
+  const profile = useDemo((s) => s.profile);
+  const dismissed = useDemo((s) => s.profileCardDismissed);
+  const dismiss = useDemo((s) => s.setProfileCardDismissed);
+  const openOverlay = useDemo((s) => s.openOverlay);
+  if (dismissed || (profile.challenge && profile.expertise.length > 0)) return null;
+  return (
+    <section aria-label="Complete seu perfil" className="rounded-lg border border-border-subtle bg-surface-1 py-2 pl-card pr-2">
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-body-strong text-text-primary">Complete seu perfil</h2>
+        <button
+          type="button"
+          onClick={() => dismiss(true)}
+          aria-label="Dispensar, completar depois"
+          className="flex h-touch w-touch shrink-0 items-center justify-center rounded-md text-text-secondary active:bg-surface-3"
+        >
+          <X size={20} aria-hidden />
+        </button>
+      </div>
+      <div className="-mt-2 flex items-center justify-between gap-3 pb-1">
+        <p className="min-w-0 flex-1 text-caption text-text-secondary">Opcional, 30 segundos. Mostra quem pode ajudar no seu desafio.</p>
+        <Button size="compact" className="shrink-0 px-4" onClick={() => openOverlay('profile')}>
+          Completar
+        </Button>
+      </div>
+    </section>
   );
 }
 
@@ -192,7 +222,10 @@ export function ConnectionsVip() {
           }
         />
       ) : panel === 'sugestoes' ? (
-        <SuggestionsPanel onExplore={() => setPanel('explorar')} />
+        <>
+          <CompleteProfileCard />
+          <SuggestionsPanel onExplore={() => setPanel('explorar')} />
+        </>
       ) : panel === 'pedidos' ? (
         <RequestsPanel />
       ) : panel === 'rede' ? (
@@ -204,7 +237,7 @@ export function ConnectionsVip() {
       <BottomSheet open={moreOpen} onClose={() => setMoreOpen(false)} title="Conexões" closeLabel="Fechar opções">
         <ul className="flex flex-col">
           {[
-            { label: 'Meu perfil de Conexões', Icon: UserRound, run: () => openOverlay('privacy') },
+            { label: 'Meu perfil de Conexões', Icon: UserRound, run: () => openOverlay('profile') },
             {
               label: paused ? 'Reativar meu perfil' : 'Pausar meu perfil',
               Icon: PauseCircle,

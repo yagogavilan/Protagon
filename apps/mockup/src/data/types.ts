@@ -75,6 +75,26 @@ export interface Material {
   meta: string;
 }
 
+/**
+ * Tema em que alguém pode precisar de ajuda (maior desafio) ou ter bastante conhecimento ("Domina").
+ * O mesmo vocabulário vale para os dois lados: é ele que permite cruzar o desafio de um com o conhecimento do outro (DEC-002).
+ */
+export type TopicId =
+  | 'trafego'
+  | 'financas'
+  | 'comercial'
+  | 'retencao'
+  | 'vendedores'
+  | 'lideranca'
+  | 'franquia'
+  | 'precificacao'
+  | 'conteudo'
+  | 'crm'
+  | 'sucessao'
+  | 'investimento'
+  | 'operacao'
+  | 'atendimento';
+
 export interface Participant {
   id: string;
   name: string;
@@ -85,6 +105,18 @@ export interface Participant {
   tier: Tier;
   objectives: Objective[];
   interests: string[];
+  /** Nicho específico, mais fino que o segmento ("Academias de bairro") */
+  niche: string;
+  /** Objetivo no Protagon: o que quer levar do evento */
+  goal: string;
+  /** Maior desafio atual */
+  challenge: TopicId;
+  /** "Onde tenho bastante conhecimento" (1 a 3 temas) */
+  expertise: TopicId[];
+  /** Instagram fictício. Só aparece após o aceite mútuo (ou antes, se a pessoa liberou e o aluno também) */
+  instagram: string;
+  /** Proposta (DEC-002): a pessoa liberou o @ antes da conexão */
+  instagramEarly: boolean;
   /** Perfil visível nas Conexões (pausado = false) */
   visible: boolean;
 }
@@ -101,6 +133,11 @@ export interface DemoUser {
   segment: string;
   objectives: Objective[];
   interests: string[];
+  niche: string;
+  goal: string;
+  challenge: TopicId;
+  expertise: TopicId[];
+  instagram: string;
   credentialCode: string;
 }
 

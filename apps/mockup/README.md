@@ -14,7 +14,7 @@ npm run build:single  # um único dist-single/index.html (JS, CSS e marca embuti
 npm run smoke         # roteiro Playwright (VIP e Executivo); precisa de dist/ (npm run build) e de Chrome/Chromium
 ```
 
-`npm run smoke` serve o `dist/` numa porta local, percorre o dia de um aluno VIP (login ao fim do Dia 3) e o de um Executivo, falha se houver erro de console e salva uma captura por tela em `docs/design/capturas/etapa-3/`. Variáveis: `SMOKE_URL` (usar um servidor já rodando), `CHROME_PATH`, `SMOKE_OUT`.
+`npm run smoke` (cobre também o motivo por desafio e conhecimento e o Instagram só após o aceite) serve o `dist/` numa porta local, percorre o dia de um aluno VIP (login ao fim do Dia 3) e o de um Executivo, falha se houver erro de console e salva uma captura por tela em `docs/design/capturas/etapa-3/`. Variáveis: `SMOKE_URL` (usar um servidor já rodando), `CHROME_PATH`, `SMOKE_OUT`.
 
 ## Atalhos de URL
 
@@ -28,9 +28,10 @@ Abrem direto num estado (QA e roteiro de demo):
 | `phase` | `start`, `five`, `now` | Posição na pausa (intervalo e almoço): início, faltam 5 min, volte agora |
 | `day` | `1`, `2`, `3` | Dia do evento |
 | `tab` | `agora`, `trilha`, `conexoes`, `materiais`, `eu` | Aba aberta |
-| `overlay` | `credential`, `notifications`, `checkout`, `map`, `qrscan`, `break`, `eat`, `activate`, `prefs`, `privacy`, `nps`, `support` | Página aberta por cima da aba |
+| `overlay` | `credential`, `notifications`, `checkout`, `map`, `qrscan`, `break`, `eat`, `activate`, `profile`, `prefs`, `privacy`, `nps`, `support` | Página aberta por cima da aba |
 | `go` | qualquer código da Etapa 1 (`E01` a `U05`, mais `E04n` e `A04c`) | Leva à tela e ajusta ingresso, perfil e rede de exemplo quando a tela exige |
 | `connections` | `1` | Perfil de Conexões já ativado |
+| `profile` | `full` | Perfil de Conexões completo (maior desafio e "Domina" preenchidos): o card "Complete seu perfil" não aparece e os motivos já usam o cruzamento |
 | `network` | `1` | Carrega a rede de exemplo (5 conectados, chat e encontros) |
 | `sent` | `0` a `25` | Pedidos já enviados hoje (limite D4: 15 VIP, 25 Diamond) |
 | `perm` | `unknown`, `granted`, `denied` | Permissão de notificações (E04) |
@@ -66,12 +67,13 @@ O painel tem "Ir direto para" (lista todos os códigos) e os controles de ingres
 | T01 | Dia em andamento, futuro, encerrado, bloco alterado, progresso da jornada | Momento + Dia; abas Dia 1/2/3 | Aba Trilha; o bloco alterado é a dinâmica em trios (Dia 1) |
 | T02 | Ao vivo, concluída, próxima, material liberado ou "libera às 14h", anotações | `go=T02`; momento | Toque num bloco; anotações ficam no estado |
 | C00 | Prévia + contador, convite de upgrade, convite fechado | Ingresso "Executivo" | Aba Conexões, "Quero me conectar", "Agora não" |
-| C01 | Dados, objetivos (até 3), interesses (até 8), visibilidade, consentimento desligado, concluído | `go=C01` | Onboarding (VIP), aba Conexões ou card da Home: "Ativar perfil" |
-| C02 | Fila com afinidade, fim, limite diário, perfil pausado, antes do evento (proposta) | Painel "Pedidos hoje: Esgotar"; momento "Antes do evento"; pausar em C11 ou U03 | Aba Conexões |
-| C03 | Antes do aceite, pedido enviado (Pendente), pedido recebido, conectados (WhatsApp, LinkedIn, Instagram) | `go=C03` (conectado); "Carregar rede de exemplo" | Toque no card, em "Ver perfil" ou numa linha de Explorar, Pedidos ou Minha rede |
+| C01 | Dados, nicho e objetivo no Protagon, objetivos (até 3), interesses (até 8), visibilidade, consentimento desligado, concluído (DEC-002: sem passo novo) | `go=C01` | Onboarding (VIP), aba Conexões ou card da Home: "Ativar perfil" |
+| C01b | "Complete seu perfil" (opcional): maior desafio, "Domina" (até 3), nicho, objetivo e Instagram | `?connections=1&overlay=profile` | Card "Complete seu perfil" em Conexões > Sugestões (fechável); Eu > "Meu perfil de Conexões"; menu "..." de Conexões |
+| C02 | Fila com afinidade e motivo (cruzamento desafio x conhecimento ou, sem ele, interesses e objetivos), nicho e objetivo no Protagon, "Maior desafio" e "Domina", fim, limite diário, perfil pausado, antes do evento (proposta) | Painel "Pedidos hoje: Esgotar"; momento "Antes do evento"; pausar em C11 ou U03 | Aba Conexões |
+| C03 | Antes do aceite (nicho, objetivo, maior desafio e "Domina" completos), pedido enviado (Pendente), pedido recebido, conectados (WhatsApp, LinkedIn, Instagram); Instagram antes do aceite só com a opção de Privacidade ligada (proposta) | `go=C03` (conectado); "Carregar rede de exemplo" | Toque no card, em "Ver perfil" ou numa linha de Explorar, Pedidos ou Minha rede |
 | C04 | Modelos, mensagem própria, enviado, limite atingido | `go=C04`; "Esgotar" | "Conectar" |
 | C05 | Com pedidos, vazio, aceito (vibração), recusado em silêncio (D5) | `go=C05` | Aba Conexões, Pedidos; "Aceitar" e "Agora não" |
-| C06 | Filtros (segmento, cidade, objetivo, ingresso), resultados, sem resultados | `go=C06` | Aba Conexões, Explorar; combine "Segmento: Agronegócio" com "Ingresso: VIP" (ou busque um termo que não existe) para ver "sem resultados" |
+| C06 | Filtros (segmento, cidade, objetivo, "Domina", ingresso), busca também por nicho e tema, resultados, sem resultados | `go=C06` | Aba Conexões, Explorar; combine "Segmento: Agronegócio" com "Ingresso: VIP" (ou busque um termo que não existe) para ver "sem resultados" |
 | C07 | Primeira mensagem, conversa, encontro proposto, confirmado, outro horário | `go=C07` (conversa e encontro proposto a você); painel "Outro confirma" e "Outro horário" | "Conversar" depois do aceite; nos dados de exemplo, Larissa (primeira mensagem), Isabela (proposto), Felipe (confirmado), Renata (outro horário) |
 | C08 | Próximo intervalo + Ponto, almoço, escolher outro | `go=C08` | "Vamos nos ver?" no chat, perfil ou depois do aceite |
 | C09 | Lista, vazia, nota privada, exportar (só depois do evento, D7) | `go=C09`; momento "Depois do evento" | Aba Conexões, Minha rede |
@@ -79,9 +81,9 @@ O painel tem "Ir direto para" (lista todos os códigos) e os controles de ingres
 | C11 | Bloquear, denunciar, desfazer conexão, pausar meu perfil | `go=C11` | Menu "..." em perfil e chat |
 | M01 | Liberado, agendado, baixado, concluído, offline (só baixados) | Momento (Dia 1: "Sessão ao vivo" mostra os agendados; "Fim do dia" mostra liberado, baixado e concluído); "Sem internet" | Aba Materiais |
 | M02 | PDF, workbook, áudio, vídeo | `go=M02`; momento "Fim do dia" libera os demais | Toque num material liberado |
-| U01 | Dados da compra, selo, CPF mascarado | `go=U01` | Aba Eu |
+| U01 | Dados da compra, selo, CPF mascarado; "Meu perfil de Conexões" (nicho, objetivo, desafio, "Domina", Instagram) para VIP e Diamond com perfil ativo, com "Completar perfil" ou "Editar perfil" | `go=U01`; `?connections=1&tab=eu` | Aba Eu |
 | U02 | Por categoria, permissão negada | `go=U02`; painel "Permissão" | Eu, Notificações |
-| U03 | Campos visíveis, perfil pausado, excluir dados com confirmação, dados excluídos | `go=U03` | Eu, Privacidade; Conexões, menu "..." |
+| U03 | Campos visíveis, "Mostrar meu Instagram antes da conexão" (selo "proposta", desligado por padrão), perfil pausado, excluir dados com confirmação, dados excluídos | `go=U03` | Eu, Privacidade; Conexões, menu "..." |
 | U04 | Pendente, respondida, NPS final | Momento "Fim do dia" ou "Depois do evento" | Eu, Avaliação do dia; cartões da Home |
 | U05 | FAQ, falar com o CS | `go=U05` | Eu, Suporte e FAQ |
 
@@ -118,7 +120,7 @@ Tailwind lê os tokens via `tailwind.config.ts`. Cor ou medida solta em componen
 - Vidro só na tab bar e nos bottom sheets. `prefers-reduced-motion` e `prefers-reduced-transparency` respeitados.
 - Marca: wordmark branco do SVG oficial no login, onboarding e antes do evento; leão (recorte do mesmo SVG, gradiente dourado) na TopBar da Home e na credencial.
 - Durante a palestra só chegam notificações operacionais; as demais ficam em espera até o intervalo. Mensagens e pedidos enviados na palestra são entregues no intervalo.
-- Contato pessoal (WhatsApp, LinkedIn, Instagram) só aparece depois do aceite mútuo; não existe chat aberto. Consentimento de Conexões desligado por padrão; CPF sempre mascarado.
+- Contato pessoal (WhatsApp, LinkedIn, Instagram) só aparece depois do aceite mútuo (C03 conectados, Minha rede, chat); não existe chat aberto. Única exceção, proposta e desligada por padrão: Eu > Privacidade > "Mostrar meu Instagram antes da conexão" mostra o @ de quem também liberou, no card e no perfil. Consentimento de Conexões desligado por padrão; CPF sempre mascarado.
 - Cadeado do Executivo só na aba Conexões e em um card da Home; convite só ao tocar em "Conectar", sempre fechável.
 - Agenda, mapa e credencial a no máximo 2 toques: as páginas empilhadas deixam a tab bar visível (só a credencial e a tela do intervalo ocupam a tela inteira, e ambas têm saída direta).
 - Linguagem das Conexões: conectar, afinidade, interesses em comum, Pendente. Sem "match", "curtir" ou corações.
@@ -127,5 +129,5 @@ Tailwind lê os tokens via `tailwind.config.ts`. Cor ou medida solta em componen
 
 - Câmera do C10, download, Wallet, abrir app de mapas e WhatsApp são simulados (toast ou botão "Simular").
 - A Live Activity e a Dynamic Island são desenhos na moldura; no app real exigem ActivityKit.
-- O ranking de afinidade usa os objetivos e interesses escolhidos no C01, mas os dados de exemplo são fixos.
+- O ranking de afinidade usa os objetivos e interesses do C01 e, se preenchidos, o maior desafio e o "Domina" (`src/lib/affinity.ts`). O cruzamento (desafio de um com o conhecimento do outro) pesa 6 por direção, acima de interesse (2) e objetivo (3); o motivo em uma linha prioriza o cruzamento ("Domina tráfego pago, seu maior desafio hoje"; se mútuo, "Vocês podem se ajudar: ... ↔ ...") e cai no motivo antigo sem ele. Os dados de exemplo são fixos (`src/data/participants.ts`, vocabulário `topics`).
 - Notas, anotações e conversas vivem só no estado da página; recarregar reinicia a demo.

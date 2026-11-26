@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Check, ShieldCheck, Trash2 } from 'lucide-react';
 import { OverlayPage } from '@/components/shell/OverlayPage';
 import { Button } from '@/components/ui/Button';
+import { Chip } from '@/components/ui/Chip';
 import { Switch } from '@/components/ui/Switch';
 import { useDemo, type Privacy } from '@/state/store';
 import { haptic } from '@/lib/haptics';
@@ -24,6 +25,8 @@ export function PrivacyScreen() {
   const deleted = useDemo((s) => s.dataDeleted);
   const setPaused = useDemo((s) => s.setConnectionsPaused);
   const setPrivacy = useDemo((s) => s.setPrivacy);
+  const instagramEarly = useDemo((s) => s.instagramEarly);
+  const setInstagramEarly = useDemo((s) => s.setInstagramEarly);
   const setActive = useDemo((s) => s.setConnectionsActive);
   const openOverlay = useDemo((s) => s.openOverlay);
   const deleteMyData = useDemo((s) => s.deleteMyData);
@@ -60,7 +63,21 @@ export function PrivacyScreen() {
                 {(Object.keys(LABEL) as (keyof Privacy)[]).map((k) => (
                   <Switch key={k} label={LABEL[k]} checked={privacy[k]} onChange={(v) => setPrivacy(k, v)} />
                 ))}
-                <p className="px-1 pb-2 pt-1 text-caption text-text-secondary">Telefone e redes só aparecem depois de um aceite mútuo.</p>
+                <p className="px-1 pb-2 pt-1 text-caption text-text-secondary">Telefone e redes só aparecem depois de um aceite mútuo. A única exceção é o Instagram, e só se você ligar a opção abaixo.</p>
+              </section>
+              <section className="rounded-lg border border-border-subtle bg-surface-1 p-2" aria-label="Instagram antes da conexão">
+                <p className="flex items-center gap-2 px-1 pt-2 text-body-strong text-text-primary">
+                  Instagram <Chip variant="proposal" />
+                </p>
+                <Switch
+                  label="Mostrar meu Instagram antes da conexão"
+                  hint="Seu @ aparece para VIP e Diamond antes do aceite, e você vê o @ de quem também liberou. Desligado por padrão."
+                  checked={instagramEarly}
+                  onChange={(v) => {
+                    setInstagramEarly(v);
+                    showToast({ text: v ? 'Seu Instagram fica visível antes da conexão' : 'Seu Instagram volta a aparecer só depois do aceite', tone: 'info' });
+                  }}
+                />
               </section>
               <section className="rounded-lg border border-border-subtle bg-surface-1 p-2" aria-label="Pausar perfil">
                 <Switch

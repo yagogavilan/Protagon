@@ -44,6 +44,9 @@ export function NetworkPanel() {
                 <span className="block truncate text-caption text-text-secondary">
                   {p.role} · {p.company}
                 </span>
+                <span className="block truncate text-caption text-gold-200" aria-label={`Instagram ${p.instagram}`}>
+                  {p.instagram}
+                </span>
               </span>
               {connected[p.id]?.via === 'qr' ? <Chip>QR</Chip> : null}
             </button>
@@ -73,7 +76,7 @@ export function NetworkPanel() {
       <section className="rounded-lg border border-border-subtle bg-surface-1 p-card" aria-label="Exportar contatos">
         <p className="text-body-strong text-text-primary">Exportar contatos</p>
         <p className="mt-1 text-body text-text-secondary">
-          {canExport ? 'Gere um arquivo com nome, empresa, WhatsApp, LinkedIn e suas notas.' : 'Disponível no dia seguinte ao fim do evento, para você fazer o acompanhamento com calma.'}
+          {canExport ? 'Gere um arquivo com nome, empresa, WhatsApp, LinkedIn, Instagram e suas notas.' : 'Disponível no dia seguinte ao fim do evento, para você fazer o acompanhamento com calma.'}
         </p>
         <Button
           block
