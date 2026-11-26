@@ -18,7 +18,7 @@ Este arquivo é lido por TODOS os agentes do time. Ele define o projeto, a fase 
 - O desenvolvimento do app real só começa depois que a diretoria aprovar funcionalidades e visual.
 
 Ordem de trabalho (cada pausa é um gate com o fundador):
-1. Pesquisa + mapa de navegação + telas × estados. **Concluída**, aguardando validação: `docs/design/etapa-1.html`, decisões D1–D8 em `docs/decisoes.md`.
+1. Pesquisa + mapa de navegação + telas × estados. **Concluída e validada (2026-11-26)**: `docs/design/etapa-1.html`, decisões D1–D8 em `docs/decisoes.md`.
 2. Design system (tokens + componentes) e 3 telas-chave: Home ao vivo, Conexões (VIP), Conexões (Executivo com cadeado). **Pausar para validar o visual.**
 3. Mockup completo navegável com painel de demonstração.
 4. Revisão do `qa-engineer` (quem não construiu), ajustes e entrega.
