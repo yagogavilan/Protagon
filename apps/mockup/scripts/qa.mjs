@@ -46,7 +46,7 @@ function serve(dir) {
   });
 }
 
-const wanted = new Set(process.argv.slice(2).length ? process.argv.slice(2) : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']);
+const wanted = new Set(process.argv.slice(2).length ? process.argv.slice(2) : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
 const results = { checks: [], findings: {} };
 const pageErrors = [];
 let browser;
@@ -962,6 +962,15 @@ async function sectionH() {
     ['mapa', 'go=A04'],
     ['intervalo', 'go=A02&moment=break&phase=five'],
     ['eu', 'go=U01&connections=1'],
+    // Grupos, Ofertas e Gaia One
+    ['gr-home-card', `${A}&moment=break&tier=vip&perm=granted`],
+    ['gr-lista', 'go=GR02&moment=break'],
+    ['gr-meu-grupo', 'go=GR06&moment=break'],
+    ['of-home', 'go=OF01&day=2'],
+    ['of-tela', 'go=OF02'],
+    ['of-consultor', 'go=OF03'],
+    ['ga-home-card', 'go=GA01'],
+    ['ga-checklist', 'go=GA02'],
   ];
   for (const [name, q] of shots) {
     const { ctx, page } = await open(q);
@@ -1038,6 +1047,336 @@ async function sectionI() {
 }
 
 // ---------------------------------------------------------------------------
+// (j) Grupos, Ofertas e Gaia One: revisão independente (prompt §7, DEC-003, DEC-004, SEC-018 a SEC-024)
+// A verdade sobre quem é de qual categoria vem de src/data (lida do disco), não de listas escritas à mão no teste.
+// ---------------------------------------------------------------------------
+function tierNames() {
+  const out = { executivo: new Set(), vip: new Set(), diamond: new Set() };
+  const first = (full) => full.split(' ')[0];
+  const part = readFileSync(join(root, 'src/data/participants.ts'), 'utf8');
+  for (const m of part.matchAll(/^\s*\['([^']+)',\s*'[^']*',\s*'[^']*',\s*'[^']*',\s*'[^']*',\s*'(executivo|vip|diamond)'/gm)) out[m[2]].add(first(m[1]));
+  const grp = readFileSync(join(root, 'src/data/groups.ts'), 'utf8');
+  for (const m of grp.matchAll(/name: '([^']+)',[^}]*tier: '(executivo|vip|diamond)'/g)) out[m[2]].add(first(m[1]));
+  return out;
+}
+const OFFER_NAMES = /Olimpo|Liderança 360|Assinar o|Reservar minha vaga|Condição do evento|Condição válida|Oferta especial|Oferta do palco|Ofertas do evento|Bônus da condição/i;
+const PRESSURE = /restam|últimas? vagas?|só hoje|corra|imperdível|não perca|última chance|garanta já|aproveite|esgota|acaba hoje|\d+ pessoas já|oportunidade única|por tempo limitado|vagas limitadas/i;
+const PHONE = /\(\d{2}\)\s?9?\d{4}-?\d{4}|\+55\s?\d|\b\d{4,5}-\d{4}\b|wa\.me|tel:|api\.whatsapp/i;
+/** HTML inteiro (inclui nós ocultos, aria-label e atributos) + armazenamento local, o que um innerText não vê */
+const everything = (page) => page.evaluate(() => document.documentElement.outerHTML.replace(/ value="[^"]*"/g, '') + '\n' + JSON.stringify({ ...localStorage }) + JSON.stringify({ ...sessionStorage }));
+/** Só o aparelho (moldura), sem o painel de demonstração, que lista "Ofertas do evento" no "Ir direto para" */
+const deviceHtml = (page) => page.evaluate(() => (document.querySelector('[role=region][aria-label^="Tela do app"]')?.outerHTML ?? '').replace(/ value="[^"]*"/g, ''));
+const navBtn = (page, name) => frameOf(page).getByRole('navigation', { name: 'Navegação principal' }).getByRole('button', { name });
+const VIBRATE_PROBE = () => {
+  window.__vib = [];
+  window.__snd = [];
+  const v = navigator.vibrate ? navigator.vibrate.bind(navigator) : () => true;
+  Object.defineProperty(navigator, 'vibrate', { configurable: true, value: (p) => (window.__vib.push(p), v(p)) });
+  const play = HTMLMediaElement.prototype.play;
+  HTMLMediaElement.prototype.play = function () { window.__snd.push('audio'); return play.apply(this, arguments); };
+  if (window.AudioContext) { const O = window.AudioContext; window.AudioContext = function () { window.__snd.push('ctx'); return new O(); }; }
+  window.__notif = [];
+  window.Notification = function (t) { window.__notif.push(t); };
+  window.Notification.permission = 'granted';
+};
+
+async function sectionJ() {
+  const names = tierNames();
+  keep('j', 'alunosPorCategoria', Object.fromEntries(Object.entries(names).map(([k, v]) => [k, [...v]])));
+  const onlyOthers = (tier) => {
+    const mine = names[tier];
+    const others = Object.entries(names).filter(([k]) => k !== tier).flatMap(([, v]) => [...v]).filter((n) => !mine.has(n));
+    return new RegExp(`\\b(${others.join('|')})\\b`);
+  };
+  check('j', 'base de nomes lida de src/data tem as 3 categorias', Object.values(names).every((s) => s.size >= 5), JSON.stringify(Object.fromEntries(Object.entries(names).map(([k, v]) => [k, v.size]))));
+
+  // --- J1. Oferta invisível antes da liberação: 3 ingressos x Dia 2 e 3, em todas as superfícies, no HTML inteiro ---
+  for (const tier of ['vip', 'diamond', 'executivo']) {
+    for (const day of [2, 3]) {
+      const { ctx, page } = await open(`${A}&tier=${tier}&moment=live&day=${day}&perm=granted&connections=1&profile=full`);
+      const requests = [];
+      page.on('request', (r) => requests.push(r.url()));
+      const surfaces = [];
+      const sweep = async (where) => {
+        const h = await everything(page); // página inteira (painel incluído): nome, preço e bônus não podem estar em lugar nenhum
+        const d = await deviceHtml(page); // textos que anunciam oferta: só o aparelho
+        const m = h.match(/Olimpo|Liderança 360|Imersão Lid|Hotmart|Diagnóstico individual/i) ?? d.match(OFFER_NAMES) ?? h.match(/1\.490|1\.290|17\.880|15\.990|6x de|12x de/);
+        surfaces.push(where);
+        return m ? `${where}: "${m[0]}"` : null;
+      };
+      const leaks = [];
+      const add = (x) => x && leaks.push(x);
+      add(await sweep('Home'));
+      await navBtn(page, /Trilha/).click(); await settle(page);
+      add(await sweep('Trilha'));
+      const pitch = frameOf(page).getByRole('button', { name: new RegExp(day === 2 ? '^Palestra: O legado do líder' : '^Palestra: Protagonista para sempre') });
+      if ((await pitch.count()) > 0) { await pitch.first().click(); await settle(page); add(await sweep('detalhe da sessão do pitch')); await tap(page, /^Voltar/); }
+      else leaks.push('bloco do pitch não encontrado na Trilha (teste cego)');
+      await navBtn(page, /Materiais/).click(); await settle(page);
+      add(await sweep('Materiais'));
+      for (const box of await frameOf(page).getByRole('searchbox').all()) { if (await box.isVisible()) { await box.fill('Olimpo'); await settle(page); add(await sweep('busca em Materiais')); } }
+      await navBtn(page, /Conexões/).click(); await settle(page);
+      add(await sweep('Conexões'));
+      if (tier !== 'executivo') {
+        await tap(page, /^Explorar/);
+        const q = frameOf(page).getByLabel('Buscar por nome, empresa, nicho ou interesse');
+        for (const term of ['Olimpo', 'Liderança 360', 'oferta', 'mentoria']) {
+          await q.fill(term); await settle(page, 350);
+          add(await sweep(`busca Explorar "${term}"`));
+        }
+      }
+      await navBtn(page, /Eu/).click(); await settle(page);
+      add(await sweep('Eu'));
+      await tap(page, /^Notificações/);
+      add(await sweep('Notificações'));
+      await tap(page, /^Voltar/);
+      const opts = await panelOf(page).locator('select#tpl option').evaluateAll((os) => os.map((o) => o.value).filter(Boolean));
+      for (const id of opts) {
+        await panelOf(page).locator('select#tpl').selectOption(id);
+        await panelOf(page).getByRole('button', { name: /Disparar notificação/ }).click();
+        await settle(page, 300);
+        add(await sweep(`notificação de modelo ${id}`));
+      }
+      const fetched = requests.filter((u) => /offers/i.test(u));
+      check('j', `oferta invisível antes de "Liberar oferta" (${tier}, Dia ${day}): ${surfaces.length} superfícies, HTML inteiro`, leaks.length === 0 && fetched.length === 0, leaks.join(' | ') + (fetched.length ? ` | dados baixados: ${fetched.join(',')}` : ''));
+      await ctx.close();
+    }
+  }
+  // chunks: só offers-*.js pode conter nome, preço ou bônus (o dist-single embute tudo: limitação conhecida, SEC-023)
+  {
+    const dir = join(root, 'dist/assets');
+    const { readdirSync } = await import('node:fs');
+    const holders = readdirSync(dir).filter((f) => f.endsWith('.js') && /Olimpo|Imersão Liderança 360|PROTAGON27|Diagnóstico individual/.test(readFileSync(join(dir, f), 'utf8')));
+    const gaiaHolders = readdirSync(dir).filter((f) => f.endsWith('.js') && /Olimpo/.test(readFileSync(join(dir, f), 'utf8')));
+    check('j', 'nome da oferta só existe no chunk offers-*.js do build', gaiaHolders.length === 1 && /^offers-/.test(gaiaHolders[0]), `chunks com "Olimpo": ${gaiaHolders.join(',') || 'nenhum'}; com outros termos: ${holders.join(',')}`);
+  }
+
+  // --- J2. Liberação em plena palestra: silêncio (sem push, vibração, som, notificação do sistema) e 1 toque ---
+  for (const tier of ['vip', 'diamond', 'executivo']) {
+    const day = tier === 'executivo' ? 3 : 2;
+    const { ctx, page } = await open(`${A}&tier=${tier}&moment=live&day=${day}&perm=granted`, { init: VIBRATE_PROBE });
+    const bell = () => frameOf(page).getByRole('button', { name: /^Notificações/ }).first().getAttribute('aria-label');
+    const log = async () => (await panelOf(page).innerText()).match(/(Última:[^\n]*|Nenhuma ainda)/)?.[1] ?? '';
+    if (tier === 'executivo') await panelOf(page).getByRole('radiogroup', { name: 'Oferta' }).getByRole('radio', { name: /Dia 3/ }).click();
+    const before = { bell: await bell(), log: await log(), vib: await page.evaluate(() => window.__vib.length) };
+    await panelOf(page).getByRole('button', { name: 'Liberar oferta' }).click();
+    await settle(page, 1500);
+    const toast = await frameOf(page).getByText('Oferta do palco disponível').filter({ visible: true }).count();
+    const pushBanner = await frameOf(page).locator('[aria-live=polite] button.system-glass').count();
+    const after = { bell: await bell(), log: await log(), vib: await page.evaluate(() => window.__vib.length), snd: await page.evaluate(() => window.__snd.length), notif: await page.evaluate(() => window.__notif.length) };
+    check('j', `liberar oferta na palestra é silencioso (${tier}): sem push, vibração, som nem badge`, pushBanner === 0 && after.vib === before.vib && after.snd === 0 && after.notif === 0 && after.log === before.log && after.bell === before.bell, JSON.stringify({ before, after, pushBanner }));
+    // 1 toque: o card está no topo da Home e um toque abre a tela da oferta
+    const card = frameOf(page).getByRole('button', { name: /^Ver oferta/ }).first();
+    const top = await card.evaluate((el) => { const f = el.closest('[role=region]'); return el.getBoundingClientRect().top - f.getBoundingClientRect().top; }).catch(() => -1);
+    const wanted = await card.count();
+    if (wanted) { await card.click(); await settle(page, 700); }
+    const open1 = await frameOf(page).getByRole('heading', { name: 'Oferta do palco' }).filter({ visible: true }).count();
+    check('j', `oferta em 1 toque a partir da Home e dentro da primeira tela (${tier})`, wanted > 0 && open1 > 0 && top >= 0 && top < 700, `cards=${wanted} topo=${Math.round(top)}px abriu=${open1}`);
+    const t = await text(page);
+    check('j', `tom da oferta sem pressão falsa (${tier})`, !PRESSURE.test(t), (t.match(PRESSURE) ?? [''])[0]);
+    // o toast some sozinho e não volta (R-OF-5)
+    await settle(page, 6500);
+    check('j', `toast da oferta some em ~6 s (${tier})`, (await frameOf(page).getByText('Oferta do palco disponível').filter({ visible: true }).count()) === 0, `toast visível na liberação: ${toast}`);
+    check('j', `toast apareceu uma vez na liberação (${tier})`, toast >= 1);
+    await ctx.close();
+  }
+  // oferta que o ingresso não tem: nada, em lugar nenhum (Executivo, Olimpo)
+  {
+    const { ctx, page } = await open(`${A}&tier=executivo&moment=live&day=2&perm=granted`);
+    await panelOf(page).getByRole('button', { name: 'Liberar oferta' }).click();
+    await settle(page, 1500);
+    const h = await everything(page);
+    const front = (await text(page));
+    await navBtn(page, /Eu/).click(); await settle(page);
+    const eu = await text(page);
+    const locks = await frameOf(page).locator('main svg.lucide-lock').count();
+    check('j', 'Executivo: Olimpo liberado não cria card, toast, item em Eu nem cadeado; dado fica no aparelho sem uso', !OFFER_NAMES.test(front) && !/Ofertas do evento/.test(eu), `cadeados em main (aba Eu)=${locks}; nome no HTML (esperado: dado carregado mas invisível)=${/Olimpo/.test(h)}`);
+    keep('j', 'executivoOlimpoDadoNoHtml', /Olimpo/.test(h));
+    await ctx.close();
+  }
+
+  // --- J3. Grupos: formar/entrar em < 1 minuto nos 3 ingressos, sem ajuda, e nunca outra categoria ---
+  for (const tier of ['executivo', 'vip', 'diamond']) {
+    const foreign = onlyOthers(tier);
+    for (const path of ['entrar', 'criar', 'encaixar']) {
+      const { ctx, page } = await open(`${A}&tier=${tier}&moment=break&day=1&perm=granted`);
+      const f = frameOf(page);
+      const t0 = Date.now();
+      let taps = 0;
+      const click = async (loc) => { await loc.first().click({ timeout: 8000 }); taps += 1; };
+      const seen = [];
+      try {
+        await click(f.getByRole('button', { name: 'Formar meu grupo' }));
+        await f.getByRole('article').first().waitFor({ timeout: 8000 });
+        seen.push((await f.locator('.z-overlay').last().innerText()));
+        if (path === 'entrar') { await click(f.getByRole('button', { name: /^Entrar no Grupo/ })); await f.getByRole('heading', { name: 'Meu grupo' }).waitFor({ timeout: 8000 }); }
+        if (path === 'criar') { await click(f.getByRole('button', { name: 'Criar grupo' })); await f.getByRole('heading', { name: 'Seu grupo foi criado' }).waitFor({ timeout: 8000 }); await f.getByText(/^[A-Z]{4}$/).first().waitFor({ timeout: 8000 }).catch(() => {}); }
+        if (path === 'encaixar') { await click(f.getByRole('button', { name: 'Me coloque em um grupo' })); await f.getByText(/Encaixamos você no Grupo|Criamos o Grupo/).first().waitFor({ timeout: 8000 }); }
+        seen.push(await f.locator('.z-overlay').last().innerText());
+        seen.push(await f.innerText());
+      } catch (e) {
+        seen.push('ERRO ' + e.message.split('\n')[0]);
+      }
+      const secs = (Date.now() - t0) / 1000;
+      const all = seen.join(' ').replace(/\s+/g, ' ');
+      const err = /ERRO/.test(all);
+      const foreignHit = all.match(foreign)?.[0];
+      check('j', `grupo em < 1 min e ≤ 4 toques sem ajuda (${tier}, ${path})`, !err && secs < 60 && taps <= 4, `${secs.toFixed(1)} s, ${taps} toques${err ? ' ' + all.match(/ERRO[^ ]* .{0,80}/)?.[0] : ''}`);
+      check('j', `nenhum nome de outra categoria na lista, no código e no Meu grupo (${tier}, ${path})`, !foreignHit, foreignHit ?? '');
+      keep('j', `tempo-${tier}-${path}`, { secs, taps });
+      await ctx.close();
+    }
+    // código: todos os códigos das OUTRAS categorias dão a mesma resposta do código inexistente e não entram
+    const src = readFileSync(join(root, 'src/data/groups.ts'), 'utf8');
+    const codes = [...src.matchAll(/tier: '(executivo|vip|diamond)', number: \d+, code: '([A-Z]{4})'/g)].map((m) => [m[1], m[2]]);
+    const { ctx, page } = await open(`${A}&tier=${tier}&moment=break&day=1&perm=granted&go=GR04`);
+    const f = frameOf(page);
+    const field = f.getByLabel('Código do grupo');
+    const reply = async (code) => { await field.fill(''); await field.fill(code); await settle(page, 1100); return (await f.getByRole('status').filter({ hasText: /Código|grupo/ }).allInnerTexts()).join(' ').replace(/\s+/g, ' ').trim() + (await f.getByRole('heading', { name: 'Meu grupo' }).count() ? ' [ENTROU]' : ''); };
+    const none = await reply('XXXX');
+    const mismatched = [];
+    const others = codes.filter(([t]) => t !== tier);
+    for (const [t, c] of others) { const r = await reply(c); if (r !== none) mismatched.push(`${t}:${c} -> "${r}"`); }
+    check('j', `código de outra categoria = mesma mensagem do inexistente, e não entra (${tier}, ${others.length} códigos)`, others.length >= 7 && mismatched.length === 0 && /Código não encontrado/.test(none), mismatched.slice(0, 3).join(' | ') || none);
+    await ctx.close();
+  }
+
+  // --- J4. Contato do grupo nunca antes do opt-in e nunca de quem não compartilhou ---
+  for (const tier of ['executivo', 'vip', 'diamond']) {
+    const { ctx, page } = await open(`${A}&tier=${tier}&moment=break&day=1&perm=granted&go=GR06`);
+    await settle(page, 600);
+    const f = frameOf(page);
+    const wa = f.getByRole('switch', { name: /Compartilhar meu WhatsApp/ });
+    const off = (await wa.getAttribute('aria-checked')) === 'false';
+    const html1 = await everything(page);
+    const btn1 = await f.getByRole('button', { name: 'Chamar no WhatsApp' }).count();
+    check('j', `Meu grupo ${tier} 2/3, chave desligada: nenhum número, link nem botão de WhatsApp`, off && btn1 === 0 && !PHONE.test(html1), `chave desligada=${off} botões=${btn1} ${html1.match(PHONE)?.[0] ?? ''}`);
+    // liga a chave com o grupo ainda 2/3: o opt-in sozinho não revela ninguém
+    await wa.click(); await settle(page, 400);
+    await frameOf(page).getByRole('dialog').getByRole('button', { name: /^Compartilhar$/ }).click(); await settle(page, 500);
+    const html2 = await everything(page);
+    const btn2 = await f.getByRole('button', { name: 'Chamar no WhatsApp' }).count();
+    check('j', `Meu grupo ${tier} 2/3, chave ligada: ainda nenhum número (só quando o grupo completa)`, btn2 === 0 && !PHONE.test(html2), `botões=${btn2} ${html2.match(PHONE)?.[0] ?? ''}`);
+    await panelOf(page).getByRole('button', { name: /Alguém entrou no meu grupo/ }).click(); await settle(page, 700);
+    const html3 = await everything(page);
+    const btn3 = await f.getByRole('button', { name: 'Chamar no WhatsApp' }).count();
+    const members = await f.getByRole('list', { name: 'Membros do grupo' }).getByRole('listitem').count();
+    check('j', `Meu grupo ${tier} completo, chave ligada: botão só para quem compartilhou, nunca o número impresso`, btn3 <= members - 1 && !PHONE.test(html3), `botões=${btn3} de ${members - 1} outros membros ${html3.match(PHONE)?.[0] ?? ''}`);
+    // desligar tira tudo na hora
+    await wa.click(); await settle(page, 500);
+    const btn4 = await f.getByRole('button', { name: 'Chamar no WhatsApp' }).count();
+    check('j', `desligar a chave tira o WhatsApp do grupo na hora (${tier})`, (await wa.getAttribute('aria-checked')) === 'false' && btn4 === 0, `botões=${btn4}`);
+    await ctx.close();
+  }
+  // grupo cria sozinho (Só por código): fora da lista dos outros alunos; aviso de exposição; sem pré-marcado de contato
+  {
+    const { ctx, page } = await open(`${A}&tier=vip&moment=break&day=1&perm=granted&go=GR03`);
+    await settle(page, 1000);
+    const f = frameOf(page);
+    await tap(page, /Mostrar meu grupo na lista/);
+    await tap(page, /^Pronto/);
+    await settle(page, 500);
+    await tap(page, /^Voltar/).catch(() => {});
+    await panelOf(page).locator('select#go-to').selectOption('GR02'); await settle(page, 1200);
+    const list = (await f.locator('.z-overlay').last().innerText()).replace(/\s+/g, ' ');
+    const mine = await f.getByRole('article').count();
+    check('j', 'grupo "Só por código" criado pelo aluno não aparece na lista (SEC-018)', !/Rafael/.test(list), `artigos na lista=${mine}`);
+    await ctx.close();
+  }
+  // durante a palestra, "alguém entrou no meu grupo" não vibra nem empurra (R-GR-9)
+  {
+    const { ctx, page } = await open(`${A}&tier=vip&moment=live&day=1&perm=granted&go=GR06`, { init: VIBRATE_PROBE });
+    await settle(page, 700);
+    const log0 = (await panelOf(page).innerText()).match(/(Última:[^\n]*|Nenhuma ainda)/)?.[1] ?? '';
+    const v0 = await page.evaluate(() => window.__vib.length);
+    await panelOf(page).getByRole('button', { name: /Alguém entrou no meu grupo/ }).click(); await settle(page, 1200);
+    const log1 = (await panelOf(page).innerText()).match(/(Última:[^\n]*|Nenhuma ainda)/)?.[1] ?? '';
+    const v1 = await page.evaluate(() => window.__vib.length);
+    const push = await frameOf(page).locator('[aria-live=polite] button.system-glass').count();
+    check('j', 'palestra: alguém entrou no grupo sem push nem vibração (R-GR-9)', push === 0 && v1 === v0 && log1 === log0, JSON.stringify({ log0, log1, v0, v1, push }));
+    await ctx.close();
+  }
+
+  // --- J5. Gaia One: concluir só pelo app, nos 3 ingressos, e sem aviso na palestra ---
+  for (const tier of ['executivo', 'vip', 'diamond']) {
+    const { ctx, page } = await open(`${A}&tier=${tier}&moment=break&day=2&perm=granted`, { init: VIBRATE_PROBE });
+    const f = frameOf(page);
+    await panelOf(page).getByRole('button', { name: 'Iniciar atividade' }).click(); await settle(page, 500);
+    let taps = 0;
+    const t0 = Date.now();
+    const click = async (loc) => { await loc.first().click({ timeout: 6000 }); taps += 1; await settle(page, 250); };
+    await click(f.getByRole('button', { name: /^Começar/ }));
+    for (let i = 0; i < 4; i += 1) {
+      const body = (await f.locator('.z-overlay').last().innerText()).replace(/\s+/g, ' ');
+      if (/Quando o teste estiver ativo/.test(body)) break;
+      await click(f.getByRole('checkbox', { name: 'Feito' }));
+    }
+    const early = await f.getByRole('button', { name: /^Já ativei/ }).count();
+    await click(f.getByRole('button', { name: /^Já ativei/ }));
+    const done = /Gaia One ativado/.test(await text(page));
+    const outsideAsk = /(procure|fale com) (a )?equipe|peça (para|à) equipe/i.test((await f.locator('.z-overlay').last().innerText()));
+    check('j', `Gaia One concluída só pelo app (${tier}): ${taps} toques, ${((Date.now() - t0) / 1000).toFixed(1)} s`, done && early > 0 && taps <= 8, `concluída=${done} tocou Já ativei no passo 4=${early > 0}`);
+    keep('j', `gaia-${tier}`, { taps, outsideAsk });
+    await ctx.close();
+  }
+  {
+    // pular passos: "Já ativei" com o passo 1 recém-aberto deve ou ficar bloqueado ou pedir confirmação (progresso honesto)
+    const { ctx, page } = await open(`${A}&tier=vip&moment=break&day=2&perm=granted&go=GA02`);
+    const f = frameOf(page);
+    await settle(page, 600);
+    const btn = f.getByRole('button', { name: /^Já ativei/ });
+    const n = await btn.count();
+    const disabled = n ? await btn.first().isDisabled() : true;
+    let doneEarly = false;
+    if (n && !disabled) { await btn.first().click(); await settle(page, 500); doneEarly = /Gaia One ativado/.test(await text(page)); }
+    check('j', 'Gaia One: "Já ativei" no passo 1 não conclui a atividade sem os passos (progresso honesto)', !doneEarly, `botão presente=${n > 0} desabilitado=${disabled} concluiu=${doneEarly}`);
+    await ctx.close();
+  }
+  {
+    const { ctx, page } = await open(`${A}&tier=vip&moment=live&day=2&perm=granted`, { init: VIBRATE_PROBE });
+    await panelOf(page).getByRole('button', { name: 'Iniciar atividade' }).click(); await settle(page, 1200);
+    const v = await page.evaluate(() => window.__vib.length);
+    const push = await frameOf(page).locator('[aria-live=polite] button.system-glass').count();
+    const toast = await frameOf(page).locator('[role=status]').filter({ hasText: /Gaia/ }).count();
+    const list = await tap(page, /^Notificações/).then(async () => (await frameOf(page).locator('.z-overlay').last().innerText()).replace(/\s+/g, ' ')).catch(() => '');
+    check('j', 'Gaia One iniciada na palestra: sem push, vibração nem notificação nova (GA-09)', push === 0 && v === 0 && toast === 0 && !/Gaia One/.test(list), JSON.stringify({ push, v, toast, listaMenciona: /Gaia One/.test(list) }));
+    await ctx.close();
+  }
+
+  // --- J6. Regras de CLAUDE.md §8 nas telas novas: vocabulário, emoji, coração, cadeado fora de Conexões ---
+  {
+    const codes = ['GR01', 'GR02', 'GR03', 'GR04', 'GR05', 'GR06', 'OF01', 'OF02', 'OF02x', 'OF03', 'OF04', 'GA01', 'GA02', 'GA03'];
+    const bad = [];
+    const locks = [];
+    for (const tier of ['executivo', 'vip', 'diamond']) {
+      for (const code of codes) {
+        const { ctx, page } = await open(`${A}&tier=${tier}&moment=break&perm=granted&go=${code}`);
+        await settle(page, 900);
+        // OF02x força Executivo; o resto respeita o ingresso pedido
+        const html = (await deviceHtml(page)) ?? '';
+        const visible = await frameOf(page).innerText();
+        const word = visible.match(/\bmatch(es)?\b|curtir|curtid|namor|paquer|\bflerte|crush/i)?.[0];
+        const emoji = visible.match(/\p{Extended_Pictographic}/u)?.[0];
+        const heart = /lucide-heart|lucide-flame/.test(html);
+        if (word || emoji || heart) bad.push(`${tier}/${code}: ${word ?? ''}${emoji ?? ''}${heart ? 'ícone coração/chama' : ''}`);
+        const lockInOverlay = await frameOf(page).locator('.z-overlay svg.lucide-lock, .z-overlay svg.lucide-lock-keyhole').count();
+        if (lockInOverlay > 0) locks.push(`${tier}/${code}`);
+        await ctx.close();
+      }
+    }
+    check('j', 'telas novas sem match/curtir/coração/emoji (regras 2 e 9)', bad.length === 0, bad.join(' | '));
+    check('j', 'nenhum cadeado em Grupos, Ofertas e Gaia One (regra 4)', locks.length === 0, locks.join(' | '));
+    // Home do Executivo: cadeado em no máximo 1 card, com oferta liberada e grupos abertos
+    const { ctx, page } = await open(`${A}&tier=executivo&moment=break&day=1&perm=granted&offer=1`);
+    await settle(page, 700);
+    const homeLocks = await frameOf(page).locator('main svg.lucide-lock').count();
+    check('j', 'Home do Executivo com grupos e oferta: cadeado em no máximo 1 card (regra 4)', homeLocks <= 1, `cadeados em main=${homeLocks}`);
+    await ctx.close();
+  }
+  console.log('\n[j] concluída.');
+}
+
+// ---------------------------------------------------------------------------
 async function main() {
   browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox'] });
   if (process.env.QA_URL) base = process.env.QA_URL;
@@ -1053,7 +1392,7 @@ async function main() {
     await browser.close();
     process.exit(0);
   }
-  const order = ['a', 'bc', 'e', 'd', 'f', 'g', 'h', 'i'];
+  const order = ['a', 'bc', 'e', 'd', 'f', 'g', 'h', 'i', 'j'];
   for (const sec of order) {
     const run = sec === 'bc' ? wanted.has('b') || wanted.has('c') || wanted.has('h') : wanted.has(sec);
     if (!run) continue;
@@ -1066,6 +1405,7 @@ async function main() {
     if (sec === 'g') await sectionG();
     if (sec === 'h') await sectionH();
     if (sec === 'i') await sectionI();
+    if (sec === 'j') await sectionJ();
   }
   await browser.close();
   keep('infra', 'errosDeConsole', pageErrors);

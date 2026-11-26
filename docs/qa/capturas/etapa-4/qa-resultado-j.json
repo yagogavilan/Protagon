@@ -1,0 +1,514 @@
+{
+  "checks": [
+    {
+      "section": "j",
+      "name": "base de nomes lida de src/data tem as 3 categorias",
+      "ok": true,
+      "detail": "{\"executivo\":11,\"vip\":22,\"diamond\":11}"
+    },
+    {
+      "section": "j",
+      "name": "oferta invisível antes de \"Liberar oferta\" (vip, Dia 2): 15 superfícies, HTML inteiro",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "oferta invisível antes de \"Liberar oferta\" (vip, Dia 3): 15 superfícies, HTML inteiro",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "oferta invisível antes de \"Liberar oferta\" (diamond, Dia 2): 15 superfícies, HTML inteiro",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "oferta invisível antes de \"Liberar oferta\" (diamond, Dia 3): 15 superfícies, HTML inteiro",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "oferta invisível antes de \"Liberar oferta\" (executivo, Dia 2): 10 superfícies, HTML inteiro",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "oferta invisível antes de \"Liberar oferta\" (executivo, Dia 3): 10 superfícies, HTML inteiro",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "nome da oferta só existe no chunk offers-*.js do build",
+      "ok": true,
+      "detail": "chunks com \"Olimpo\": offers-Cwe86ijX.js; com outros termos: index-jzqHlfQF.js,offers-Cwe86ijX.js"
+    },
+    {
+      "section": "j",
+      "name": "liberar oferta na palestra é silencioso (vip): sem push, vibração, som nem badge",
+      "ok": true,
+      "detail": "{\"before\":{\"bell\":\"Notificações, 1 não lida\",\"log\":\"Nenhuma ainda\",\"vib\":0},\"after\":{\"bell\":\"Notificações, 1 não lida\",\"log\":\"Nenhuma ainda\",\"vib\":0,\"snd\":0,\"notif\":0},\"pushBanner\":0}"
+    },
+    {
+      "section": "j",
+      "name": "oferta em 1 toque a partir da Home e dentro da primeira tela (vip)",
+      "ok": true,
+      "detail": "cards=1 topo=251px abriu=1"
+    },
+    {
+      "section": "j",
+      "name": "tom da oferta sem pressão falsa (vip)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "toast da oferta some em ~6 s (vip)",
+      "ok": true,
+      "detail": "toast visível na liberação: 1"
+    },
+    {
+      "section": "j",
+      "name": "toast apareceu uma vez na liberação (vip)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "liberar oferta na palestra é silencioso (diamond): sem push, vibração, som nem badge",
+      "ok": true,
+      "detail": "{\"before\":{\"bell\":\"Notificações, 1 não lida\",\"log\":\"Nenhuma ainda\",\"vib\":0},\"after\":{\"bell\":\"Notificações, 1 não lida\",\"log\":\"Nenhuma ainda\",\"vib\":0,\"snd\":0,\"notif\":0},\"pushBanner\":0}"
+    },
+    {
+      "section": "j",
+      "name": "oferta em 1 toque a partir da Home e dentro da primeira tela (diamond)",
+      "ok": true,
+      "detail": "cards=1 topo=251px abriu=1"
+    },
+    {
+      "section": "j",
+      "name": "tom da oferta sem pressão falsa (diamond)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "toast da oferta some em ~6 s (diamond)",
+      "ok": true,
+      "detail": "toast visível na liberação: 1"
+    },
+    {
+      "section": "j",
+      "name": "toast apareceu uma vez na liberação (diamond)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "liberar oferta na palestra é silencioso (executivo): sem push, vibração, som nem badge",
+      "ok": true,
+      "detail": "{\"before\":{\"bell\":\"Notificações, 1 não lida\",\"log\":\"Nenhuma ainda\",\"vib\":0},\"after\":{\"bell\":\"Notificações, 1 não lida\",\"log\":\"Nenhuma ainda\",\"vib\":0,\"snd\":0,\"notif\":0},\"pushBanner\":0}"
+    },
+    {
+      "section": "j",
+      "name": "oferta em 1 toque a partir da Home e dentro da primeira tela (executivo)",
+      "ok": true,
+      "detail": "cards=1 topo=251px abriu=1"
+    },
+    {
+      "section": "j",
+      "name": "tom da oferta sem pressão falsa (executivo)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "toast da oferta some em ~6 s (executivo)",
+      "ok": true,
+      "detail": "toast visível na liberação: 1"
+    },
+    {
+      "section": "j",
+      "name": "toast apareceu uma vez na liberação (executivo)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "Executivo: Olimpo liberado não cria card, toast, item em Eu nem cadeado; dado fica no aparelho sem uso",
+      "ok": true,
+      "detail": "cadeados em main (aba Eu)=0; nome no HTML (esperado: dado carregado mas invisível)=false"
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (executivo, entrar)",
+      "ok": true,
+      "detail": "1.7 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (executivo, entrar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (executivo, criar)",
+      "ok": true,
+      "detail": "9.7 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (executivo, criar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (executivo, encaixar)",
+      "ok": true,
+      "detail": "2.2 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (executivo, encaixar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "código de outra categoria = mesma mensagem do inexistente, e não entra (executivo, 12 códigos)",
+      "ok": true,
+      "detail": "Código não encontrado. Confira as letras com quem criou o grupo. Grupos só reúnem pessoas com o mesmo tipo de ingresso."
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (vip, entrar)",
+      "ok": true,
+      "detail": "1.7 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (vip, entrar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (vip, criar)",
+      "ok": true,
+      "detail": "9.7 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (vip, criar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (vip, encaixar)",
+      "ok": true,
+      "detail": "2.2 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (vip, encaixar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "código de outra categoria = mesma mensagem do inexistente, e não entra (vip, 7 códigos)",
+      "ok": true,
+      "detail": "Código não encontrado. Confira as letras com quem criou o grupo. Grupos só reúnem pessoas com o mesmo tipo de ingresso."
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (diamond, entrar)",
+      "ok": true,
+      "detail": "1.7 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (diamond, entrar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (diamond, criar)",
+      "ok": true,
+      "detail": "9.7 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (diamond, criar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "grupo em < 1 min e ≤ 4 toques sem ajuda (diamond, encaixar)",
+      "ok": true,
+      "detail": "2.2 s, 2 toques"
+    },
+    {
+      "section": "j",
+      "name": "nenhum nome de outra categoria na lista, no código e no Meu grupo (diamond, encaixar)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "código de outra categoria = mesma mensagem do inexistente, e não entra (diamond, 13 códigos)",
+      "ok": true,
+      "detail": "Código não encontrado. Confira as letras com quem criou o grupo. Grupos só reúnem pessoas com o mesmo tipo de ingresso."
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo executivo 2/3, chave desligada: nenhum número, link nem botão de WhatsApp",
+      "ok": true,
+      "detail": "chave desligada=true botões=0 "
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo executivo 2/3, chave ligada: ainda nenhum número (só quando o grupo completa)",
+      "ok": true,
+      "detail": "botões=0 "
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo executivo completo, chave ligada: botão só para quem compartilhou, nunca o número impresso",
+      "ok": true,
+      "detail": "botões=1 de 2 outros membros "
+    },
+    {
+      "section": "j",
+      "name": "desligar a chave tira o WhatsApp do grupo na hora (executivo)",
+      "ok": true,
+      "detail": "botões=0"
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo vip 2/3, chave desligada: nenhum número, link nem botão de WhatsApp",
+      "ok": true,
+      "detail": "chave desligada=true botões=0 "
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo vip 2/3, chave ligada: ainda nenhum número (só quando o grupo completa)",
+      "ok": true,
+      "detail": "botões=0 "
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo vip completo, chave ligada: botão só para quem compartilhou, nunca o número impresso",
+      "ok": true,
+      "detail": "botões=2 de 2 outros membros "
+    },
+    {
+      "section": "j",
+      "name": "desligar a chave tira o WhatsApp do grupo na hora (vip)",
+      "ok": true,
+      "detail": "botões=0"
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo diamond 2/3, chave desligada: nenhum número, link nem botão de WhatsApp",
+      "ok": true,
+      "detail": "chave desligada=true botões=0 "
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo diamond 2/3, chave ligada: ainda nenhum número (só quando o grupo completa)",
+      "ok": true,
+      "detail": "botões=0 "
+    },
+    {
+      "section": "j",
+      "name": "Meu grupo diamond completo, chave ligada: botão só para quem compartilhou, nunca o número impresso",
+      "ok": true,
+      "detail": "botões=1 de 2 outros membros "
+    },
+    {
+      "section": "j",
+      "name": "desligar a chave tira o WhatsApp do grupo na hora (diamond)",
+      "ok": true,
+      "detail": "botões=0"
+    },
+    {
+      "section": "j",
+      "name": "grupo \"Só por código\" criado pelo aluno não aparece na lista (SEC-018)",
+      "ok": true,
+      "detail": "artigos na lista=5"
+    },
+    {
+      "section": "j",
+      "name": "palestra: alguém entrou no grupo sem push nem vibração (R-GR-9)",
+      "ok": true,
+      "detail": "{\"log0\":\"Nenhuma ainda\",\"log1\":\"Nenhuma ainda\",\"v0\":0,\"v1\":0,\"push\":0}"
+    },
+    {
+      "section": "j",
+      "name": "Gaia One concluída só pelo app (executivo): 5 toques, 1.6 s",
+      "ok": true,
+      "detail": "concluída=true tocou Já ativei no passo 4=true"
+    },
+    {
+      "section": "j",
+      "name": "Gaia One concluída só pelo app (vip): 5 toques, 1.6 s",
+      "ok": true,
+      "detail": "concluída=true tocou Já ativei no passo 4=true"
+    },
+    {
+      "section": "j",
+      "name": "Gaia One concluída só pelo app (diamond): 5 toques, 1.6 s",
+      "ok": true,
+      "detail": "concluída=true tocou Já ativei no passo 4=true"
+    },
+    {
+      "section": "j",
+      "name": "Gaia One: \"Já ativei\" no passo 1 não conclui a atividade sem os passos (progresso honesto)",
+      "ok": true,
+      "detail": "botão presente=false desabilitado=true concluiu=false"
+    },
+    {
+      "section": "j",
+      "name": "Gaia One iniciada na palestra: sem push, vibração nem notificação nova (GA-09)",
+      "ok": true,
+      "detail": "{\"push\":0,\"v\":0,\"toast\":0,\"listaMenciona\":false}"
+    },
+    {
+      "section": "j",
+      "name": "telas novas sem match/curtir/coração/emoji (regras 2 e 9)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "nenhum cadeado em Grupos, Ofertas e Gaia One (regra 4)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "j",
+      "name": "Home do Executivo com grupos e oferta: cadeado em no máximo 1 card (regra 4)",
+      "ok": true,
+      "detail": "cadeados em main=1"
+    }
+  ],
+  "findings": {
+    "j": {
+      "alunosPorCategoria": {
+        "executivo": [
+          "Gustavo",
+          "Vanessa",
+          "Henrique",
+          "Rodrigo",
+          "Gabriel",
+          "Sérgio",
+          "Jonas",
+          "Mônica",
+          "Cláudio",
+          "Eliane",
+          "Nelson"
+        ],
+        "vip": [
+          "Juliana",
+          "Carolina",
+          "Patrícia",
+          "Leonardo",
+          "Aline",
+          "Marcos",
+          "Thiago",
+          "Camila",
+          "Larissa",
+          "Isabela",
+          "Mariana",
+          "André",
+          "Beatriz",
+          "Tatiane",
+          "Simone",
+          "Natália",
+          "Priscila",
+          "Daniela",
+          "Vinícius",
+          "Fábio",
+          "Elisa",
+          "Paulo"
+        ],
+        "diamond": [
+          "Bruno",
+          "Diego",
+          "Fernanda",
+          "Renata",
+          "Eduardo",
+          "Ricardo",
+          "Felipe",
+          "Lucas",
+          "Otávio",
+          "Luana",
+          "Cristiane"
+        ]
+      },
+      "executivoOlimpoDadoNoHtml": false,
+      "tempo-executivo-entrar": {
+        "secs": 1.708,
+        "taps": 2
+      },
+      "tempo-executivo-criar": {
+        "secs": 9.68,
+        "taps": 2
+      },
+      "tempo-executivo-encaixar": {
+        "secs": 2.201,
+        "taps": 2
+      },
+      "tempo-vip-entrar": {
+        "secs": 1.715,
+        "taps": 2
+      },
+      "tempo-vip-criar": {
+        "secs": 9.689,
+        "taps": 2
+      },
+      "tempo-vip-encaixar": {
+        "secs": 2.205,
+        "taps": 2
+      },
+      "tempo-diamond-entrar": {
+        "secs": 1.704,
+        "taps": 2
+      },
+      "tempo-diamond-criar": {
+        "secs": 9.712,
+        "taps": 2
+      },
+      "tempo-diamond-encaixar": {
+        "secs": 2.194,
+        "taps": 2
+      },
+      "gaia-executivo": {
+        "taps": 5,
+        "outsideAsk": false
+      },
+      "gaia-vip": {
+        "taps": 5,
+        "outsideAsk": false
+      },
+      "gaia-diamond": {
+        "taps": 5,
+        "outsideAsk": false
+      }
+    },
+    "infra": {
+      "errosDeConsole": []
+    }
+  }
+}

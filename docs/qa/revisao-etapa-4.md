@@ -169,3 +169,85 @@ Resultado: `npm run typecheck`, `npm run build`, `npm run build:single`, `npm ru
 - `npm install @fontsource-variable/sora` foi negado pelo ambiente; o arquivo da Sora foi baixado direto do Google Fonts (`fonts.gstatic.com`, SIL Open Font License 1.1). Conferir a licença com o designer antes de publicar.
 - `text-label` e `text-label-sm` não existem em `docs/design/tokens.json`; o designer precisa incorporá-los. O mockup já os usa.
 - Os textos de consentimento e de política são do jurídico (§5 do parecer de segurança); o link "Política de privacidade" é simulado.
+
+## 9. Revisão: Grupos, Ofertas e Gaia One
+
+Data: 2026-11-26 · Revisor: `qa-engineer` (não construiu) · Objeto: `apps/mockup` no commit `be106f5` (GR01 a GR06, OF01 a OF04, GA01 a GA03) · Critérios: `docs/produto/grupos-ofertas-gaia.md`, specs `gr-grupos.md`, `of-ofertas.md`, `ga-gaia-one.md`, DEC-003, DEC-004, `docs/seguranca/lgpd-conexoes.md` §7 (SEC-018 a SEC-024), `docs/produto/prompt-grupos-ofertas-gaia.md` §7 e `CLAUDE.md` §8.
+
+### 9.1 Parecer: APROVADO COM RESSALVAS (para o mockup da Fase 1)
+
+Nenhum achado crítico ou alto. Os cinco critérios do prompt §7 passam em ambiente de teste (Chrome), com prova própria e não só a do smoke do dev. As ressalvas são 3 itens de severidade média, que dependem de decisão de produto ou de resposta do fundador, e 6 baixos. O parecer vale para o mockup; não vale como aprovação de segurança do app real (SEC-025 e SEC-026 seguem como requisito que bloqueia o lançamento de Ofertas e Grupos).
+
+Contagem: crítica 0 · alta 0 · média 3 · baixa 6 (9 achados, BUG-017 a BUG-025).
+
+### 9.2 O que rodei
+
+| Comando | Resultado |
+|---|---|
+| `npm run build` | passa (typecheck estrito e Vite; aviso de chunk > 500 kB, sem impacto no mockup) |
+| `npm run smoke` | passa, 160 capturas, 0 erro de console (regenera PNGs em `docs/design/capturas/etapa-3/`; restaurei os já versionados para não sujar o diff) |
+| `npm run qa`, seções a a i (rodada completa antes da seção j) | 319 verificações, 0 falhas, 0 erro de console; 52 estados novos de GR, OF e GA alcançados, 0 não confirmados; contraste, corpo de 16 px, alvos de 44 px e foco passam nas telas novas |
+| `node scripts/qa.mjs j` (nova) | 67 verificações, 0 falhas, 0 erro de console |
+| Exploratório (Playwright avulso, fora do repositório) | duplo toque em "Entrar", sair e reentrar, grupo cheio, código com formação encerrada, troca de ingresso no painel depois da liberação, Executivo em "Pedir troca ou denunciar", Gaia One com grupo |
+
+### 9.3 As checagens do dev provam o que dizem?
+
+Parcialmente. Passam, mas deixam buracos que a seção j fecha:
+
+| Checagem do dev (`smoke.mjs`) | Fraqueza | O que a seção j faz |
+|---|---|---|
+| Oferta invisível antes da liberação | Só VIP no Dia 2; lê `innerText` (não vê atributos, `aria-label` nem nós ocultos); Diamond, Executivo e Dia 3 ficam sem prova; sem busca por "oferta" e "mentoria" | 3 ingressos x Dia 2 e 3, 10 a 15 superfícies cada (Home, Trilha, detalhe do pitch, Materiais, Conexões e busca de Explorar com 4 termos, Eu, Notificações, todos os modelos do painel), HTML inteiro mais `localStorage`; nenhum download de `offers-*.js`; nome só no chunk `offers-*.js` do build |
+| Nenhum grupo de outra categoria | Lista de nomes escrita à mão no teste (some a cobertura se alguém entra na base); testa 1 código de outra categoria | Nomes lidos de `src/data/participants.ts` e `groups.ts`; 3 ingressos x 3 caminhos (entrar, criar, encaixar) varrendo lista, código e Meu grupo; TODOS os códigos das outras categorias (7 a 13 por ingresso) dão a mesma resposta do código inexistente e não entram |
+| Contato do grupo só após opt-in | Regex só do formato `(NN) 9NNNN-NNNN`; só VIP | Sem número, `wa.me`, `tel:` nem `+55` no HTML com a chave desligada, com a chave ligada em 2/3 e com o grupo completo; botão só para quem compartilhou; desligar tira na hora; 3 ingressos |
+| Liberação silenciosa | Olha só o registro do painel ("Última:") | Espia `navigator.vibrate`, áudio, `Notification` e o banner de push, além do registro e do badge do sino; controle positivo confirmado (em intervalo o mesmo teste vê vibração) |
+
+Limitação que continua: o teste olha o DOM de um build de demonstração. O critério "nem nos dados do app" só é provável no app real (SEC-025); no `dist-single` a oferta vai embutida no HTML (limitação já registrada em SEC-023).
+
+### 9.4 Achados
+
+| ID | Tela | Sev. | Achado e evidência | Critério violado | Correção sugerida |
+|---|---|---|---|---|---|
+| BUG-017 | OF01, OF02, `offers.ts` | Média | A matriz por ingresso do build inverte a do PO: Olimpo só VIP e Diamond (`offers.ts` `prices` sem `executivo`) e Liderança 360 para os três. O PO escreveu o contrário (`grupos-ofertas-gaia.md` R-OF-11 e §5: Olimpo para todos, Liderança só VIP e Diamond) e o Gherkin OF-07 ("Liderança liberada só para VIP e Diamond, sou Executivo, não vejo card") não se reproduz literalmente. O designer (`of-ofertas.md`, "Diferenças por ingresso") tinha o Olimpo sem Executivo. Dois documentos divergem e não há DEC. Efeito na demo: o Executivo só vê oferta no Dia 3. A cobertura de comportamento continua (restrita, para todos, preço por categoria, "não disponível" sem cadeado: `OF02x`, `OF02-exec-lideranca`, 0 cadeados em 42 telas x ingressos). | R-OF-7, OF-07, §5 do PO sem decisão que os revogue; DEC-003 | PO e CEO decidem a matriz (vender o Olimpo ao Executivo é decisão comercial do fundador, pergunta 4), registram `DEC-###` e alinham §5, R-OF-11, OF-07 e o README. Se mantiver o build, reescrever OF-07 com o Olimpo. |
+| BUG-018 | GR01, GR02 | Média | Estado "categoria com menos de 3 alunos" (R-GR-8, Gherkin GR-19, DEC-003 item 4) não existe: nenhum texto "A equipe vai te informar seu grupo" em `src/` (busca por "equipe vai te informar" sem resultado) e o painel não tem como ativá-lo. Com a lista vazia o app diz "Crie um ou peça para o app te encaixar", promessa que não se cumpre se a categoria não tem 3 pessoas. O mockup tem 11 Diamond, então a demo não sofre, mas a diretoria pode perguntar. | R-GR-8; GR-19; DEC-003 (4) | Construir o estado com chave no painel ("Poucos alunos na categoria") ou o PO marcar GR-19 como requisito do app real e o README dizer isso. |
+| BUG-019 | GA02, GA03 | Média | O aluno não consegue "concluir seguindo só o app" de verdade hoje: a tela mostra texto bruto de pendência, por exemplo "Descrição do produto em uma frase [a confirmar]" logo abaixo do título, "[a confirmar]" também em duração do teste, resposta de cartão, código promocional, equipe de apoio e link da loja (`gaia.ts`, `PENDING`). O fluxo funciona e fecha em 5 toques nos 3 ingressos, mas sem o que é o produto, sem loja real e sem regra de cartão o passo a passo não é validável. É dependência do fundador (pergunta 8), não defeito de código. | Prompt §7 (4); R-GA-3 | Yago responde a pergunta 8 (produto, links das lojas, cartão, duração, código); até lá, ressalva com dono Yago. Antes da diretoria, trocar o texto bruto por selo "proposta" discreto no padrão do restante do mockup. |
+| BUG-020 | GA02, A05 (Wi-Fi) | Baixa | "Copiar meu e-mail", "Copiar código" e "Copiar senha" mostram "copiado" mesmo se a cópia falha: `copyText` engole o erro (`GaiaScreen.tsx` linhas 24 a 30; `WifiSheet.tsx` linhas 20 a 28). Em página `http` ou sem permissão, `navigator.clipboard` não existe ou rejeita e o aluno cola vazio no cadastro do Gaia One, no passo que mais pesa no tempo de 3 minutos. O estado "Copiar falhou" da spec não foi construído (reportado pelo dev). | `ga-gaia-one.md` estados ("Copiar falhou"); regra de honestidade do progresso | Mostrar "Não conseguimos copiar. Toque e segure o texto para copiar." quando a promessa rejeitar ou a API não existir; o e-mail já é `select-all`. Teste manual no celular do fundador (§9.7, item 3). |
+| BUG-021 | OF01, painel "Liberar oferta" | Baixa | O painel e o PO dizem "Dia 2 · 18h15, durante O legado do líder", mas o relógio da demonstração está em 10h05 (Plenária da manhã, "Começou às 9h30"). A Home com a oferta mostra "Liderança que forma líderes" ao vivo e a contagem "Falta 1 dia e 9h" calculada a partir de 10h05 (`brilho40-of-home.png`). Quem vê a demo lê um pitch às 10h da manhã. | R-OF-11; coerência da demo | Liberar a oferta posicionando o relógio em 18h15 (momento "Ao vivo" tardio) ou trocar o rótulo do painel. |
+| BUG-022 | GR06 "Pedir troca ou denunciar" | Baixa | "Denunciar" oferece 4 motivos (Assédio, Mensagem ofensiva, Perfil falso, Outro). Falta "Oferta indevida ou spam" do SEC-005, que o SEC-019 pede como "mesmos motivos". A caminho urgente (estande) existe. Testado com Executivo, que chega à folha sem C11. | SEC-019 | Incluir o motivo ou registrar que, em grupo, "spam" não se aplica. |
+| BUG-023 | OF02 | Baixa | O aviso de saída "Você vai sair do app para pagar na Hotmart." fica depois de "Agora não", em `text-caption` (13 px, `OfferScreen.tsx` linha 203): quem toca "Assinar" não o leu. O aviso antifraude acima ("Não pague por links recebidos em grupos") está bem posto. | SEC-023 (3); CLAUDE.md §8.6 (texto relevante não deve ficar abaixo do corpo) | Subir o aviso para antes do botão "Assinar" em 16 px. |
+| BUG-024 | OF01, OF02 | Baixa | Dois estados da spec sem construção (reportados pelo dev): banner "O time atualizou o prazo: agora vale até 19h." (OF02) e skeleton do card da oferta na Home (`OfferHomeCard.tsx` não usa `Skeleton`). Não há critério Gherkin para eles; a tela OF02 tem skeleton. | `of-ofertas.md` (estados OF01 e OF02) | Aceitar como diferença documentada ou construir; sem impacto no critério §7. |
+| BUG-025 | GA02 passo 2 | Baixa | O e-mail quebra no meio da palavra ("raf" / "ael.moraes@...") por causa de `break-all` (`GaiaScreen.tsx` linha 304); visível em `brilho40-ga-checklist.png`. É o dado que o aluno precisa copiar ou digitar. | Legibilidade; §8.6 | `break-words` ou o e-mail em linha própria. |
+
+### 9.5 Desvios reportados pelo mobile-dev
+
+| Desvio | Avaliação |
+|---|---|
+| Matriz de ofertas por ingresso | Vira BUG-017. O comportamento está correto e demonstrado; o problema é decisão e documento. |
+| Prazos (Olimpo até 14/03 19h10; Liderança até 21/03 19h10) | Aceito. Bate com R-OF-11 (fim do Dia 3; 7 dias) e é prazo real, sem escassez; a contagem não muda de cor, não vibra e não avisa (`Countdown` sem tom `warning`). Verificado: 12 x 1.490 = 17.880 e os outros 4 totais fecham. O exemplo "18h30" do designer era ilustrativo. |
+| Categoria com menos de 3 alunos | Vira BUG-018. |
+| "Copiar falhou" | Vira BUG-020. |
+| "Prazo atualizado pelo time" e skeleton do card | Vira BUG-024. |
+
+### 9.6 Critérios do prompt §7
+
+| Critério | Resultado | Evidência |
+|---|---|---|
+| Forma ou entra num grupo de 3 em menos de 1 minuto, sem ajuda | Atendido | 3 ingressos x 3 caminhos (entrar, criar, "Me coloque"): 2 toques em todos; 1,7 a 2,2 s de script e 9,7 s em "criar" (geração simulada). Tempo humano não medido: roteiro do §9.7, item 1. Sem diálogo de confirmação no caminho. |
+| Ninguém vê ou entra em grupo de outra categoria | Atendido no mockup | Seção j: 0 nomes de outra categoria em lista, código e Meu grupo nos 3 ingressos; 32 códigos de outras categorias respondem igual ao inexistente (SEC-021). A prova real é no servidor (SEC-026). |
+| Oferta invisível antes de "Liberar oferta"; depois, 1 toque na Home | Atendido | 6 combinações ingresso x dia, HTML inteiro; card no topo (251 px) e "Ver oferta" abre a tela em 1 toque nos 3 ingressos. Silêncio na palestra: 0 vibração, áudio, push, notificação do sistema e badge; toast de 6 s some e só aparece uma vez. Tom: nenhuma ocorrência de "restam", "última chance", "só hoje", "corra", "imperdível" nem contador de vagas; preço total e à vista juntos; "Agora não" sem culpa, tile discreto; aviso antifraude presente. |
+| Gaia One concluído só pelo app | Atendido com ressalva (BUG-019) | 5 toques até "Gaia One ativado" nos 3 ingressos; "Já ativei" só aparece no passo 4; sem pedido para sair do app; sem aviso nem vibração ao iniciar em palestra (GA-09); grupo mostra só "N de 3 já ativaram" (SEC-024). |
+| Três ingressos e alcançável pelo painel | Atendido | Todos os códigos GR, OF e GA estão em "Ir direto para"; 52 sondas de estado nas telas novas, 0 não confirmadas; 0 cadeado em GR, OF e GA; Home do Executivo com grupos e oferta tem 1 cadeado (Conexões); sem "match", "curtir", coração nem emoji. |
+
+SEC-018 a SEC-024: todos verificados no mockup. SEC-018 (lista sem empresa, fila nem foto; aviso e "Só por código"), SEC-019 (folha de troca e denúncia nos 3 ingressos, com a nota do BUG-022), SEC-020 (chave desligada, só depois de completar, só quem compartilhou, "quem salvar fica com o número"), SEC-021 (mensagem única; códigos sem vogal), SEC-022 (campos listados, sem CPF nem Conexões, "Cancelar pedido"), SEC-023 ("Ofertas do evento" só depois da 1ª liberação; aviso de saída com a nota do BUG-023), SEC-024 (só a contagem).
+
+### 9.7 Roteiro curto para o fundador (aparelho real; eu não testo hardware)
+
+1. Grupos, com cronômetro: no celular, Home > "Formar meu grupo" > "Entrar", com dois colegas que nunca viram o app. Esperado: menos de 1 minuto cada um, sem perguntar nada. Ler o QR de um grupo com a câmera real.
+2. Silêncio na palestra: com som e vibração ligados, abrir a Home e liberar a oferta pelo painel em outro aparelho. Esperado: celular não vibra nem toca; o toast "Oferta do palco disponível" some em cerca de 6 s.
+3. Copiar: no Gaia One, "Copiar meu e-mail" e colar nas Notas; repetir com "Copiar código" e a senha do Wi-Fi. Anotar se algum cola vazio (BUG-020), no Wi-Fi do salão e no 4G.
+4. Brilho no mínimo, no escuro: lista de grupos ("Setor VIP", "Fecha às 10h45"), tela da oferta (preço e prazo) e checklist do Gaia One. Anotar o que não lê.
+5. Texto do sistema no maior tamanho: tela da oferta (preço e botões sem corte) e lista de grupos.
+6. Leitura por quem não conhece o app (3 pessoas): ler a tela da oferta e dizer se sentiram pressão. Hipótese minha: não, mas isso é percepção, não DOM.
+
+### 9.8 Alterações em `apps/mockup/scripts/qa.mjs`
+
+Nova seção `j` (rodar com `node scripts/qa.mjs j`; já entra em `npm run qa`): oferta invisível em HTML inteiro, silêncio de liberação, tom, 1 toque, grupos por categoria e por código, contato, Gaia One em 3 ingressos e na palestra, vocabulário, emoji e cadeado. A seção `h` ganhou 8 pares de capturas de brilho 40% das telas novas (`docs/qa/capturas/etapa-4/*-gr-*`, `*-of-*`, `*-ga-*`); a razão de contraste a 40% continua só indicativa. Resultado em `docs/qa/capturas/etapa-4/qa-resultado-j.json` e `qa-resultado-abcdefghi.json`. Não revisei leitor de tela (VoiceOver, TalkBack) nem aparelho real.
