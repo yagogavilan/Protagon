@@ -1,12 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 import { fileURLToPath, URL } from 'node:url';
 
 // base relativa: o dist/ pode ser publicado em qualquer caminho como página estática.
-export default defineConfig({
+// `--mode single` (npm run build:single) gera um único index.html com JS e CSS embutidos em dist-single/.
+export default defineConfig(({ mode }) => ({
   base: './',
-  plugins: [react()],
+  plugins: mode === 'single' ? [react(), viteSingleFile()] : [react()],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
-});
+  build: mode === 'single' ? { outDir: 'dist-single' } : undefined,
+}));

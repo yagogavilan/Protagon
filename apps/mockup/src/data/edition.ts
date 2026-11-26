@@ -10,7 +10,7 @@ export const edition: Edition = {
     name: 'Centro de Eventos Orla Sul',
     address: 'Av. Praia de Belas, 2400 · Praia de Belas · Porto Alegre, RS',
     parking: 'Estacionamento coberto no subsolo, entrada pela Rua Washington Luiz. Diária de R$ 35, pagamento no local.',
-    wifi: { network: 'Protagon_POA', password: 'protagonista2027' },
+    wifi: { network: 'Protagon-Alunos', password: 'protagonista2027' },
     accessNotes: 'Credenciamento abre às 7h30 no foyer térreo. Leve um documento com foto.',
   },
   support: {
@@ -19,9 +19,9 @@ export const edition: Edition = {
     hours: 'Das 7h às 20h nos dias do evento',
   },
   sectorByTier: {
-    executivo: 'Plenária · Setor C',
-    vip: 'Plenária · Setor B',
-    diamond: 'Plenária · Setor A, filas 1 a 5',
+    executivo: 'Setor Executivo · fila 21',
+    vip: 'Setor VIP · fila 8',
+    diamond: 'Setor Diamond · fila 2',
   },
 };
 
@@ -42,3 +42,19 @@ export const connectionPoints: ConnectionPoint[] = [
   { id: 'B', name: 'Ponto B', where: 'Ao lado do estande Protagon' },
   { id: 'C', name: 'Ponto C', where: 'Saída da praça de alimentação' },
 ];
+
+/** Avisos fixados na Home (A01, bloco 8) */
+export const pinnedNotices: string[] = [
+  'Almoço no 2º andar, pela escada B',
+  'Achados e perdidos no credenciamento',
+  'Pagamento do estacionamento só na saída, no subsolo',
+];
+
+/** Mudança de agenda usada no banner "Agenda atualizada" (A01, bloco 2) */
+export const agendaChange = {
+  day: 1 as const,
+  sessionId: 'd1-s12',
+  text: 'Dinâmica em trios passou para 17h05',
+};
+
+export const boothLocation = 'Estande Protagon · ao lado do Ponto B';

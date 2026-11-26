@@ -5,6 +5,7 @@ import { StatusBar } from './StatusBar';
 import { DynamicIsland } from './DynamicIsland';
 import { PushBanner } from './PushBanner';
 import { LockScreen } from './LockScreen';
+import { SHEET_ROOT_ID } from '@/components/ui/BottomSheet';
 
 /** Moldura de iPhone com tela de 390×844 */
 export function DeviceFrame({ children, scale = 1 }: { children: ReactNode; scale?: number }) {
@@ -34,6 +35,8 @@ export function DeviceFrame({ children, scale = 1 }: { children: ReactNode; scal
           <StatusBar />
           <DynamicIsland />
           {children}
+          {/* destino dos BottomSheets (portal), dentro da tela do aparelho */}
+          <div id={SHEET_ROOT_ID} className="pointer-events-none absolute inset-0 z-sheet" />
           <AnimatePresence>{locked ? <LockScreen key="lock" /> : null}</AnimatePresence>
           <PushBanner />
           {/* indicador de home */}

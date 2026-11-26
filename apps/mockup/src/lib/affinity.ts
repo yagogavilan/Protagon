@@ -1,6 +1,8 @@
 import type { DemoUser, Objective, Participant } from '@/data/types';
+import { demoUser } from '@/data/participants';
 
-export type AffinityLevel = 'alta' | 'media' | 'baixa' | 'nenhuma';
+/** Dois níveis visíveis (design-system §PersonCard): 'alta' e 'boa'. Abaixo de 'boa' a pessoa não é sugerida. */
+export type AffinityLevel = 'alta' | 'boa' | 'baixa' | 'nenhuma';
 
 export interface Affinity {
   score: number;
@@ -67,7 +69,7 @@ export function computeAffinity(me: Pick<DemoUser, 'interests' | 'objectives'>, 
   }
 
   const score = sharedInterests.length * 2 + objectiveMatches * 3;
-  const level: AffinityLevel = score >= 9 ? 'alta' : score >= 5 ? 'media' : score > 0 ? 'baixa' : 'nenhuma';
+  const level: AffinityLevel = score >= 9 ? 'alta' : score >= 5 ? 'boa' : score > 0 ? 'baixa' : 'nenhuma';
 
   const parts: string[] = [];
   if (sharedInterests.length > 0) {
@@ -90,15 +92,60 @@ export function connectionsPool(participants: Participant[]): Participant[] {
   return participants.filter((p) => p.visible && p.tier !== 'executivo');
 }
 
-/** Sugestões ordenadas por afinidade (só quem tem algo em comum) */
-export function rankSuggestions(me: Pick<DemoUser, 'interests' | 'objectives'>, participants: Participant[]) {
+export interface Suggestion {
+  participant: Participant;
+  affinity: Affinity;
+}
+
+/** Sugestões ordenadas só por afinidade (F5: ingresso não altera a ordem). Só "alta" e "boa". */
+export function rankSuggestions(me: Pick<DemoUser, 'interests' | 'objectives'>, participants: Participant[]): Suggestion[] {
   return connectionsPool(participants)
     .map((p) => ({ participant: p, affinity: computeAffinity(me, p) }))
-    .filter((x) => x.affinity.level !== 'nenhuma')
+    .filter((x) => x.affinity.level === 'alta' || x.affinity.level === 'boa')
     .sort((a, b) => b.affinity.score - a.affinity.score);
 }
 
-/** Contador real do cadeado do Executivo: "N pessoas com interesses parecidos com os seus estão aqui" */
-export function countSimilarPeople(me: Pick<DemoUser, 'interests' | 'objectives'>, participants: Participant[]): number {
-  return rankSuggestions(me, participants).length;
+/**
+ * Contador do cadeado do Executivo (F1, aprovado): total real de perfis de Conexões ativos e visíveis
+ * da edição. Não usa afinidade, porque o Executivo não tem perfil para comparar.
+ */
+export function activeProfilesCount(participants: Participant[]): number {
+  return connectionsPool(participants).length;
+}
+
+/** Abaixo disso o número é escondido (C00: "Contador indisponível ou baixo") */
+export const MIN_PROFILES_TO_SHOW = 20;
+
+const OBJECTIVE_VERB: Record<Objective, string> = {
+  'Busco sócio': 'busca sócio',
+  'Busco clientes': 'busca clientes',
+  'Contrato serviços': 'contrata serviços',
+  'Ofereço serviços': 'oferece serviços',
+  'Quero mentorar': 'quer mentorar',
+  'Quero ser mentorado': 'busca mentoria',
+  Parcerias: 'busca parcerias',
+  Investimento: 'fala de investimento',
+};
+
+export function objectiveLabel(o: Objective): string {
+  const v = OBJECTIVE_VERB[o];
+  return v.charAt(0).toUpperCase() + v.slice(1);
+}
+
+/** Modelos de mensagem do pedido (C04): objetivo, interesses, empresa */
+export function requestTemplates(s: Suggestion): string[] {
+  const { participant: p, affinity } = s;
+  const first = p.name.split(' ')[0] ?? p.name;
+  // objetivo da pessoa que combina com os do usuário da demo; senão, o primeiro
+  const objective = p.objectives.find((o) => demoUser.objectives.some((m) => COMPLEMENTS[m]?.includes(o))) ?? p.objectives[0];
+  const interests = affinity.sharedInterests.slice(0, 2).map((t) => t.toLowerCase());
+  const t1 = objective
+    ? `Oi, ${first}. Vi que você ${OBJECTIVE_VERB[objective]}. Tenho uma rede de academias em Porto Alegre e acho que podemos somar. Vamos conversar no próximo intervalo?`
+    : `Oi, ${first}. Tenho uma rede de academias em Porto Alegre. Vamos conversar no próximo intervalo?`;
+  const t2 =
+    affinity.sharedInterests.length > 0
+      ? `Oi, ${first}. Temos ${affinity.sharedInterests.length === 1 ? '1 interesse' : `${affinity.sharedInterests.length} interesses`} em comum, entre eles ${interests.join(' e ')}. Que tal trocarmos uma ideia no intervalo das 15h40?`
+      : `Oi, ${first}. Que tal trocarmos uma ideia no intervalo das 15h40?`;
+  const t3 = `Oi, ${first}. Quero conhecer melhor a ${p.company}. Podemos nos encontrar em um Ponto de Conexão?`;
+  return [t1, t2, t3];
 }

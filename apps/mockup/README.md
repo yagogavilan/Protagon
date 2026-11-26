@@ -11,10 +11,12 @@ npm run dev        # servidor local (Vite)
 npm run typecheck  # TypeScript strict
 npm run build      # gera dist/ com caminhos relativos (base './'), pronto para hospedar como página estática
 npm run preview    # serve o dist/ localmente
+npm run build:single  # um único dist-single/index.html (JS e CSS embutidos) para publicar como página estática
 ```
 
 Atalhos de URL para abrir direto num estado (QA e roteiro de demo):
 `?auth=app&tier=executivo&moment=lunch&day=2&tab=conexoes&overlay=credential&offline=1&locked=1`
+(`connections=1` ativa o perfil de Conexões; `sent=15` marca pedidos já usados no dia; `overlay` aceita também `checkout`, `map` e `qrscan`.)
 
 No login: CPF `000.000.000-00` simula "ingresso não encontrado"; código `000000` simula "código inválido".
 
@@ -22,7 +24,7 @@ No login: CPF `000.000.000-00` simula "ingresso não encontrado"; código `00000
 
 ```
 src/
-  styles/tokens.css        # tokens do brief §6 em variáveis CSS (fonte provisória até docs/design/tokens.json)
+  styles/tokens.css        # espelho de docs/design/tokens.json em variáveis CSS (glass.nav 0,84, F6)
   styles/index.css         # Tailwind + utilitários (glass-nav, card, tabular) + reduced motion
   data/                    # dados de exemplo tipados (.ts)
     types.ts               # tipos de domínio
@@ -41,8 +43,11 @@ src/
     device/                # moldura, status bar, Dynamic Island, push, tela bloqueada, banner offline
     panel/                 # painel de demonstração
     shell/                 # TopBar, TabBar, roteamento por estado, cabeçalho de overlay
-    ui/                    # Button, TierBadge, IconButton
-  screens/                 # Login (E01), Código (E02), Credencial (G01), Notificações (G02 base), placeholders das abas
+    ui/                    # design system: Button, IconButton, TierBadge, Avatar, Chip, BentoTile, LiveCard, StatusBanner,
+                           # Countdown, PersonCard, LockedPreview, BottomSheet (vidro), Toast, EmptyState, SegmentedTabs
+  screens/                 # Login (E01), Código (E02), Home (A01), Credencial (G01), Notificações (G02 base),
+    connections/           # C00 (Executivo), C02 + C04 (VIP/Diamond), stub de ativação (C01)
+  lib/connections.ts       # fila de sugestões, pedidos recebidos; lib/haptics.ts: vibração simulada
 ```
 
 Tailwind lê os tokens via `tailwind.config.ts` (`bg-surface-1`, `text-gold-200`, `bg-gradient-cta`, `rounded-lg`, `shadow-card`, `duration-base`, `ease-protagon`...). Cor ou medida solta em componente é bug.

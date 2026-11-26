@@ -5,7 +5,23 @@ import { computeClock, type EventClock } from '@/lib/clock';
 
 export type TabId = 'agora' | 'trilha' | 'conexoes' | 'materiais' | 'eu';
 export type AuthStep = 'login' | 'code' | 'app';
-export type Overlay = 'credential' | 'notifications' | null;
+export type Overlay = 'credential' | 'notifications' | 'checkout' | 'map' | 'qrscan' | null;
+export type MapFocus = 'sector' | 'booth';
+
+export interface Toast {
+  id: number;
+  text: string;
+  tone: 'success' | 'info' | 'warning';
+  action?: { label: string; run: () => void };
+}
+
+export interface HapticEvent {
+  label: string;
+  at: number;
+}
+
+/** Estado de cada sugestão já tratada hoje */
+export type SuggestionOutcome = 'sent' | 'queued' | 'notNow';
 
 export interface AppNotification {
   id: string;
@@ -50,6 +66,18 @@ interface DemoState {
   /** Pedidos de conexão enviados, por dia (limite D4: 15 VIP, 25 Diamond) */
   requestsSentByDay: Record<DayNumber, number>;
   walletAdded: boolean;
+  /** Banner "Agenda atualizada" ainda não visto */
+  agendaUpdated: boolean;
+  connectionsPaused: boolean;
+  /** Veio do checkout simulado: C01 mostra "Seu ingresso agora é VIP" */
+  justUpgraded: boolean;
+  /** Sugestões tratadas, por dia (D5: "Agora não" volta no dia seguinte) */
+  suggestionOutcomes: Record<DayNumber, Record<string, SuggestionOutcome>>;
+  /** Pedidos recebidos já respondidos */
+  answeredRequests: Record<string, 'accepted' | 'notNow'>;
+  mapFocus: MapFocus;
+  toast: Toast | null;
+  lastHaptic: HapticEvent | null;
 
   // ações do painel
   setTier: (tier: Tier) => void;
@@ -59,6 +87,8 @@ interface DemoState {
   setLocked: (locked: boolean) => void;
   fireNotification: () => void;
   resetDemo: () => void;
+  setAgendaUpdated: (v: boolean) => void;
+  setRequestsSent: (n: number) => void;
 
   // ações do app
   submitIdentifier: (identifier: string) => void;
@@ -66,6 +96,14 @@ interface DemoState {
   completeLogin: () => void;
   setTab: (tab: TabId) => void;
   openOverlay: (overlay: Exclude<Overlay, null>) => void;
+  openMap: (focus: MapFocus) => void;
+  showToast: (t: Omit<Toast, 'id'>) => void;
+  hideToast: () => void;
+  setConnectionsPaused: (v: boolean) => void;
+  setSuggestionOutcome: (id: string, outcome: SuggestionOutcome | null) => void;
+  answerRequest: (id: string, answer: 'accepted' | 'notNow') => void;
+  upgradeToVip: () => void;
+  recordHaptic: (label: string) => void;
   closeOverlay: () => void;
   dismissPush: () => void;
   markAllRead: () => void;
@@ -89,6 +127,14 @@ const initialApp = {
   connectionsActive: false,
   requestsSentByDay: { 1: 0, 2: 0, 3: 0 } as Record<DayNumber, number>,
   walletAdded: false,
+  agendaUpdated: true,
+  connectionsPaused: false,
+  justUpgraded: false,
+  suggestionOutcomes: { 1: {}, 2: {}, 3: {} } as Record<DayNumber, Record<string, SuggestionOutcome>>,
+  answeredRequests: {} as Record<string, 'accepted' | 'notNow'>,
+  mapFocus: 'sector' as MapFocus,
+  toast: null as Toast | null,
+  lastHaptic: null as HapticEvent | null,
 };
 
 let seq = 0;
@@ -117,6 +163,7 @@ function fromUrl() {
     return allowed.includes(v as T) ? (v as T) : undefined;
   };
   const dayParam = Number(q.get('day'));
+  const sentParam = Math.max(0, Math.min(25, Number(q.get('sent')) || 0));
   return {
     tier: pick<Tier>('tier', ['executivo', 'vip', 'diamond']) ?? 'vip',
     moment: pick<Moment>('moment', ['before', 'live', 'break', 'lunch', 'endOfDay', 'after']) ?? 'live',
@@ -125,7 +172,9 @@ function fromUrl() {
     locked: q.get('locked') === '1',
     auth: pick<AuthStep>('auth', ['login', 'code', 'app']) ?? 'login',
     tab: pick<TabId>('tab', ['agora', 'trilha', 'conexoes', 'materiais', 'eu']) ?? 'agora',
-    overlay: pick<'credential' | 'notifications'>('overlay', ['credential', 'notifications']) ?? null,
+    overlay: pick<Exclude<Overlay, null>>('overlay', ['credential', 'notifications', 'checkout', 'map', 'qrscan']) ?? null,
+    connectionsActive: q.get('connections') === '1',
+    requestsSentByDay: { 1: sentParam, 2: sentParam, 3: sentParam } as Record<DayNumber, number>,
   };
 }
 
@@ -174,13 +223,37 @@ export const useDemo = create<DemoState>()((set, get) => ({
     set((s) => ({ notifications: [n, ...s.notifications], push: n, fireCount: s.fireCount + 1 }));
   },
 
-  resetDemo: () => set({ ...initialApp, requestsSentByDay: { 1: 0, 2: 0, 3: 0 }, locked: false }),
+  resetDemo: () =>
+    set({
+      ...initialApp,
+      requestsSentByDay: { 1: 0, 2: 0, 3: 0 },
+      suggestionOutcomes: { 1: {}, 2: {}, 3: {} },
+      answeredRequests: {},
+      locked: false,
+    }),
+  setAgendaUpdated: (agendaUpdated) => set({ agendaUpdated }),
+  setRequestsSent: (n) => set((s) => ({ requestsSentByDay: { ...s.requestsSentByDay, [s.day]: n } })),
 
   submitIdentifier: (identifier) => set({ loginIdentifier: identifier, auth: 'code' }),
   backToLogin: () => set({ auth: 'login' }),
   completeLogin: () => set({ auth: 'app', tab: 'agora', overlay: null }),
-  setTab: (tab) => set({ tab, overlay: null }),
+  setTab: (tab) => set({ tab, overlay: null, justUpgraded: tab === 'conexoes' ? get().justUpgraded : false }),
   openOverlay: (overlay) => set({ overlay }),
+  openMap: (mapFocus) => set({ overlay: 'map', mapFocus }),
+  showToast: (t) => set({ toast: { ...t, id: Date.now() } }),
+  hideToast: () => set({ toast: null }),
+  setConnectionsPaused: (connectionsPaused) => set({ connectionsPaused }),
+  setSuggestionOutcome: (id, outcome) =>
+    set((s) => {
+      const today = { ...s.suggestionOutcomes[s.day] };
+      if (outcome) today[id] = outcome;
+      else delete today[id];
+      return { suggestionOutcomes: { ...s.suggestionOutcomes, [s.day]: today } };
+    }),
+  answerRequest: (id, answer) => set((s) => ({ answeredRequests: { ...s.answeredRequests, [id]: answer } })),
+  upgradeToVip: () =>
+    set({ tier: 'vip', connectionsActive: false, justUpgraded: true, tab: 'conexoes', overlay: null }),
+  recordHaptic: (label) => set({ lastHaptic: { label, at: Date.now() } }),
   closeOverlay: () => set({ overlay: null }),
   dismissPush: () => set({ push: null }),
   markAllRead: () => set((s) => ({ notifications: s.notifications.map((n) => ({ ...n, read: true })) })),

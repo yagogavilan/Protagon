@@ -3,7 +3,8 @@ import { motion } from 'motion/react';
 import { Check, ChevronLeft, CircleAlert } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useDemo } from '@/state/store';
-import { hideCpf, hideEmail, looksLikeCpf, vibrate } from '@/lib/format';
+import { hideCpf, hideEmail, looksLikeCpf } from '@/lib/format';
+import { haptic } from '@/lib/haptics';
 import { cn } from '@/lib/cn';
 
 /** Código que simula "código inválido" no mockup */
@@ -42,11 +43,11 @@ export function CodeScreen() {
     window.setTimeout(() => {
       if (value === INVALID_CODE) {
         setStatus('invalid');
-        vibrate([40, 60, 40]);
+        haptic('error', 'código inválido');
         return;
       }
       setStatus('success');
-      vibrate(25);
+      haptic('success', 'login');
       window.setTimeout(completeLogin, 900);
     }, 700);
   };

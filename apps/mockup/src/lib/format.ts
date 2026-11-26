@@ -28,11 +28,3 @@ export function initials(name: string): string {
   const parts = name.trim().split(/\s+/);
   return ((parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length - 1]?.[0] ?? '' : '')).toUpperCase();
 }
-
-export function vibrate(pattern: number | number[]): void {
-  try {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate(pattern);
-  } catch {
-    // sem suporte: ignora
-  }
-}

@@ -14,19 +14,20 @@ const bg: Record<Tier, string> = {
   diamond: 'bg-tier-diamond',
 };
 
-/** Selo do ingresso. Texto sempre #020111 sobre o fundo do tier. */
-export function TierBadge({ tier, size = 'md', className }: { tier: Tier; size?: 'sm' | 'md'; className?: string }) {
+/** Selo do ingresso (design-system §TierBadge): pill 22, caption 600, texto #020111. Não é tocável. */
+export function TierBadge({ tier, className }: { tier: Tier; className?: string }) {
   return (
     <span
+      role="img"
+      aria-label={`Ingresso ${TIER_LABEL[tier]}`}
       className={cn(
-        'inline-flex items-center gap-1 rounded-pill font-semibold text-on-gold',
-        size === 'sm' ? 'px-2 py-0.5 text-caption' : 'px-3 py-1 text-caption',
+        'inline-flex h-[22px] shrink-0 items-center gap-1 rounded-pill px-2 text-caption font-semibold text-on-gold',
         bg[tier],
         className,
       )}
     >
       {tier === 'diamond' ? <Gem aria-hidden size={12} strokeWidth={2.5} /> : null}
-      {TIER_LABEL[tier]}
+      <span aria-hidden>{TIER_LABEL[tier]}</span>
     </span>
   );
 }

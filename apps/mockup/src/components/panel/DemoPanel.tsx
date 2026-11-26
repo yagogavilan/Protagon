@@ -2,7 +2,7 @@ import { BellRing, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { TIER_LABEL } from '@/components/ui/TierBadge';
 import { PanelSection, Segmented, Toggle } from './controls';
-import { useClock, useDemo } from '@/state/store';
+import { useClock, useDemo, DAILY_REQUEST_LIMIT } from '@/state/store';
 import { formatLongDate, MOMENT_LABEL } from '@/lib/clock';
 import type { DayNumber, Moment, Tier } from '@/data/types';
 import { NOT_FOUND_CPF } from '@/screens/LoginScreen';
@@ -20,7 +20,7 @@ export function DemoPanel() {
   return (
     <aside
       aria-label="Painel de demonstração"
-      className="flex w-full max-w-[420px] flex-col gap-5 rounded-xl border border-border-subtle bg-surface-1 p-5 shadow-card lg:w-[340px]"
+      className="no-scrollbar flex w-full max-w-[420px] flex-col gap-5 rounded-xl border border-border-subtle bg-surface-1 p-5 shadow-card lg:max-h-[calc(100vh-32px)] lg:w-[340px] lg:overflow-y-auto"
     >
       <header className="flex flex-col gap-1">
         <p className="text-caption uppercase tracking-[0.2em] text-gold-200">Painel de demonstração</p>
@@ -66,6 +66,39 @@ export function DemoPanel() {
         ) : null}
         <Toggle label="Sem internet" hint="Banner offline; credencial segue" checked={!s.online} onChange={(v) => s.setOnline(!v)} />
         <Toggle label="Tela bloqueada" hint="Push e Live Activity" checked={s.locked} onChange={s.setLocked} />
+      </PanelSection>
+
+      <PanelSection title="Conexões">
+        {s.tier === 'executivo' ? (
+          <p className="text-caption text-text-tertiary">Executivo vê a aba com cadeado (C00). Troque o ingresso para VIP ou Diamond.</p>
+        ) : (
+          <>
+            <Toggle label="Perfil ativado" hint="Desligado mostra o convite para ativar" checked={s.connectionsActive} onChange={s.setConnectionsActive} />
+            <div className="flex items-center justify-between gap-2 rounded-md border border-border-subtle bg-surface-1 px-3 py-2">
+              <span className="tabular text-[15px] text-text-primary">
+                Pedidos hoje: {s.requestsSentByDay[s.day]} de {DAILY_REQUEST_LIMIT[s.tier]}
+              </span>
+              <span className="flex gap-1">
+                <button type="button" onClick={() => s.setRequestsSent(DAILY_REQUEST_LIMIT[s.tier])} className="min-h-[40px] rounded-md px-2 text-[14px] font-semibold text-gold-200">
+                  Esgotar
+                </button>
+                <button type="button" onClick={() => s.setRequestsSent(0)} className="min-h-[40px] rounded-md px-2 text-[14px] font-semibold text-gold-200">
+                  Zerar
+                </button>
+              </span>
+            </div>
+          </>
+        )}
+      </PanelSection>
+
+      <PanelSection title="Home">
+        <Toggle label="Agenda atualizada" hint="Banner na sessão ao vivo e no intervalo (Dia 1)" checked={s.agendaUpdated} onChange={s.setAgendaUpdated} />
+      </PanelSection>
+
+      <PanelSection title="Vibração simulada">
+        <p className="text-[14px] leading-5 text-text-secondary" aria-live="polite">
+          {s.lastHaptic ? `Última: ${s.lastHaptic.label}` : 'Nenhuma ainda. No iPhone e no desktop o navegador não vibra; o registro aparece aqui.'}
+        </p>
       </PanelSection>
 
       <PanelSection title="Atalhos do login">

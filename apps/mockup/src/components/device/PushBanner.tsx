@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDemo } from '@/state/store';
 import { NotificationIcon } from '@/components/shell/NotificationIcon';
-import { vibrate } from '@/lib/format';
+import { haptic } from '@/lib/haptics';
 
 /** Push simulado no topo da moldura (app em uso). Some sozinho em 5 s; tocar abre Notificações. */
 export function PushBanner() {
@@ -16,7 +16,7 @@ export function PushBanner() {
 
   useEffect(() => {
     if (!visible) return;
-    vibrate(30);
+    haptic('light', 'notificação');
     const t = window.setTimeout(dismissPush, 5000);
     return () => window.clearTimeout(t);
   }, [visible, push?.id, dismissPush]);
@@ -36,7 +36,7 @@ export function PushBanner() {
               dismissPush();
               if (auth === 'app') openOverlay('notifications');
             }}
-            className="glass-nav pointer-events-auto flex w-full items-start gap-3 rounded-xl border border-border-subtle p-3 text-left shadow-card"
+            className="system-glass pointer-events-auto flex w-full items-start gap-3 rounded-xl border border-border-subtle p-3 text-left shadow-card"
           >
             <NotificationIcon category={push.category} />
             <span className="min-w-0 flex-1">

@@ -43,7 +43,7 @@ export function LockScreen() {
 
       <div className="mt-6 flex flex-col gap-2">
         {activity ? (
-          <div className="glass-nav rounded-xl border border-border-subtle p-4" role="status" aria-label={`Atividade ao vivo: ${activity.detail}`}>
+          <div className="system-glass rounded-xl border border-border-subtle p-4" role="status" aria-label={`Atividade ao vivo: ${activity.detail}`}>
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-caption text-gold-200">
                 <Sparkles size={14} aria-hidden /> Protagon
@@ -67,7 +67,7 @@ export function LockScreen() {
             key={n.id}
             type="button"
             onClick={() => unlockTo(true)}
-            className="glass-nav flex items-start gap-3 rounded-xl border border-border-subtle p-3 text-left"
+            className="system-glass flex items-start gap-3 rounded-xl border border-border-subtle p-3 text-left"
           >
             <NotificationIcon category={n.category} />
             <span className="min-w-0 flex-1">
