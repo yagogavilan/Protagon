@@ -1,5 +1,6 @@
 import { Bell, QrCode } from 'lucide-react';
 import { IconButton } from '@/components/ui/IconButton';
+import { LionMark } from '@/components/brand/Brand';
 import { useDemo, useUnreadCount } from '@/state/store';
 import { cn } from '@/lib/cn';
 
@@ -14,11 +15,14 @@ export function TopBar(props: TopBarProps) {
   const openOverlay = useDemo((s) => s.openOverlay);
   return (
     <header className={cn('relative z-topbar flex min-h-topbar items-center justify-between gap-3 px-margin pt-[54px]')}>
-      <div className="min-w-0 py-1">
+      <div className="flex min-w-0 items-center gap-3 py-1">
         {props.variant === 'home' ? (
           <>
-            <p className="truncate text-h2 text-text-primary">{props.greeting}</p>
-            <p className="truncate text-caption text-text-secondary">{props.context}</p>
+            <LionMark size={34} />
+            <div className="min-w-0">
+              <p className="truncate text-h2 text-text-primary">{props.greeting}</p>
+              <p className="truncate text-caption text-text-secondary">{props.context}</p>
+            </div>
           </>
         ) : props.variant === 'title' ? (
           <h1 className="truncate text-h1 text-text-primary">{props.title}</h1>

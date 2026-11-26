@@ -1,7 +1,8 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useDragControls, useReducedMotion, type PanInfo } from 'motion/react';
 import { X } from 'lucide-react';
+import { useDemo } from '@/state/store';
 import { cn } from '@/lib/cn';
 
 export const SHEET_ROOT_ID = 'sheet-root';
@@ -36,6 +37,7 @@ export function BottomSheet({ open, onClose, title, subtitle, closeLabel = 'Fech
   useEffect(() => {
     if (!open) return;
     returnFocus.current = document.activeElement as HTMLElement | null;
+    useDemo.getState().hideToast(); // o aviso não pode cobrir os botões da sheet
     const t = window.setTimeout(() => titleRef.current?.focus(), 30);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onCloseRef.current();
@@ -52,7 +54,11 @@ export function BottomSheet({ open, onClose, title, subtitle, closeLabel = 'Fech
     if (info.offset.y > 120 || info.velocity.y > 600) onClose();
   };
 
-  const root = typeof document !== 'undefined' ? document.getElementById(SHEET_ROOT_ID) : null;
+  // O destino do portal fica na moldura, depois do app no DOM: só existe após a primeira montagem
+  const [root, setRoot] = useState<HTMLElement | null>(() => (typeof document !== 'undefined' ? document.getElementById(SHEET_ROOT_ID) : null));
+  useEffect(() => {
+    setRoot(document.getElementById(SHEET_ROOT_ID));
+  }, []);
   if (!root) return null;
 
   return createPortal(

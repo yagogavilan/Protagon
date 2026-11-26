@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Clock, Lock, Radio, Sparkles } from 'lucide-react';
-import { useClock, useDemo } from '@/state/store';
+import { useClock, useDemo, usePauseStage } from '@/state/store';
 import { formatLongDate } from '@/lib/clock';
 import { liveActivityFor } from '@/lib/liveActivity';
 import { NotificationIcon } from '@/components/shell/NotificationIcon';
@@ -14,7 +14,8 @@ export function LockScreen() {
   const auth = useDemo((s) => s.auth);
   const setLocked = useDemo((s) => s.setLocked);
   const openOverlay = useDemo((s) => s.openOverlay);
-  const activity = liveActivityFor(moment, clock);
+  const stage = usePauseStage();
+  const activity = liveActivityFor(moment, clock, stage);
   const recent = notifications.filter((n) => !n.read).slice(0, 3);
 
   const unlockTo = (withNotifications: boolean) => {
@@ -59,6 +60,7 @@ export function LockScreen() {
               </span>
             </div>
             <p className="mt-2 text-[17px] font-semibold leading-6 text-text-primary">{activity.detail}</p>
+            <p className="text-[14px] leading-5 text-text-secondary">{activity.extra}</p>
           </div>
         ) : null}
 

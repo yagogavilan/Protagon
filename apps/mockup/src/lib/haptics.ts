@@ -35,7 +35,9 @@ export function haptic(kind: HapticKind, reason: string): void {
   useDemo.getState().recordHaptic(`${KIND_LABEL[kind]} · ${reason}`);
   if (prefersReducedMotion()) return;
   try {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate(PATTERN[kind]);
+    // Sem toque anterior do usuário o navegador bloqueia a vibração e registra erro no console
+    const activated = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation?.hasBeenActive ?? true;
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator && activated) navigator.vibrate(PATTERN[kind]);
   } catch {
     // sem suporte: ignora
   }

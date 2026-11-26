@@ -124,3 +124,40 @@ export interface ConnectionPoint {
   name: string;
   where: string;
 }
+
+/* ---------- Conexões: relação, chat e encontro ---------- */
+
+export type PointId = 'A' | 'B' | 'C';
+
+export interface MeetingSlot {
+  sessionId: string;
+  day: DayNumber;
+  /** HH:MM */
+  time: string;
+}
+
+export interface Meeting {
+  /** Quem propôs o horário atual */
+  by: 'me' | 'them';
+  status: 'proposed' | 'confirmed' | 'counter';
+  slot: MeetingSlot;
+  point: PointId;
+}
+
+export interface ChatMessage {
+  id: string;
+  from: 'me' | 'them';
+  text: string;
+  /** HH:MM do relógio do evento */
+  at: string;
+  /** Enviada durante a palestra: entrega no intervalo */
+  queued?: boolean;
+}
+
+export interface Connection {
+  via: 'request' | 'qr';
+  /** HH:MM */
+  at: string;
+}
+
+export type NpsKey = '1' | '2' | '3' | 'final';

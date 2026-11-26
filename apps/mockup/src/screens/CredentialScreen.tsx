@@ -1,5 +1,6 @@
 import { QRCodeSVG } from 'qrcode.react';
-import { Check, CloudOff, ShieldCheck, Sun, Wallet } from 'lucide-react';
+import { Check, CloudOff, ScanLine, ShieldCheck, Sun, Wallet } from 'lucide-react';
+import { LionMark } from '@/components/brand/Brand';
 import { Button } from '@/components/ui/Button';
 import { TierBadge } from '@/components/ui/TierBadge';
 import { OverlayHeader } from '@/components/shell/OverlayHeader';
@@ -23,6 +24,7 @@ export function CredentialScreen() {
   const walletAdded = useDemo((s) => s.walletAdded);
   const setWalletAdded = useDemo((s) => s.setWalletAdded);
   const closeOverlay = useDemo((s) => s.closeOverlay);
+  const openOverlay = useDemo((s) => s.openOverlay);
 
   return (
     <div className="flex h-full flex-col bg-bg">
@@ -32,7 +34,9 @@ export function CredentialScreen() {
         <div className="card relative overflow-hidden p-5">
           <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-gold" />
           <div className="flex items-center justify-between">
-            <span className="text-caption uppercase tracking-[0.18em] text-gold-200">{edition.name}</span>
+            <span className="flex items-center gap-2 text-caption uppercase tracking-[0.18em] text-gold-200">
+              <LionMark size={22} /> {edition.name}
+            </span>
             <TierBadge tier={tier} />
           </div>
 
@@ -84,7 +88,7 @@ export function CredentialScreen() {
           ) : (
             <CloudOff size={20} aria-hidden className="mt-0.5 shrink-0 text-warning" />
           )}
-          <p className="text-[15px] leading-[22px] text-text-secondary">
+          <p className="text-body text-text-secondary">
             {online ? (
               <>
                 <span className="text-text-primary">Disponível offline.</span> A credencial abre mesmo sem internet.
@@ -113,6 +117,9 @@ export function CredentialScreen() {
               Adicionar à Wallet
             </Button>
           )}
+          <Button block variant="ghost" className="mt-1" icon={<ScanLine size={20} aria-hidden />} onClick={() => openOverlay('qrscan')}>
+            Ler QR de outra pessoa
+          </Button>
           {!online && !walletAdded ? (
             <p className="mt-2 text-center text-caption text-text-tertiary">Para adicionar à Wallet, conecte-se à internet.</p>
           ) : null}

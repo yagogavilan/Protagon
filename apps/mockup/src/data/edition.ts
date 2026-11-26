@@ -55,6 +55,8 @@ export const agendaChange = {
   day: 1 as const,
   sessionId: 'd1-s12',
   text: 'Dinâmica em trios passou para 17h05',
+  oldStart: '17:00',
+  newStart: '17:05',
 };
 
 export const boothLocation = 'Estande Protagon · ao lado do Ponto B';

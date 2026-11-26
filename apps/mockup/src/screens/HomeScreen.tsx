@@ -1,15 +1,20 @@
 import { useState, type ReactNode } from 'react';
 import { AnimatePresence } from 'motion/react';
 import {
+  Car,
   CalendarClock,
   CalendarCheck,
   Check,
   ChevronRight,
   Circle,
   Coffee,
+  Copy,
   FolderOpen,
+  Link2,
+  MapPin,
   Map as MapIcon,
   Megaphone,
+  Navigation,
   QrCode,
   Share2,
   Users,
@@ -17,13 +22,17 @@ import {
   Wifi,
   WifiOff,
 } from 'lucide-react';
-import { useClock, useDemo } from '@/state/store';
+import { useClock, useDemo, usePauseStage } from '@/state/store';
+import { Wordmark } from '@/components/brand/Brand';
+import { NpsCard } from '@/components/ui/NpsCard';
+import { Button } from '@/components/ui/Button';
+import { packingChecklist } from '@/data/content';
 import { agenda, sessionsOfDay } from '@/data/agenda';
 import { agendaChange, edition, pinnedNotices } from '@/data/edition';
-import { materials } from '@/data/materials';
+import { materials, materialsOfDay } from '@/data/materials';
 import { activeProfilesCount, MIN_PROFILES_TO_SHOW } from '@/lib/affinity';
 import { participants } from '@/data/participants';
-import { currentSession, formatHour, formatLongDate, nextSession, toMinutes, type EventClock } from '@/lib/clock';
+import { currentSession, formatHour, formatLongDate, materialStatus, nextSession, toMinutes, type EventClock } from '@/lib/clock';
 import { countersVisible, plural, usePendingRequests, useSuggestionQueue } from '@/lib/connections';
 import { haptic } from '@/lib/haptics';
 import { demoUser } from '@/data/participants';
@@ -73,6 +82,8 @@ function HomeBanner({ moment, clock }: { moment: Moment; clock: EventClock }) {
   const agendaUpdated = useDemo((s) => s.agendaUpdated);
   const setAgendaUpdated = useDemo((s) => s.setAgendaUpdated);
   const setTab = useDemo((s) => s.setTab);
+  const openOverlay = useDemo((s) => s.openOverlay);
+  const stage = usePauseStage();
   const now = currentSession(clock);
 
   let banner: ReactNode = null;
@@ -80,31 +91,57 @@ function HomeBanner({ moment, clock }: { moment: Moment; clock: EventClock }) {
     banner = <StatusBanner key="off" tone="info" icon={<WifiOff size={24} />} title="Sem internet." text="Agenda, mapa e credencial funcionam normalmente." />;
   } else if (justReconnected) {
     banner = <StatusBanner key="re" tone="live" icon={<Wifi size={24} />} title="Conectado de novo" />;
-  } else if (moment === 'break' && now) {
-    const left = toMinutes(now.end) - clock.minutes;
-    banner = (
-      <StatusBanner
-        key="break"
-        tone="info"
-        icon={<Coffee size={24} />}
-        title={`Intervalo · volte às ${formatHour(now.end)}`}
-        text={
-          <span>
-            Café no foyer. Retorno <Countdown minutes={left} />
-          </span>
-        }
-      />
-    );
-  } else if (moment === 'lunch' && now) {
-    banner = (
-      <StatusBanner
-        key="lunch"
-        tone="info"
-        icon={<Utensils size={24} />}
-        title={`Almoço até ${formatHour(now.end)}`}
-        text={`Volte ao salão às ${formatHour(minus(now.end, BREAK_RETURN_OFFSET))}.`}
-      />
-    );
+  } else if ((moment === 'break' || moment === 'lunch') && now) {
+    const isLunch = moment === 'lunch';
+    const returnAt = isLunch ? minus(now.end, BREAK_RETURN_OFFSET) : now.end;
+    const left = toMinutes(returnAt) - clock.minutes;
+    const Icon = isLunch ? Utensils : Coffee;
+    if (stage === 'now') {
+      banner = (
+        <StatusBanner
+          key="now"
+          tone="warning"
+          alert
+          icon={<Icon size={24} />}
+          title="Volte agora ao salão"
+          text={`A próxima sessão começa em instantes. Toque para ver seu setor.`}
+          pressLabel="Volte agora ao salão. Abrir tela do intervalo"
+          onPress={() => openOverlay('break')}
+        />
+      );
+    } else if (stage === 'five') {
+      banner = (
+        <StatusBanner
+          key="five"
+          tone="warning"
+          icon={<Icon size={24} />}
+          title="Faltam 5 min. Volte ao salão"
+          text={<span>Retorno às {formatHour(returnAt)}.</span>}
+          pressLabel="Faltam 5 minutos. Abrir tela do intervalo"
+          onPress={() => openOverlay('break')}
+        />
+      );
+    } else {
+      banner = (
+        <StatusBanner
+          key={moment}
+          tone="info"
+          icon={<Icon size={24} />}
+          title={isLunch ? `Almoço até ${formatHour(now.end)}` : `Intervalo · volte às ${formatHour(now.end)}`}
+          text={
+            isLunch ? (
+              `Volte ao salão às ${formatHour(returnAt)}.`
+            ) : (
+              <span>
+                Café no foyer. Retorno <Countdown minutes={left} />
+              </span>
+            )
+          }
+          pressLabel={`${isLunch ? 'Almoço' : 'Intervalo'}. Abrir tela cheia com a contagem`}
+          onPress={() => openOverlay('break')}
+        />
+      );
+    }
   } else if ((moment === 'live' || moment === 'break') && agendaUpdated && clock.dayIndex === agendaChange.day) {
     banner = (
       <StatusBanner
@@ -133,6 +170,7 @@ function ConnectionsTile({ moment, clock }: { moment: Moment; clock: EventClock 
   const paused = useDemo((s) => s.connectionsPaused);
   const setTab = useDemo((s) => s.setTab);
   const pending = usePendingRequests().length;
+  const connectedCount = useDemo((s) => Object.keys(s.connected).length);
   const { queue } = useSuggestionQueue();
 
   if (tier === 'executivo') {
@@ -185,7 +223,8 @@ function ConnectionsTile({ moment, clock }: { moment: Moment; clock: EventClock 
   let line: string;
   if (moment === 'before') line = `${plural(queue.length, 'sugestão', 'sugestões')} já disponíveis`;
   else if (moment === 'endOfDay') line = 'Anote quem você conheceu hoje';
-  else if (moment === 'after') line = 'Sua rede fica disponível por 90 dias';
+  else if (moment === 'after')
+    line = connectedCount > 0 ? `${plural(connectedCount, 'conexão feita', 'conexões feitas')}. Exporte os contatos` : 'Sua rede fica disponível por 90 dias';
   else if (pending === 0 && queue.length === 0) line = 'Novas sugestões no almoço';
   else {
     const parts = `${plural(pending, 'pedido', 'pedidos')} e ${plural(queue.length, 'sugestão', 'sugestões')}`;
@@ -272,19 +311,19 @@ function NextTile({ clock }: { clock: EventClock }) {
 }
 
 function WhereToEatTile() {
-  const openMap = useDemo((s) => s.openMap);
+  const openOverlay = useDemo((s) => s.openOverlay);
   return (
-    <BentoTile heading="Onde comer" icon={<Utensils size={16} className="text-gold-500" />} onPress={() => openMap('sector')} pressLabel="Onde comer: praça de alimentação no 2º andar. Ver no mapa" className="h-full">
+    <BentoTile heading="Onde comer" icon={<Utensils size={16} className="text-gold-500" />} onPress={() => openOverlay('eat')} pressLabel="Onde comer: praça de alimentação no 2º andar. Ver opções" className="h-full">
       <p className="text-h2 text-text-primary">Praça de alimentação</p>
       <p className="mt-1 text-body text-text-secondary">2º andar, pela escada B</p>
-      <p className="mt-auto pt-2 text-caption text-text-secondary">Restaurantes próximos no mapa</p>
+      <p className="mt-auto pt-2 text-caption text-text-secondary">Restaurantes próximos também</p>
     </BentoTile>
   );
 }
 
 function WifiTile() {
   const showToast = useDemo((s) => s.showToast);
-  const openMap = useDemo((s) => s.openMap);
+  const setWifiOpen = useDemo((s) => s.setWifiOpen);
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
@@ -298,7 +337,7 @@ function WifiTile() {
     window.setTimeout(() => setCopied(false), 1200);
   };
   return (
-    <BentoTile onPress={() => openMap('sector')} pressLabel={`Wi-Fi ${edition.venue.wifi.network}, ver detalhes`} className="py-2">
+    <BentoTile onPress={() => setWifiOpen(true)} pressLabel={`Wi-Fi ${edition.venue.wifi.network}, ver detalhes`} className="py-2">
       <div className="flex min-h-[40px] items-center gap-3">
         <Wifi size={24} aria-hidden className="text-gold-500" />
         <div className="min-w-0 flex-1">
@@ -351,40 +390,112 @@ function PinnedTile() {
 
 /* ---------- Cards principais por momento ---------- */
 
-function BeforeCard() {
+function remainingToStart(clock: EventClock): { days: number; hours: number; minutes: number } {
+  const start = new Date(`${edition.dates[0]}T09:00:00`).getTime();
+  const nowMs = new Date(`${clock.date}T${clock.time}:00`).getTime();
+  const diff = Math.max(0, Math.round((start - nowMs) / 60000));
+  return { days: Math.floor(diff / 1440), hours: Math.floor((diff % 1440) / 60), minutes: diff % 60 };
+}
+
+function BeforeCard({ clock }: { clock: EventClock }) {
   const walletAdded = useDemo((s) => s.walletAdded);
-  const active = useDemo((s) => s.connectionsActive);
-  const tier = useDemo((s) => s.tier);
-  const items: { label: string; done: boolean }[] = [
-    { label: 'Credencial na Wallet', done: walletAdded },
-    ...(tier !== 'executivo' ? [{ label: 'Perfil de Conexões', done: active }] : []),
-    { label: 'Como chegar', done: false },
-    { label: 'Estacionamento no subsolo', done: false },
-  ];
+  const checklist = useDemo((s) => s.checklist);
+  const toggle = useDemo((s) => s.toggleChecklist);
+  const r = remainingToStart(clock);
+  const items = packingChecklist.map((it) => ({ ...it, done: it.id === 'cred' ? walletAdded || Boolean(checklist[it.id]) : Boolean(checklist[it.id]) }));
+  const done = items.filter((i) => i.done).length;
   return (
-    <section className="rounded-lg border border-border-gold bg-surface-2 p-card shadow-card" aria-label="Contagem para o evento">
-      <p className="text-caption text-text-secondary">{formatLongDate(edition.dates[0])} · 9h</p>
-      <p className="tabular mt-1 text-display text-text-primary">Faltam 2 dias</p>
-      <p className="mt-1 text-body text-text-secondary">
-        {edition.venue.name}. Credenciamento a partir das 7h30.
-      </p>
-      <ul className="mt-4 flex flex-col gap-2" aria-label="Checklist">
-        {items.map((it) => (
-          <li key={it.label} className="flex items-center gap-3 text-body text-text-primary">
-            {it.done ? <Check size={20} aria-hidden className="text-live" /> : <Circle size={20} aria-hidden className="text-border-strong" />}
-            <span className={it.done ? 'text-text-secondary' : undefined}>{it.label}</span>
-            <span className="sr-only">{it.done ? ', feito' : ', pendente'}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <>
+      <section className="rounded-lg border border-border-gold bg-surface-2 p-card shadow-card" aria-label="Contagem para o evento">
+        <Wordmark width={170} />
+        <p className="mt-4 text-caption text-text-secondary">{formatLongDate(edition.dates[0])} · 9h</p>
+        <p className="sr-only">
+          Faltam {r.days} dias, {r.hours} horas e {r.minutes} minutos
+        </p>
+        <div className="mt-2 grid grid-cols-3 gap-2" aria-hidden>
+          {[
+            { v: r.days, l: r.days === 1 ? 'dia' : 'dias' },
+            { v: r.hours, l: 'horas' },
+            { v: r.minutes, l: 'min' },
+          ].map((x) => (
+            <div key={x.l} className="rounded-md bg-surface-1 py-2 text-center">
+              <p className="tabular text-display text-text-primary">{String(x.v).padStart(2, '0')}</p>
+              <p className="text-caption text-text-secondary">{x.l}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-body text-text-secondary">Credenciamento a partir das 7h30, no foyer térreo.</p>
+      </section>
+
+      <section className="rounded-lg border border-border-subtle bg-surface-1 p-card shadow-card" aria-label="O que levar">
+        <p className="flex items-center justify-between text-body-strong text-text-primary">
+          O que levar
+          <span className="tabular text-caption text-text-secondary">
+            {done} de {items.length}
+          </span>
+        </p>
+        <ul className="mt-2 flex flex-col">
+          {items.map((it) => (
+            <li key={it.id}>
+              <button
+                type="button"
+                role="checkbox"
+                aria-checked={it.done}
+                onClick={() => toggle(it.id)}
+                className="flex min-h-touch w-full items-center gap-3 rounded-md text-left text-body text-text-primary active:bg-surface-3"
+              >
+                {it.done ? <Check size={20} aria-hidden className="text-live" /> : <Circle size={20} aria-hidden className="text-border-strong" />}
+                <span className={it.done ? 'text-text-secondary line-through' : undefined}>{it.label}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <LocalTile />
+    </>
+  );
+}
+
+function LocalTile() {
+  const openMap = useDemo((s) => s.openMap);
+  const showToast = useDemo((s) => s.showToast);
+  return (
+    <>
+      <BentoTile heading="Local" icon={<MapPin size={16} className="text-gold-500" />}>
+        <p className="text-h2 text-text-primary">{edition.venue.name}</p>
+        <p className="mt-1 text-body text-text-secondary">{edition.venue.address}</p>
+        <div className="mt-3 flex gap-2">
+          <Button
+            size="compact"
+            variant="secondary"
+            className="flex-1 px-2"
+            icon={<Navigation size={18} aria-hidden />}
+            onClick={() => showToast({ text: 'Abriria o app de mapas (simulado)', tone: 'info' })}
+          >
+            Como chegar
+          </Button>
+          <Button size="compact" variant="secondary" className="flex-1 px-2" icon={<MapIcon size={18} aria-hidden />} onClick={() => openMap('sector')}>
+            Ver no mapa
+          </Button>
+        </div>
+      </BentoTile>
+      <BentoTile heading="Estacionamento" icon={<Car size={16} className="text-gold-500" />}>
+        <p className="text-body text-text-primary">{edition.venue.parking}</p>
+      </BentoTile>
+    </>
   );
 }
 
 function EndOfDayCard({ clock }: { clock: EventClock }) {
   const day = clock.dayIndex as 1 | 2 | 3;
   const blocks = sessionsOfDay(day).filter((s) => s.kind !== 'intervalo' && s.kind !== 'almoco');
-  const [score, setScore] = useState<number | null>(null);
+  const dayMaterials = materialsOfDay(day);
+  const released = dayMaterials.filter((m) => materialStatus(clock, m) === 'released').length;
+  const connectedCount = useDemo((s) => Object.keys(s.connected).length);
+  const tier = useDemo((s) => s.tier);
+  const setTab = useDemo((s) => s.setTab);
+  const tomorrow = day < 3 ? sessionsOfDay((day + 1) as 2 | 3)[0] : undefined;
   return (
     <>
       <section className="rounded-lg border border-border-gold bg-surface-2 p-card shadow-card">
@@ -394,64 +505,127 @@ function EndOfDayCard({ clock }: { clock: EventClock }) {
         <p className="tabular mt-1 text-h1 text-text-primary">
           {blocks.length} de {blocks.length} blocos
         </p>
-        <p className="mt-1 text-body text-text-secondary">
-          {day < 3 ? 'Amanhã às 9h. Credenciamento a partir das 7h30.' : 'Obrigado por viver o Protagon com a gente.'}
-        </p>
-      </section>
-      <section className="rounded-lg border border-border-subtle bg-surface-1 p-card shadow-card" aria-label={`Avaliação do Dia ${day}`}>
-        <p className="text-body-strong text-text-primary">Como foi o Dia {day}?</p>
-        <p className="text-caption text-text-secondary">De 0 a 10. Leva 10 segundos.</p>
-        {score === null ? (
-          <div className="mt-3 grid grid-cols-6 gap-1.5" role="radiogroup" aria-label="Nota de 0 a 10">
-            {Array.from({ length: 11 }, (_, n) => (
-              <button
-                key={n}
-                type="button"
-                role="radio"
-                aria-checked={false}
-                onClick={() => setScore(n)}
-                className="tabular h-touch rounded-md border border-border-strong text-body-strong text-text-primary active:bg-surface-3"
-              >
-                {n}
-              </button>
-            ))}
+        <dl className="mt-3 grid grid-cols-2 gap-3 border-t border-border-subtle pt-3">
+          <div>
+            <dt className="text-caption text-text-secondary">Materiais do dia</dt>
+            <dd className="tabular text-body-strong text-text-primary">{released} liberados</dd>
           </div>
-        ) : (
-          <p className="mt-3 flex items-center gap-2 text-body text-live" role="status">
-            <Check size={18} aria-hidden /> Obrigado. Você deu nota {score}.
-          </p>
-        )}
+          {tier !== 'executivo' ? (
+            <div>
+              <dt className="text-caption text-text-secondary">Conexões</dt>
+              <dd className="tabular text-body-strong text-text-primary">{plural(connectedCount, 'pessoa', 'pessoas')}</dd>
+            </div>
+          ) : null}
+        </dl>
+        <p className="mt-3 text-body text-text-secondary">
+          {tomorrow ? `Amanhã às ${formatHour(tomorrow.start)}: ${tomorrow.title}. Credenciamento a partir das 7h30.` : 'Obrigado por viver o Protagon com a gente.'}
+        </p>
+        <button
+          type="button"
+          onClick={() => setTab('materiais')}
+          className="-mx-2 mt-1 flex min-h-touch items-center gap-1 rounded-md px-2 text-body-strong text-gold-200 active:bg-surface-3"
+        >
+          Ver materiais do dia <ChevronRight size={18} aria-hidden />
+        </button>
       </section>
+      <NpsCard npsKey={String(day) as '1' | '2' | '3'} question={`Como foi o Dia ${day}?`} />
     </>
+  );
+}
+
+function ShareSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const showToast = useDemo((s) => s.showToast);
+  const link = 'protagon.exemplo/indique/rafael-m';
+  return (
+    <BottomSheet
+      open={open}
+      onClose={onClose}
+      title="Indique o Protagon"
+      closeLabel="Fechar"
+      footer={
+        <>
+          <Button
+            block
+            icon={<Copy size={20} aria-hidden />}
+            onClick={() => {
+              void navigator.clipboard?.writeText(link).catch(() => undefined);
+              showToast({ text: 'Link copiado', tone: 'success' });
+              onClose();
+            }}
+          >
+            Copiar link
+          </Button>
+          <Button
+            block
+            variant="secondary"
+            onClick={() => {
+              showToast({ text: 'Abriria o WhatsApp (simulado)', tone: 'info' });
+              onClose();
+            }}
+          >
+            Enviar pelo WhatsApp
+          </Button>
+        </>
+      }
+    >
+      <p className="text-body text-text-secondary">Quem você indicar ganha prioridade na lista de espera da próxima edição.</p>
+      <p className="mt-3 flex items-center gap-2 rounded-md bg-surface-1 p-3 text-body text-text-primary">
+        <Link2 size={20} aria-hidden className="shrink-0 text-gold-500" />
+        <span className="select-all break-all">{link}</span>
+      </p>
+      <p className="mt-2 text-caption text-text-secondary">Benefício de indicação: proposta, ainda não definido pela diretoria.</p>
+    </BottomSheet>
   );
 }
 
 function AfterCards() {
   const setTab = useDemo((s) => s.setTab);
+  const [share, setShare] = useState(false);
+  const blocks = agenda.filter((s) => s.kind !== 'intervalo' && s.kind !== 'almoco').length;
   return (
     <>
       <section className="rounded-lg border border-border-gold bg-surface-2 p-card shadow-card">
-        <p className="text-caption text-text-secondary">Sua jornada</p>
+        <Wordmark width={150} />
+        <p className="mt-4 text-caption text-text-secondary">Resumo da sua jornada</p>
         <p className="mt-1 text-h1 text-text-primary">3 dias de Protagon</p>
         <p className="mt-1 text-body text-text-secondary">Mentalidade, liderança e negócios. O plano de 90 dias começa agora.</p>
+        <dl className="mt-3 grid grid-cols-2 gap-3 border-t border-border-subtle pt-3">
+          <div>
+            <dt className="text-caption text-text-secondary">Blocos</dt>
+            <dd className="tabular text-body-strong text-text-primary">{blocks} concluídos</dd>
+          </div>
+          <div>
+            <dt className="text-caption text-text-secondary">Materiais</dt>
+            <dd className="tabular text-body-strong text-text-primary">{materials.length} liberados</dd>
+          </div>
+        </dl>
       </section>
       <BentoTile icon={<FolderOpen size={16} className="text-gold-500" />} heading="Materiais" onPress={() => setTab('materiais')} pressLabel="Materiais: todos liberados. Ver">
         <p className="tabular text-body text-text-primary">Todos os {materials.length} materiais liberados</p>
+        <p className="mt-1 text-caption text-text-secondary">Ficam no app por 90 dias. Baixe para ler sem internet.</p>
       </BentoTile>
-      <BentoTile icon={<Share2 size={16} className="text-gold-500" />} heading="Indique o Protagon">
-        <p className="text-body text-text-primary">Conhece alguém que precisa viver esses 3 dias?</p>
-      </BentoTile>
+      <NpsCard npsKey="final" question="Como foi o Protagon?" />
+      <section className="rounded-lg border border-border-gold bg-surface-2 p-card shadow-card" aria-label="Indique o Protagon">
+        <p className="flex items-center gap-2 text-caption text-text-secondary">
+          <Share2 size={16} aria-hidden className="text-gold-500" /> Indique o Protagon
+        </p>
+        <p className="mt-1 text-h2 text-text-primary">Conhece alguém que precisa viver esses 3 dias?</p>
+        <Button block variant="secondary" className="mt-3" onClick={() => setShare(true)}>
+          Compartilhar com um amigo
+        </Button>
+      </section>
+      <ShareSheet open={share} onClose={() => setShare(false)} />
     </>
   );
 }
 
 /* ---------- Tela ---------- */
 
-/** A01 · Home. Ao vivo com spec completa; demais momentos com banner e card principal (Etapa 3 detalha). */
+/** A01 · Home nos 6 momentos: antes, ao vivo, intervalo, almoço, fim do dia e depois do evento. */
 export function HomeScreen() {
   const clock = useClock();
   const moment = useDemo((s) => s.moment);
-  const setTab = useDemo((s) => s.setTab);
+  const openOverlay = useDemo((s) => s.openOverlay);
   const now = currentSession(clock);
   const during = moment === 'live' || moment === 'break' || moment === 'lunch';
   // Intervalo e almoço: Conexões sobe para logo abaixo do banner
@@ -468,14 +642,14 @@ export function HomeScreen() {
 
       {moment === 'live' ? (
         now ? (
-          <LiveCard session={now} clock={clock} onOpen={() => setTab('trilha')} />
+          <LiveCard session={now} clock={clock} onOpen={() => openOverlay('session', now.id)} />
         ) : (
           <BentoTile heading="A seguir">
             <p className="text-h2 text-text-primary">Começa em instantes</p>
           </BentoTile>
         )
       ) : null}
-      {moment === 'before' ? <BeforeCard /> : null}
+      {moment === 'before' ? <BeforeCard clock={clock} /> : null}
       {moment === 'endOfDay' ? <EndOfDayCard clock={clock} /> : null}
       {moment === 'after' ? <AfterCards /> : null}
 

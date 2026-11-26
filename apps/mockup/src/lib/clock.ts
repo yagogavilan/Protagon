@@ -14,13 +14,42 @@ export interface EventClock {
 }
 
 const MOMENT_TIME: Record<Moment, string> = {
-  before: '18:00',
+  before: '09:00',
   live: '10:05',
   break: '10:38',
   lunch: '12:52',
   endOfDay: '19:10',
   after: '10:00',
 };
+
+/** Posição dentro do intervalo/almoço (A02): início, faltam 5 min e volte agora */
+export type PausePhase = 'start' | 'five' | 'now';
+
+const PAUSE_TIME: Partial<Record<Moment, Record<PausePhase, string>>> = {
+  break: { start: '10:38', five: '10:40', now: '10:44' },
+  lunch: { start: '12:52', five: '13:15', now: '13:20' },
+};
+
+export const PAUSE_PHASE_LABEL: Record<PausePhase, string> = {
+  start: 'Início',
+  five: 'Faltam 5 min',
+  now: 'Volte agora',
+};
+
+/** Minutos que faltam para voltar ao salão. Almoço: volte 10 min antes do fim (13h20). */
+export function minutesUntilReturn(moment: Moment, minutes: number): number | null {
+  if (moment === 'break') return toMinutes('10:45') - minutes;
+  if (moment === 'lunch') return toMinutes('13:20') - minutes;
+  return null;
+}
+
+export function pauseStage(moment: Moment, minutes: number): PausePhase {
+  const left = minutesUntilReturn(moment, minutes);
+  if (left === null) return 'start';
+  if (left <= (moment === 'break' ? 1 : 0)) return 'now';
+  if (left <= 5) return 'five';
+  return 'start';
+}
 
 export const MOMENT_LABEL: Record<Moment, string> = {
   before: 'Antes do evento',
@@ -42,8 +71,8 @@ function addDays(isoDate: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-export function computeClock(moment: Moment, day: DayNumber): EventClock {
-  const time = MOMENT_TIME[moment];
+export function computeClock(moment: Moment, day: DayNumber, phase: PausePhase = 'start'): EventClock {
+  const time = PAUSE_TIME[moment]?.[phase] ?? MOMENT_TIME[moment];
   const [d1, , d3] = edition.dates;
   if (moment === 'before') return { date: addDays(d1, -2), time, dayIndex: 0, minutes: toMinutes(time) };
   if (moment === 'after') return { date: addDays(d3, 1), time, dayIndex: 4, minutes: toMinutes(time) };

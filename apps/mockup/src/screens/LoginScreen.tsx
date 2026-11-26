@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { CircleAlert, LifeBuoy, Mail, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Wordmark } from '@/components/brand/Brand';
 import { edition } from '@/data/edition';
 import { useDemo } from '@/state/store';
 import { looksLikeCpf, maskCpfInput } from '@/lib/format';
@@ -48,9 +49,10 @@ export function LoginScreen() {
 
   return (
     <div
-      className="flex h-full flex-col px-margin pb-10 pt-[96px]"
+      className="flex h-full flex-col px-margin pb-10 pt-[84px]"
       style={{ backgroundImage: 'radial-gradient(90% 45% at 50% 0%, rgba(204,143,78,0.22), transparent 70%)' }}
     >
+      <Wordmark width={270} className="mb-10" />
       <div className="flex flex-col items-start gap-3">
         <span className="text-caption uppercase tracking-[0.2em] text-gold-200">{edition.name}</span>
         <h1 className="text-display text-text-primary">Que bom ter você aqui</h1>
@@ -96,11 +98,11 @@ export function LoginScreen() {
                 <CircleAlert size={20} aria-hidden className="mt-0.5 shrink-0 text-danger" />
                 Não encontramos ingresso para {isCpf ? 'este CPF' : 'este e-mail'}.
               </p>
-              <p className="text-[15px] leading-[22px] text-text-secondary">
+              <p className="text-body text-text-secondary">
                 Confira se é o mesmo dado usado na compra. Se o ingresso estiver no nome de outra pessoa, fale com o suporte.
               </p>
               {showSupport ? (
-                <div className="flex flex-col gap-2 rounded-md bg-surface-2 p-3 text-[15px] text-text-primary">
+                <div className="flex flex-col gap-2 rounded-md bg-surface-2 p-3 text-body text-text-primary">
                   <span className="flex items-center gap-2">
                     <Phone size={16} aria-hidden className="text-gold-200" />
                     <span className="tabular select-all">{edition.support.phone}</span>

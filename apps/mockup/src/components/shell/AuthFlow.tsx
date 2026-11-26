@@ -2,9 +2,10 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useDemo } from '@/state/store';
 import { LoginScreen } from '@/screens/LoginScreen';
 import { CodeScreen } from '@/screens/CodeScreen';
+import { OnboardingScreen } from '@/screens/OnboardingScreen';
 import { AppShell } from './AppShell';
 
-/** Roteamento por estado: login -> código -> app */
+/** Roteamento por estado: login -> código -> onboarding -> app */
 export function AuthFlow() {
   const auth = useDemo((s) => s.auth);
   return (
@@ -17,7 +18,7 @@ export function AuthFlow() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
       >
-        {auth === 'login' ? <LoginScreen /> : auth === 'code' ? <CodeScreen /> : <AppShell />}
+        {auth === 'login' ? <LoginScreen /> : auth === 'code' ? <CodeScreen /> : auth === 'onboarding' ? <OnboardingScreen /> : <AppShell />}
       </motion.div>
     </AnimatePresence>
   );

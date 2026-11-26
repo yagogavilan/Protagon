@@ -1,4 +1,4 @@
-import { Clock3, QrCode, Sparkles } from 'lucide-react';
+import { ChevronRight, Clock3, QrCode, Sparkles } from 'lucide-react';
 import type { Suggestion } from '@/lib/affinity';
 import { objectiveLabel } from '@/lib/affinity';
 import { Avatar } from './Avatar';
@@ -15,13 +15,14 @@ interface PersonCardProps {
   onConnect: () => void;
   onNotNow: () => void;
   onConnectByQr: () => void;
+  onOpenProfile?: () => void;
 }
 
 /**
  * PersonCard (design-system §PersonCard). Ordem obrigatória: afinidade, empresa, objetivo, motivo,
  * interesses em comum, pessoa, ações. Sem foto grande, sem percentual, sem coração.
  */
-export function PersonCard({ suggestion, state = 'default', limitReached, onConnect, onNotNow, onConnectByQr }: PersonCardProps) {
+export function PersonCard({ suggestion, state = 'default', limitReached, onConnect, onNotNow, onConnectByQr, onOpenProfile }: PersonCardProps) {
   const { participant: p, affinity } = suggestion;
   const common = affinity.sharedInterests.slice(0, 3);
   const more = affinity.sharedInterests.length - common.length;
@@ -79,6 +80,16 @@ export function PersonCard({ suggestion, state = 'default', limitReached, onConn
           </p>
           <p className="truncate text-caption text-text-secondary">{p.role}</p>
         </div>
+        {onOpenProfile ? (
+          <button
+            type="button"
+            onClick={onOpenProfile}
+            aria-label={`Ver perfil de ${p.name}`}
+            className="flex h-touch w-touch shrink-0 items-center justify-center rounded-md text-gold-200 active:bg-surface-3"
+          >
+            <ChevronRight size={22} aria-hidden />
+          </button>
+        ) : null}
       </div>
 
       <div className="mt-5">
