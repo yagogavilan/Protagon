@@ -1,6 +1,6 @@
 # Missão: Grupos de 3, Ofertas ao vivo e Atividade Gaia One no mockup
 
-Status: RASCUNHO — aguardando aprovação do fundador. Nada é construído antes disso.
+Status: APROVADO pelo fundador em 2026-11-26. Perguntas do §8 sem resposta seguem como "proposta" no mockup.
 Data: 2026-11-26 · Dono: CEO
 
 ## Contexto
