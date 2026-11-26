@@ -20,3 +20,4 @@ Formato: ID | Data | Decisão | Status | Dono. Propostas sem resposta do fundado
 | ID | Data | Decisão | Dono |
 |---|---|---|---|
 | DEC-001 | 2026-11-26 | Time de agentes herdado do webag, adaptado para o Protagon; `social-media-strategist` e skills de marketplace removidos | CEO |
+| DEC-002 | 2026-11-26 | Perfil de Conexões ganha campos pedidos pelo fundador: nicho, objetivo no Protagon, maior desafio atual, "onde tenho bastante conhecimento" e Instagram. Ativação continua em < 60 s: só nicho e objetivo no Protagon entram nos 3 passos; desafio e conhecimento ficam em "Complete seu perfil" (opcionais). Afinidade passa a cruzar o desafio de um com o conhecimento do outro ("Ela domina tráfego pago, seu maior desafio hoje"). Instagram segue a regra de contato: só aparece após o aceite mútuo (proposta; fundador pode liberar como opção do próprio aluno). | CEO |
