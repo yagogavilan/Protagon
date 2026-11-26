@@ -236,3 +236,157 @@ Notas: ~70 palavras, leitura em cerca de 20 s; cabe no "< 60 s". O nome do contr
 - Revisão de código e documentos de um mockup com dados fictícios; não há backend para testar. RLS, rate limit e purge só se provam com testes no app real e um pentest antes de escalar para várias edições.
 - Regras das lojas e artigos da LGPD não foram reconferidos nesta sessão.
 - Decisões pedidas: DD-04 (uso comercial, SEC-009), foto na prévia (SEC-006), regra de pausa vs. conexões existentes (SEC-008, PO), SLA de denúncia (SEC-005, Eventos).
+
+## 7. Grupos, Ofertas e Gaia One
+
+Data: 2026-11-26 · Base: commit `742aa73` · Escopo: `docs/produto/prompt-grupos-ofertas-gaia.md` (APROVADO). Ainda não há código nem specs de GR/OF/GA (`docs/produto/grupos-ofertas-gaia.md` e `docs/design/telas/gr-*`, `of-*`, `ga-*` não existem): a revisão é do desenho, e o QA confere os textos abaixo no mockup.
+
+Resumo: nenhum bloqueio para o mockup; 7 ajustes de texto e fluxo (SEC-018 a SEC-024) que devem entrar na construção, para a diretoria aprovar o fluxo certo. Para o app real, 2 requisitos Altos (SEC-025 oferta invisível de verdade e SEC-026 autorização dos grupos) bloqueiam o lançamento **dessas funcionalidades**.
+
+### 7.1 Tabela LGPD
+
+| Dado | Finalidade | Base legal `[validar com jurídico]` | Quem vê e quando | Retenção (proposta) | Revogar / excluir |
+|---|---|---|---|---|---|
+| Participação no grupo: primeiro nome e setor | Encontrar grupo com vaga perto | V (dinâmica faz parte do evento contratado) | Alunos da mesma edição e categoria, só na lista, só durante a formação e enquanto há vaga | Sai da lista ao completar ou fechar | Sair durante a formação; "Só por código" |
+| Membros do grupo: nome, empresa, setor; foto só de quem tem perfil de Conexões ativo (os outros: iniciais) | Dinâmicas em trio nos 3 dias | V | Os membros do grupo; equipe do evento | Fim do evento + purge D7 (90 dias) | Troca pela equipe (SEC-019); exclusão da conta |
+| WhatsApp compartilhado no grupo | Combinar fora do app | I (finalidade 6, separada das Conexões) | Membros que também compartilharam, depois de o grupo completar ou a formação fechar | Oculto no fim do evento; purge D7. Cópias salvas: fora do controle | Desligar (efeito imediato no app) |
+| Código e QR do grupo | Entrar no grupo combinado ao vivo | V | Quem recebe o código | Expira ao completar ou fechar a formação | — |
+| Ofertas vistas, "Agora não", tempo na tela | Métrica do pitch | IX, **só agregado** | Time do evento, sem nome | 90 dias | — |
+| Pedido de contato da oferta: nome, e-mail, telefone, ingresso, oferta, data | Consultor retornar a pedido do aluno | V (procedimentos preliminares a pedido do titular) | Time comercial do Grupo Virtus, só esse pedido | [6 meses se não virar compra, jurídico] | Cancelar o pedido no app; exclusão |
+| Compra no checkout | Pagamento | V | Hotmart (papel de controladora ou operadora: jurídico) | Regra fiscal | Pela Hotmart |
+| Progresso Gaia One e "Já ativei" | Ajudar o aluno e o grupo | V | O aluno; o grupo vê só a contagem; o time vê o total | Fim do evento | — |
+| Nome na lista do palco (só se o time quiser) | Chamar ou sortear no palco | I (finalidade 7) | Equipe de palco | Apagada no fim do evento | Não marcar a opção |
+
+Conexões não alimentam nada desta tabela: desafio, objetivos, rede, chat e notas nunca vão para o comercial, a lista do palco ou o Gaia One (SEC-009).
+
+### 7.2 Achados
+
+#### (a) Ajustes no mockup agora (texto e fluxo)
+
+```
+SEC-018 | Severidade: Média | Status: Aberto
+Onde: prompt §1 Fluxo 1 (lista "Entrar num grupo com vaga") e "Criar um grupo"
+Problema: a lista mostra primeiro nome + empresa + setor/fila de quem ainda não tem grupo para a categoria inteira, sem aviso a quem cria. Fila é localização precisa; empresa não serve para escolher grupo.
+Cenário de ataque: alguém procura a aluna pelo primeiro nome e empresa, vê onde ela está sentada e entra no grupo dela para ficar perto nos 3 dias; no app real, quem percorre a lista monta um diretório nome-empresa-posição da categoria (raspagem, inclusive entre Executivos, que não aceitaram nada de Conexões).
+Correção recomendada: na lista, só primeiro nome, setor (sem fila) e vagas; empresa e foto só em "Meu grupo". Ao criar, aviso fixo (texto 7.3) e opção "Só por código" (o grupo fica fora da lista). Foto em "Meu grupo" só para quem tem perfil de Conexões ativo; o resto usa iniciais.
+Como verificar a correção: a lista não exibe empresa, fila nem foto; o aviso aparece em "Criar um grupo"; um grupo "Só por código" não aparece na lista.
+```
+
+```
+SEC-019 | Severidade: Média | Status: Aberto
+Onde: prompt §1 Fluxo 5 ("depois, só pelo time no estande") e tela "Meu grupo"
+Problema: depois da formação, quem está num grupo com alguém que o incomoda não tem caminho no app. O Executivo nem tem o C11 (denunciar e bloquear existem só nas Conexões).
+Cenário de ataque: assediador entra no grupo pela lista ou por código adivinhado; a vítima fica presa a ele por 3 dias, sem saber que pode pedir troca.
+Correção recomendada: em "Meu grupo", link "Algum problema com o grupo?" que abre uma folha com "Pedir troca de grupo" (vai para a equipe, discreta, a qualquer momento) e "Denunciar" (mesmos motivos do SEC-005), para os 3 ingressos.
+Como verificar a correção: no mockup, Executivo e VIP chegam à folha a partir de "Meu grupo" com a formação já encerrada.
+```
+
+```
+SEC-020 | Severidade: Média | Status: Aberto
+Onde: prompt §1 Fluxo 4 (WhatsApp no grupo)
+Problema: desligado por padrão está certo, mas falta: reciprocidade, momento em que o número aparece e aviso de que quem salvou fica com ele.
+Cenário de ataque: alguém entra num grupo incompleto, vê o WhatsApp de quem compartilhou sem expor o próprio e sai em seguida (sair é livre durante a formação).
+Correção recomendada: chave desligada; o número é o da compra, só pré-preenchido e editável; vê o WhatsApp dos outros só quem também compartilhou; números aparecem só quando o grupo completa ou a formação fecha; quem sai deixa de ver e de ser visto. Texto 7.3.
+Como verificar a correção: com a chave desligada, "Meu grupo" não mostra o WhatsApp de ninguém; com 2/3, não mostra nenhum número.
+```
+
+```
+SEC-021 | Severidade: Baixa | Status: Aberto
+Onde: prompt §1 "Entrar com código ou QR" e estados
+Problema: falta o estado de código inválido; se a mensagem diferenciar "não existe" de "é de outra categoria", vira oráculo para descobrir códigos.
+Cenário de ataque: no app real, a mensagem distinta confirma que o código existe em outra categoria e ajuda a força bruta (SEC-026).
+Correção recomendada: mensagem única para código inexistente, expirado ou de outra categoria (texto 7.3). "Grupo cheio" pode ser distinta. Código sem letras ambíguas (sem I, O, Q).
+Como verificar a correção: no painel, códigos inexistente e de outra categoria mostram o mesmo texto.
+```
+
+```
+SEC-022 | Severidade: Média | Status: Aberto
+Onde: prompt §2 "Falar com um consultor" (formulário de 1 toque com dados da compra preenchidos)
+Problema: envio de dados pessoais para venda sem mostrar o que vai, para quem e para quê; "dados da compra" pode incluir CPF. É a porta de entrada do comercial do Olimpo no app (relação com SEC-009).
+Cenário de ataque: aluno toca para saber o preço, recebe ligação com dados que não sabia ter enviado; ou o formulário passa a levar desafio e objetivo das Conexões para "qualificar o lead".
+Correção recomendada: 1 toque continua possível, mas os dados aparecem acima do botão: nome, e-mail, telefone (editável) e ingresso. Nunca CPF, nunca dado das Conexões. Diz o destinatário e a finalidade (só esta oferta). Confirmação com "Cancelar pedido". Texto 7.3.
+Como verificar a correção: a tela lista exatamente os campos enviados; não há CPF; existe "Cancelar pedido" no estado "interesse enviado".
+```
+
+```
+SEC-023 | Severidade: Baixa | Status: Aberto
+Onde: prompt §2 (regra "invisível antes", checkout externo simulado, "Ofertas do evento")
+Problema: (1) no mockup a oferta está no bundle; "invisível" só vale na tela (o critério "nem nos dados do app" é do app real, SEC-025); (2) uma entrada vazia "Ofertas do evento" antes da liberação já anuncia que haverá oferta; (3) o checkout externo não avisa a saída do app; (4) evento com plateia grande atrai link falso de "condição especial" nos grupos de WhatsApp que o próprio app incentiva.
+Cenário de ataque: golpista manda "link da condição do Olimpo" no grupo do trio minutos após o pitch.
+Correção recomendada: "Ofertas do evento" só aparece depois da primeira liberação; antes da liberação, smoke test procura o nome da oferta no DOM de todas as telas, busca e notificações; aviso de saída e aviso antifraude (texto 7.3).
+Como verificar a correção: smoke test sem o nome da oferta antes de "Liberar oferta"; textos presentes na tela da oferta.
+```
+
+```
+SEC-024 | Severidade: Baixa | Status: Aberto
+Onde: prompt §3 "Grupo: quem do grupo já concluiu" e pergunta 9 (lista para o palco)
+Problema: mostrar nomes de quem concluiu expõe por eliminação quem não ativou; o trial pode pedir cartão, e não ativar pode ser falta de cartão ou de dinheiro. Lista nominal para o palco é outra finalidade.
+Cenário de ataque: o grupo (ou o palco) pressiona quem não ativou; constrangimento público num evento de 3 dias.
+Correção recomendada: no card do grupo, só a contagem ("2 de 3 já ativaram"); pedir ajuda ao grupo é ação do próprio aluno. Lista do palco: por padrão só o total; nomes só com opção desligada por padrão ("Quero aparecer na lista do palco"), se o fundador confirmar a necessidade.
+Como verificar a correção: o card mostra contagem sem nomes; a opção do palco, se existir, começa desligada.
+```
+
+#### (b) Requisitos para o app real
+
+```
+SEC-025 | Severidade: Alta | Status: Requisito (bloqueia o lançamento de Ofertas)
+Onde: desenho futuro (offers, Trilha, Expo/OTA, Storage, push)
+Problema: no Expo, o caminho mais fácil é embutir conteúdo no bundle ou numa atualização OTA, e tudo no bundle é público; imagem em URL previsível, payload de push ou deep link também vazam.
+Cenário de ataque: alguém extrai o bundle ou chama a API no Dia 1 e publica preço e bônus do Olimpo antes do pitch; quem não está no evento compra pela condição especial.
+Correção recomendada: oferta só existe no servidor; RLS/RPC devolve a oferta apenas com `released_at <= now()` e categoria do aluno lida do banco; Trilha guarda só o título da sessão; imagens em bucket privado com URL assinada emitida após a liberação; nada de prefetch, OTA, push ou analytics com nome ou preço antes; deep link para oferta não liberada responde igual a inexistente. Liberar e encerrar: papel "produção" com confirmação em 2 passos e log de quem e quando; prazo da condição imposto no servidor e também na Hotmart (SEC-028).
+Como verificar a correção: teste automatizado antes da liberação (API, bundle por grep do nome, Storage, deep link) sem nenhum dado da oferta; log de liberação.
+```
+
+```
+SEC-026 | Severidade: Alta | Status: Requisito (bloqueia o lançamento de Grupos)
+Onde: desenho futuro (groups, group_members, RPC de lista, entrada por código/QR, "Me coloque")
+Problema: a regra "só a mesma categoria" e a entrada por código de 4 letras (no máximo ~160 a 450 mil combinações, com centenas de grupos abertos por edição) dependem do servidor; autorização só na tela não vale.
+Cenário de ataque: Executivo chama a RPC com o id ou o código de um grupo VIP e entra; script testa códigos e cai em grupos abertos; bloqueado entra no grupo de quem o bloqueou.
+Correção recomendada: toda leitura e escrita confere edição e categoria lidas do banco, credenciamento válido e janela de formação aberta; código vale só na edição e categoria, só enquanto há vaga, e expira ao completar ou fechar; limite de tentativas de código por conta e aparelho [proposta: 5 erros em 10 min]; o QR leva token longo aleatório (o código curto é só para digitar); lista paginada com campos mínimos (primeiro nome, setor, vagas), sem ids de pessoa, só durante a formação; bloqueio das Conexões e pedido de troca (SEC-019) impedem os dois no mesmo grupo, inclusive no encaixe automático; ações da equipe com log; aviso "entrou no seu grupo" segue SEC-016.
+Como verificar a correção: matriz de testes no CI (outra categoria, outra edição, não credenciado, formação fechada, grupo cheio, bloqueado, código expirado) esperando negação; teste do limite de tentativas.
+```
+
+```
+SEC-027 | Severidade: Média | Status: Requisito (variante de SEC-009)
+Ofertas e uso comercial. O comercial recebe dado individual só do pedido de contato ou da compra; ofertas vistas, "Agora não" e tempo de tela ficam agregados, sem nome (senão vira lead scoring sem o aluno saber). Tabela `offer_interests` com campos fixos (allowlist do DTO); papel "comercial" lê só essa tabela, com log de acesso, e nunca as tabelas de Conexões, grupos ou Gaia One; cancelamento pelo aluno apaga o pedido; retenção [6 meses, jurídico]; limite de pedidos por oferta por aluno (evita spam ao consultor).
+```
+
+```
+SEC-028 | Severidade: Média | Status: Requisito
+Checkout externo. Abrir no navegador do sistema (SFSafariViewController / Custom Tabs), nunca WebView com ponte JS; URL vinda do servidor e validada contra allowlist de domínios da Hotmart; nenhum dado pessoal na query string (CPF nunca; nome e e-mail só se a Hotmart exigir para pré-preencher) [HIPÓTESE: confirmar parâmetros da Hotmart]; "compra concluída" só por webhook da Hotmart validado (token), com re-consulta e idempotência, nunca pela URL de retorno; condição especial com validade configurada na própria Hotmart (cupom ou oferta com data de fim), porque o link será repassado em grupos. Regras de compra fora do app nas lojas: [HIPÓTESE] (prompt §8.5), validar antes do piloto.
+```
+
+```
+SEC-029 | Severidade: Média | Status: Requisito (variante de SEC-010)
+WhatsApp no grupo. Tabela própria (`group_contacts`), separada de `group_members`; leitura só por RPC que confere: membro atual, consentimento 6 vigente, reciprocidade, grupo completo ou formação fechada, sem bloqueio; quem sai ou é trocado perde acesso na hora; ocultar no fim do evento e purge D7. Teste de RLS com membro que saiu, não membro e quem não compartilhou esperando zero linhas.
+```
+
+```
+SEC-030 | Severidade: Média | Status: Requisito
+Gaia One. O Protagon não envia lista de alunos ao Gaia One; "Copiar meu e-mail" é ação do aluno (nunca copiar CPF). Se o time quiser confirmar ativação cruzando com a base do Gaia One, isso é compartilhamento entre produtos: definir controlador, contrato e aviso antes [pergunta ao fundador: o Gaia One é do Grupo Virtus?]. "Já ativei" é autodeclarado: não usar para prêmio sem conferência. Links das lojas fixos e de domínios oficiais. Senha do Wi-Fi só para aluno autenticado; rede do evento com isolamento entre clientes (todo mundo na mesma senha) [Eventos/TI].
+```
+
+Push no momento da oferta durante a palestra é exceção à regra 5 (decisão do fundador, prompt §8.6); se aprovada, corpo genérico ("Há uma oferta do palco no app"), sem preço (SEC-016 e SEC-025).
+
+### 7.3 Textos para o mockup
+
+| Onde | Texto |
+|---|---|
+| Lista de grupos com vaga (subtítulo) | "Aparecem o primeiro nome e o setor de quem já está no grupo. Empresa e foto, só depois de entrar." |
+| Criar um grupo (aviso) | "Seu grupo aparece para alunos [categoria] desta edição que procuram grupo, com seu primeiro nome e setor, até completar." Opção: "Só por código (fora da lista)" |
+| Código inválido | "Código não encontrado. Confira as letras com quem criou o grupo." |
+| Chave WhatsApp no grupo (desligada) | "Compartilhar meu WhatsApp com o grupo." Dica: "Aparece quando o grupo completar, só para quem também compartilhar. Quem salvar seu número fica com ele, mesmo se você desligar depois." |
+| Meu grupo, rodapé | "Algum problema com o grupo? Pedir troca ou denunciar. A equipe resolve com discrição." |
+| Formulário de interesse, acima do botão | "Vamos enviar ao time comercial do Grupo Virtus: [nome], [e-mail], [telefone] e ingresso [VIP]. Só para falar com você sobre o [Olimpo]. Seu perfil e suas conexões não são enviados." Botão: "Quero falar com um consultor" |
+| Interesse enviado | "Pedido enviado. Um consultor vai falar com você por WhatsApp ou e-mail." Link: "Cancelar pedido" |
+| Botão de checkout (nota abaixo) | "Você vai sair do app para pagar na Hotmart." |
+| Rodapé da tela da oferta | "Ofertas do palco só aparecem aqui no app e no estande oficial. Não pague por links recebidos em grupos." |
+| Card Gaia One do grupo | "2 de 3 do seu grupo já ativaram." |
+| "Já ativei" (confirmação) | "Pronto. Seu grupo vê só quantos já ativaram, sem nomes." |
+| Lista do palco (só se o fundador confirmar; desligada) | "Quero aparecer na lista do palco da atividade Gaia One." |
+
+### 7.4 Limites e perguntas
+
+- Revisão do prompt, sem código nem specs; repetir a passada rápida nas telas GR/OF/GA quando o `mobile-dev` construir (só os textos e estados acima).
+- Contagem de combinações do código é estimativa (alfabeto de 20 a 26 letras); o número de grupos por edição depende do público (pergunta 2).
+- Perguntas: o Gaia One é do Grupo Virtus ou parceiro (SEC-030)? A compra é pela Hotmart (SEC-028, prompt §8.5)? O time precisa de nomes no palco ou só do total (SEC-024, prompt §8.9)? Push na palestra (prompt §8.6)?
