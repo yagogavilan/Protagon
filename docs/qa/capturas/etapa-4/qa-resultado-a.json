@@ -1,0 +1,666 @@
+{
+  "checks": [
+    {
+      "section": "a",
+      "name": "E01 vazio",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E01 ingresso não encontrado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E01 enviando",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E02 digitando",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E02 inválido",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E02 reenviar em 30 s",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E02 sucesso",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E03 Executivo (2 telas, sem convite)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E03 VIP 3 telas com convite",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E04 pedido contextual (1ª abertura da Trilha)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "E04 negado + como ativar",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 antes do evento",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 sessão ao vivo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 intervalo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 almoço",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 fim do dia",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 depois do evento",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 fim do dia: NPS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 depois: Indique o Protagon + NPS final",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 agenda atualizada",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 sem internet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A01 Executivo: 1 card Conexões com cadeado/teaser",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A02 intervalo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A02 almoço",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A02 faltam 5 min",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A02 volte agora",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A03 praça e restaurantes próximos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A03 aba restaurantes próximos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A04 meu setor",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A04 setor Executivo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A04 setor Diamond",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A04 estande",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A04c Ponto de Conexão selecionado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A05 rede e senha",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "A05 copiado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G01 online",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G01 offline",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G01 adicionado à Wallet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G02 não lidas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G02 vazia",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G02 filtro Avisos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G02 limpar tudo + desfazer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G02 em espera até o intervalo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G03 push na tela bloqueada",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G04 compacta",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G04 expandida",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G04 tela bloqueada com Live Activity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G05 offline",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "G05 reconectado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T01 dia em andamento",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T01 bloco alterado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T01 dia futuro",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T01 dia encerrado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T01 progresso da jornada",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T02 ao vivo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T02 material \"libera às\"",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T02 anotações",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "T02 concluída",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C00 prévia + contador (Executivo)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C00 convite de upgrade",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C00 convite fechável (Agora não)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C01 dados, nicho, objetivos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C01 interesses + visibilidade + consentimento",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C01b Complete seu perfil",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C02 fila com afinidade e motivo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C02 limite diário",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C02 antes do evento (proposta)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C02 perfil pausado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C02 fim da fila",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C03 antes do aceite",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C03 pedido enviado (Pendente)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C03 conectado (WhatsApp, LinkedIn, Instagram)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C04 modelos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C04 mensagem própria",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C04 limite atingido",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C05 com pedidos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C05 aceito",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C05 vazio",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C06 filtros",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C06 sem resultados",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C07 primeira mensagem",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C07 conversa + encontro proposto",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C07 encontro confirmado (Felipe)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C08 próximo intervalo + ponto",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C08 escolher outro horário",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C09 lista",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C09 exportar só depois do evento",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C09 exportar liberado depois",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C09 nota privada",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C10 câmera",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C10 pessoa encontrada",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C10 Executivo cai no C00",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "C11 bloquear, denunciar, desfazer, pausar",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "M01 liberado/agendado/baixado/concluído",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "M01 offline (só baixados)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "M02 PDF",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "M02 workbook",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "M02 áudio",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "M02 vídeo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U01 dados da compra, CPF mascarado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U01 Meu perfil de Conexões",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U02 por categoria",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U02 permissão negada",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U03 campos visíveis + Instagram proposta",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U03 excluir dados com confirmação",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U03 dados excluídos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U04 pendente",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U04 NPS final",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "a",
+      "name": "U05 FAQ + falar com o CS",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "findings": {
+    "a": {
+      "naoConfirmados": []
+    },
+    "infra": {
+      "errosDeConsole": []
+    }
+  }
+}

@@ -1,0 +1,745 @@
+{
+  "checks": [
+    {
+      "section": "e",
+      "name": "alvo de toque >= 44 px (HIG) em todos os controles",
+      "ok": false,
+      "detail": "25 controles únicos abaixo de 44 px"
+    },
+    {
+      "section": "d",
+      "name": "sem \"match\", \"curtir\", corações, emoji ou estética de namoro nas telas",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "section": "d",
+      "name": "nenhum contato de outra pessoa (telefone, e-mail, @, LinkedIn) antes do aceite",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "section": "d",
+      "name": "Instagram antes da conexão desligado por padrão (U03)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "d",
+      "name": "Home Executivo: no máximo 1 card com cadeado",
+      "ok": true,
+      "detail": "[\"Home live:1\",\"Home before:1\",\"Home lunch:1\",\"Home break:1\",\"Home endOfDay:1\",\"Home after:1\"]"
+    },
+    {
+      "section": "d",
+      "name": "cadeado fora de Home/Conexões (Trilha, Materiais, Eu)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "d",
+      "name": "nenhum convite/dialog aberto na abertura (Executivo)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "d",
+      "name": "backdrop-filter (vidro) só na tab bar e em bottom sheets",
+      "ok": false,
+      "detail": "[{\"screen\":\"G03\",\"tag\":\"div\",\"cls\":\"system-glass rounded-xl border border-border-subtle p-4\",\"bf\":\"blur(24px)\",\"f\":\"\",\"nav\":false,\"dialog\":false,\"text\":\"Protagon\\nAo vivo\\n\\nA mentalidad\"},{\"screen\":\"G03\",\"tag\":\"button\",\"cls\":\"system-glass flex items-start gap-3 rounded-xl border border-border-subtle p-3 t\",\"bf\":\"blur(24px)\",\"f\":\"\",\"nav\":false,\"dialog\":false,\"text\":\"Agenda atualizada\\n10:05\\nA pale\"}]"
+    }
+  ],
+  "findings": {
+    "e": {
+      "menor44": [
+        {
+          "screen": "G04-live",
+          "name": "Toque para desbloquear",
+          "w": 192.3,
+          "h": 34,
+          "tag": "button",
+          "role": "",
+          "top": 778
+        },
+        {
+          "screen": "M01-endOfDay",
+          "name": "",
+          "w": 126,
+          "h": 37,
+          "tag": "button",
+          "role": "",
+          "top": 11
+        },
+        {
+          "screen": "U01-exec",
+          "name": "Atividade ao vivo: A mentalidade do protagonista ·",
+          "w": 176,
+          "h": 37,
+          "tag": "button",
+          "role": "",
+          "top": 11
+        },
+        {
+          "screen": "C09",
+          "name": "Atividade ao vivo: Intervalo · volte ao salão às 1",
+          "w": 176,
+          "h": 37,
+          "tag": "button",
+          "role": "",
+          "top": 11
+        },
+        {
+          "screen": "A01-break-five",
+          "name": "Atividade ao vivo: Faltam 5 min · volte ao salão à",
+          "w": 176,
+          "h": 37,
+          "tag": "button",
+          "role": "",
+          "top": 11
+        },
+        {
+          "screen": "A01-lunch",
+          "name": "Atividade ao vivo: Almoço · retorno 13h30. Expandi",
+          "w": 176,
+          "h": 37,
+          "tag": "button",
+          "role": "",
+          "top": 11
+        },
+        {
+          "screen": "A01-lunch-now",
+          "name": "Atividade ao vivo: Volte agora ao salão. Expandir",
+          "w": 176,
+          "h": 37,
+          "tag": "button",
+          "role": "",
+          "top": 11
+        },
+        {
+          "screen": "T01-day2",
+          "name": "Atividade ao vivo: Liderança que forma líderes · a",
+          "w": 176,
+          "h": 37,
+          "tag": "button",
+          "role": "",
+          "top": 11
+        },
+        {
+          "screen": "A03",
+          "name": "Praça de alimentação",
+          "w": 163,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 175
+        },
+        {
+          "screen": "A03",
+          "name": "Restaurantes próximos",
+          "w": 175,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 175
+        },
+        {
+          "screen": "G02",
+          "name": "Todas, 2 não lidas",
+          "w": 79,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 115
+        },
+        {
+          "screen": "G02",
+          "name": "Avisos, 1 não lida",
+          "w": 84.1,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 115
+        },
+        {
+          "screen": "G02",
+          "name": "Agenda",
+          "w": 64.5,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 115
+        },
+        {
+          "screen": "G02",
+          "name": "Conexões, 1 não lida",
+          "w": 106.4,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 115
+        },
+        {
+          "screen": "G02-vazia",
+          "name": "Todas",
+          "w": 72.3,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 115
+        },
+        {
+          "screen": "G02-vazia",
+          "name": "Avisos",
+          "w": 77.4,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 115
+        },
+        {
+          "screen": "G02-vazia",
+          "name": "Agenda",
+          "w": 84.6,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 115
+        },
+        {
+          "screen": "G02-vazia",
+          "name": "Conexões",
+          "w": 99.7,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 115
+        },
+        {
+          "screen": "M01-endOfDay",
+          "name": "Dia 1",
+          "w": 110.3,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 107
+        },
+        {
+          "screen": "M01-endOfDay",
+          "name": "Dia 2",
+          "w": 112.9,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 107
+        },
+        {
+          "screen": "M01-endOfDay",
+          "name": "Dia 3",
+          "w": 112.9,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 107
+        },
+        {
+          "screen": "C09-after",
+          "name": "Sugestões",
+          "w": 83.6,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 171
+        },
+        {
+          "screen": "C09-after",
+          "name": "Explorar",
+          "w": 68.6,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 171
+        },
+        {
+          "screen": "C09-after",
+          "name": "Pedidos, 4 novos",
+          "w": 94.5,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 171
+        },
+        {
+          "screen": "C09-after",
+          "name": "Minha rede",
+          "w": 87.4,
+          "h": 40,
+          "tag": "button",
+          "role": "tab",
+          "top": 171
+        }
+      ],
+      "entre44e48": [
+        {
+          "screen": "E02-invalido",
+          "name": "Trocar e-mail ou CPF",
+          "w": 207.5,
+          "h": 44,
+          "tag": "button",
+          "role": "",
+          "top": 64
+        },
+        {
+          "screen": "U04",
+          "name": "0",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 241
+        },
+        {
+          "screen": "U04",
+          "name": "1",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 241
+        },
+        {
+          "screen": "U04",
+          "name": "2",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 241
+        },
+        {
+          "screen": "U04",
+          "name": "3",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 241
+        },
+        {
+          "screen": "U04",
+          "name": "4",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 241
+        },
+        {
+          "screen": "U04",
+          "name": "5",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 241
+        },
+        {
+          "screen": "U04",
+          "name": "6",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 295
+        },
+        {
+          "screen": "U04",
+          "name": "7",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 295
+        },
+        {
+          "screen": "U04",
+          "name": "8",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 295
+        },
+        {
+          "screen": "U04",
+          "name": "9",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 295
+        },
+        {
+          "screen": "U04",
+          "name": "10",
+          "w": 47.7,
+          "h": 48,
+          "tag": "button",
+          "role": "radio",
+          "top": 295
+        },
+        {
+          "screen": "checkout",
+          "name": "Voltar",
+          "w": 80.6,
+          "h": 44,
+          "tag": "button",
+          "role": "",
+          "top": 58
+        },
+        {
+          "screen": "A04c",
+          "name": "Meu setor",
+          "w": 44.3,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 226
+        },
+        {
+          "screen": "A04c",
+          "name": "Credenciamento",
+          "w": 84.8,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 370
+        },
+        {
+          "screen": "A04c",
+          "name": "Estande",
+          "w": 84.8,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 370
+        },
+        {
+          "screen": "A04c",
+          "name": "Banheiros",
+          "w": 84.8,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 370
+        },
+        {
+          "screen": "A04c",
+          "name": "Almoço",
+          "w": 177.1,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 449
+        },
+        {
+          "screen": "A04c",
+          "name": "Saída",
+          "w": 44.3,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 209
+        },
+        {
+          "screen": "A04c",
+          "name": "Ponto A",
+          "w": 44.3,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 399
+        },
+        {
+          "screen": "A04c",
+          "name": "Ponto B",
+          "w": 44.3,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 370
+        },
+        {
+          "screen": "A04c",
+          "name": "Ponto C",
+          "w": 44.3,
+          "h": 44.3,
+          "tag": "g",
+          "role": "button",
+          "top": 449
+        },
+        {
+          "screen": "G02",
+          "name": "Limpar tudo",
+          "w": 107.6,
+          "h": 44,
+          "tag": "button",
+          "role": "",
+          "top": 58
+        },
+        {
+          "screen": "M02",
+          "name": "Fechar",
+          "w": 88.3,
+          "h": 44,
+          "tag": "button",
+          "role": "",
+          "top": 58
+        }
+      ]
+    },
+    "d": {
+      "palavrasProibidas": [],
+      "contatoAntesDoAceite": [],
+      "c01Consentimento": true,
+      "c01Switches": [
+        "Empresa=true",
+        "Cargo=true",
+        "Cidade=true",
+        "Objetivos=true",
+        "Interesses=true",
+        "Autorizo mostrar meu perfil para participantes VIP e Diamond desta edição\nVocê pode pausar ou excluir quando quiser, em Eu.=false"
+      ],
+      "cadeados": [
+        {
+          "tela": "Home live",
+          "inMain": 1,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Home before",
+          "inMain": 1,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Home lunch",
+          "inMain": 1,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Home break",
+          "inMain": 1,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Home endOfDay",
+          "inMain": 1,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Home after",
+          "inMain": 1,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Trilha",
+          "inMain": 0,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Materiais",
+          "inMain": 0,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Eu",
+          "inMain": 0,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        },
+        {
+          "tela": "Conexões",
+          "inMain": 2,
+          "inNav": 1,
+          "dialogOpen": false,
+          "mainText": ""
+        }
+      ],
+      "blur": [
+        {
+          "screen": "A01-live-vip",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\nConexões\nMateriai"
+        },
+        {
+          "screen": "C02",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\n4\nConexões\nMateri"
+        },
+        {
+          "screen": "C00-exec",
+          "tag": "div",
+          "cls": "flex flex-col gap-3 p-3 blur-locked",
+          "bf": "",
+          "f": "blur(16px)",
+          "nav": false,
+          "dialog": false,
+          "text": ""
+        },
+        {
+          "screen": "C00-exec",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\nConexões\nMateriai"
+        },
+        {
+          "screen": "G01",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\nConexões\nMateriai"
+        },
+        {
+          "screen": "A04",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\nConexões\nMateriai"
+        },
+        {
+          "screen": "C04",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\n4\nConexões\nMateri"
+        },
+        {
+          "screen": "C04",
+          "tag": "div",
+          "cls": "glass-sheet absolute inset-x-0 bottom-0 flex flex-col rounded-t-xl border-t bord",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": false,
+          "dialog": true,
+          "text": "Pedido para Camila Torres\n\nTor"
+        },
+        {
+          "screen": "U03",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\nConexões\nMateriai"
+        },
+        {
+          "screen": "G03",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\nConexões\nMateriai"
+        },
+        {
+          "screen": "G03",
+          "tag": "div",
+          "cls": "system-glass rounded-xl border border-border-subtle p-4",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": false,
+          "dialog": false,
+          "text": "Protagon\nAo vivo\n\nA mentalidad"
+        },
+        {
+          "screen": "G03",
+          "tag": "button",
+          "cls": "system-glass flex items-start gap-3 rounded-xl border border-border-subtle p-3 t",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": false,
+          "dialog": false,
+          "text": "Agenda atualizada\n10:05\nA pale"
+        },
+        {
+          "screen": "M02",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\nConexões\nMateriai"
+        },
+        {
+          "screen": "T01-live",
+          "tag": "nav",
+          "cls": "glass-nav absolute inset-x-0 bottom-0 z-tabbar border-t border-border-subtle pb-",
+          "bf": "blur(24px)",
+          "f": "",
+          "nav": true,
+          "dialog": false,
+          "text": "Agora\nTrilha\nConexões\nMateriai"
+        }
+      ],
+      "filter": [
+        {
+          "screen": "C00-exec",
+          "tag": "div",
+          "cls": "flex flex-col gap-3 p-3 blur-locked",
+          "bf": "",
+          "f": "blur(16px)",
+          "nav": false,
+          "dialog": false,
+          "text": ""
+        }
+      ],
+      "tabbarBlur": "blur(24px)",
+      "tabbarBgReducedTransparency": "rgba(14, 13, 36, 0.84)"
+    },
+    "infra": {
+      "errosDeConsole": []
+    }
+  }
+}

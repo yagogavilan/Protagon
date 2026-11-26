@@ -1,0 +1,6501 @@
+{
+  "checks": [
+    {
+      "section": "b",
+      "name": "contraste WCAG AA em todos os textos visíveis",
+      "ok": false,
+      "detail": "2 pares únicos abaixo do mínimo (2 ocorrências em 73 telas)"
+    },
+    {
+      "section": "c",
+      "name": "texto corrido (>= 45 caracteres) com fonte >= 16px",
+      "ok": false,
+      "detail": "34 ocorrências, tamanhos {\"13\":31,\"14\":3}"
+    },
+    {
+      "section": "c",
+      "name": "rótulos de ação (botões, chips, abas, links) >= 16px",
+      "ok": false,
+      "detail": "80 rótulos únicos, tamanhos {\"13\":28,\"15\":52}"
+    },
+    {
+      "section": "c",
+      "name": "nenhum texto abaixo do mínimo de caption (13px)",
+      "ok": false,
+      "detail": "12 textos"
+    }
+  ],
+  "findings": {
+    "b": {
+      "falhas": [
+        {
+          "screen": "A01-offline",
+          "t": "Conexões",
+          "fs": 13,
+          "fw": 500,
+          "ratio": 3.5,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "112,108,124,1",
+          "bg": "27,21,34,1",
+          "op": 0.6,
+          "ctl": "",
+          "disabled": false,
+          "len": 8,
+          "h": 18,
+          "clip": false,
+          "ctlLen": 0,
+          "island": false
+        },
+        {
+          "screen": "A01-offline",
+          "t": "Conexões voltam quando a internet voltar",
+          "fs": 16,
+          "fw": 400,
+          "ratio": 3.5,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "112,108,124,1",
+          "bg": "27,21,34,1",
+          "op": 0.6,
+          "ctl": "",
+          "disabled": false,
+          "len": 40,
+          "h": 48,
+          "clip": false,
+          "ctlLen": 0,
+          "island": false
+        }
+      ],
+      "desabilitados": [
+        {
+          "screen": "E02",
+          "t": "Reenviar código em 0:29",
+          "fs": 16,
+          "fw": 600,
+          "ratio": 2.15,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "68,67,84,1",
+          "bg": "2,1,17,1",
+          "op": 0.4,
+          "ctl": "button",
+          "disabled": true,
+          "len": 23,
+          "h": 52,
+          "clip": false,
+          "ctlLen": 23,
+          "island": false
+        },
+        {
+          "screen": "E02-invalido",
+          "t": "Reenviar código em 0:27",
+          "fs": 16,
+          "fw": 600,
+          "ratio": 2.15,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "68,67,84,1",
+          "bg": "2,1,17,1",
+          "op": 0.4,
+          "ctl": "button",
+          "disabled": true,
+          "len": 23,
+          "h": 52,
+          "clip": false,
+          "ctlLen": 23,
+          "island": false
+        },
+        {
+          "screen": "G01-offline",
+          "t": "Adicionar à Wallet",
+          "fs": 16,
+          "fw": 600,
+          "ratio": 3.43,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "99,98,105,1",
+          "bg": "2,1,17,1",
+          "op": 0.4,
+          "ctl": "button",
+          "disabled": true,
+          "len": 18,
+          "h": 52,
+          "clip": false,
+          "ctlLen": 18,
+          "island": false
+        },
+        {
+          "screen": "C09",
+          "t": "Exportar contatos",
+          "fs": 16,
+          "fw": 600,
+          "ratio": 3.53,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "106,105,117,1",
+          "bg": "14,13,36,1",
+          "op": 0.4,
+          "ctl": "button",
+          "disabled": true,
+          "len": 17,
+          "h": 48,
+          "clip": false,
+          "ctlLen": 17,
+          "island": false
+        },
+        {
+          "screen": "M02",
+          "t": "Anterior",
+          "fs": 16,
+          "fw": 600,
+          "ratio": 3.43,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "99,98,105,1",
+          "bg": "2,1,17,1",
+          "op": 0.4,
+          "ctl": "button",
+          "disabled": true,
+          "len": 8,
+          "h": 48,
+          "clip": false,
+          "ctlLen": 8,
+          "island": false
+        },
+        {
+          "screen": "U02",
+          "t": "Volta do almoço, mudança de sala e segurança. Sempre ligados",
+          "fs": 13,
+          "fw": 500,
+          "ratio": 2.83,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "91,90,110,1",
+          "bg": "14,13,36,1",
+          "op": 0.5,
+          "ctl": "switch",
+          "disabled": true,
+          "len": 60,
+          "h": 36,
+          "clip": false,
+          "ctlLen": 81,
+          "island": false
+        },
+        {
+          "screen": "U03",
+          "t": "Sempre visíveis",
+          "fs": 13,
+          "fw": 500,
+          "ratio": 2.83,
+          "need": 4.5,
+          "large": false,
+          "ok": false,
+          "fg": "91,90,110,1",
+          "bg": "14,13,36,1",
+          "op": 0.5,
+          "ctl": "switch",
+          "disabled": true,
+          "len": 15,
+          "h": 18,
+          "clip": false,
+          "ctlLen": 31,
+          "island": false
+        }
+      ]
+    },
+    "c": {
+      "pequenas": {
+        "body": [
+          {
+            "screen": "E02",
+            "t": "Não chegou? Veja a caixa de spam ou promoções.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E02-invalido",
+            "t": "Não chegou? Veja a caixa de spam ou promoções.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-3",
+            "t": "3 interesses em comum · vocês dois buscam parcerias no varej",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E04n",
+            "t": "Você também encontra este passo em Eu, Notificações.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Ficam no app por 90 dias. Baixe para ler sem internet.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Ficam no app por 90 dias. Baixe para ler sem internet.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Pontos de Conexão aparecem para VIP e Diamond.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A05",
+            "t": "Se a rede ficar lenta, agenda, mapa e credencial continuam f",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01-offline",
+            "t": "Para adicionar à Wallet, conecte-se à internet.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G03",
+            "t": "A palestra das 15h55 começa às 16h05. O restante do dia segu",
+            "fs": 14,
+            "ctl": "button"
+          },
+          {
+            "screen": "G04-live",
+            "t": "Ative seu perfil e veja quem tem interesses em comum com voc",
+            "fs": 14,
+            "ctl": "button"
+          },
+          {
+            "screen": "G04-live",
+            "t": "Sua credencial já está no app e funciona sem internet.",
+            "fs": 14,
+            "ctl": "button"
+          },
+          {
+            "screen": "T02-live",
+            "t": "Só você vê as anotações. Ficam salvas no aparelho, mesmo sem",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-break",
+            "t": "Só você vê as anotações. Ficam salvas no aparelho, mesmo sem",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C01",
+            "t": "Dados vindos da sua compra. Para corrigir, fale com o suport",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Opcional, 30 segundos. Mostra quem pode ajudar no seu desafi",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Opcional, 30 segundos. Mostra quem pode ajudar no seu desafi",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Opcional, 30 segundos. Mostra quem pode ajudar no seu desafi",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C05",
+            "t": "Pedidos de participantes Diamond aparecem primeiro.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C10",
+            "t": "Os dois confirmam a conexão. Pedidos pelo QR não contam no l",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C10",
+            "t": "Neste mockup não há câmera; o botão simula a leitura.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C01b",
+            "t": "Junto com WhatsApp e LinkedIn, só aparece depois que os dois",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-live",
+            "t": "15h55 · Inteligência emocional para empresários",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "15h55 · Inteligência emocional para empresários",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Dados da compra. Para corrigir, fale com o suporte.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Dados da compra. Para corrigir, fale com o suporte.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U02",
+            "t": "Volta do almoço, mudança de sala e segurança. Sempre ligados",
+            "fs": 13,
+            "ctl": "switch"
+          },
+          {
+            "screen": "U02",
+            "t": "Durante as palestras só chegam avisos operacionais. O resto ",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U03",
+            "t": "Para participantes VIP e Diamond desta edição.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U03",
+            "t": "Telefone e redes só aparecem depois de um aceite mútuo. A ún",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U03",
+            "t": "Seu @ aparece para VIP e Diamond antes do aceite, e você vê ",
+            "fs": 13,
+            "ctl": "switch"
+          },
+          {
+            "screen": "U03",
+            "t": "Desligar revoga a autorização e desativa o perfil",
+            "fs": 13,
+            "ctl": "switch"
+          },
+          {
+            "screen": "U03",
+            "t": "Tratamos seus dados com base na sua autorização (LGPD). Chat",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "checkout",
+            "t": "Valor e forma de pagamento: decisão da diretoria.",
+            "fs": 13,
+            "ctl": ""
+          }
+        ],
+        "action": [
+          {
+            "screen": "A01-before-vip",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "1",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "1",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "1",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-offline",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A03",
+            "t": "Praça de alimentação",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A03",
+            "t": "Restaurantes próximos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A03",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A03",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A03",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A03",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A03",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04",
+            "t": "Meu setor",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Credenciamento",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Estande",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Banheiros",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Almoço",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Ponto A",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Ponto B",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Ponto C",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Saída",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Meu setor",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Credenciamento",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Estande",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Banheiros",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Almoço",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Saída",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04c",
+            "t": "Meu setor",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Credenciamento",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Estande",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Banheiros",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Almoço",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Ponto A",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Ponto B",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Ponto C",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Saída",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "A04c",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04c",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04c",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04c",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "A04c",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "Todas",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "2",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "Avisos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "1",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "Agenda",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02-vazia",
+            "t": "Todas",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02-vazia",
+            "t": "Avisos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02-vazia",
+            "t": "Agenda",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02-vazia",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02-vazia",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02-vazia",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02-vazia",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G02-vazia",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "G03",
+            "t": "Toque para desbloquear",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "G04-lunch",
+            "t": "Toque para desbloquear",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "G04-live",
+            "t": "Toque para desbloquear",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Dia 1",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Dia 2",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Dia 3",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Dia 1",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Dia 2",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Dia 3",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Dia 1",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Dia 2",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Dia 3",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-live",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-live",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-live",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-live",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-live",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-break",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-break",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-break",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-break",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "T02-break",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C00-exec",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C00-exec",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C00-exec",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C00-exec",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C00-exec",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01",
+            "t": "Busco sócio",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Busco clientes",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Contrato serviços",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Ofereço serviços",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Quero mentorar",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Quero ser mentorado",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Parcerias",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Investimento",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Destravar a liderança do meu time",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Estruturar a expansão por franquia",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Organizar o comercial e vender mais",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Aprender a escalar sem perder qualidade",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Profissionalizar a gestão financeira",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Resolver a sucessão na empresa",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Conhecer empresários de outros segmentos",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Ler QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02",
+            "t": "Sugestões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Explorar",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Pedidos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Minha rede",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Ler QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Sugestões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Explorar",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Pedidos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Minha rede",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Ler QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Sugestões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Explorar",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Pedidos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Minha rede",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-before",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "2",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Ler QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C05",
+            "t": "Sugestões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Explorar",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Pedidos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Minha rede",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C05",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Ler QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Sugestões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Explorar",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Pedidos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Minha rede",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C06",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C07",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C07",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C07",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C07",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C07",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C07",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Ler QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "Sugestões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Explorar",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Pedidos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Minha rede",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Ler QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Sugestões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Explorar",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Pedidos",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "4",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Minha rede",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C10",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C10",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C10",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C10",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C10",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01b",
+            "t": "Fazer o tráfego pago dar retorno",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Organizar o caixa e o financeiro",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Estruturar o processo comercial B2B",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Reter clientes depois do 3º mês",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Contratar e manter vendedores",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Formatar a operação para franquear",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Cobrar o preço certo sem perder cliente",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Gerar demanda com conteúdo",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Organizar o funil de vendas e o CRM",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Preparar a sucessão na empresa",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Captar investimento para crescer",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Tirar a operação das minhas costas",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Padronizar o atendimento",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Tráfego pago",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Gestão financeira de PME",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Processo comercial B2B",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Retenção de clientes",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Contratação de vendedores",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Liderança de equipes",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Expansão por franquia",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Precificação",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Marketing de conteúdo",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Automação e CRM",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Sucessão familiar",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Captação de investimento",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Processos e operação",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Atendimento ao cliente",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Destravar a liderança do meu time",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Estruturar a expansão por franquia",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Organizar o comercial e vender mais",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Aprender a escalar sem perder qualidade",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Profissionalizar a gestão financeira",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Resolver a sucessão na empresa",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Conhecer empresários de outros segmentos",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01b",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01b",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01b",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "C01b",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Dia 1",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Dia 2",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Dia 3",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Baixados",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Dia 1",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Dia 2",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Dia 3",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Baixados",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M02",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M02",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M02",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M02",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "M02",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "QR, setor e Wallet",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "O que você quer receber",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Nota de 0 a 10",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Dúvidas e atendimento",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "QR, setor e Wallet",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "O que você quer receber",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Seus dados e exclusão",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Nota de 0 a 10",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Dúvidas e atendimento",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U02",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U02",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U02",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U02",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U02",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U03",
+            "t": "Sempre visíveis",
+            "fs": 13,
+            "ctl": "switch"
+          },
+          {
+            "screen": "U03",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U03",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U03",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U03",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U03",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U04",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U04",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U04",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U04",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U04",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U05",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U05",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U05",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U05",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "U05",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "checkout",
+            "t": "Agora",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "checkout",
+            "t": "Trilha",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "checkout",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "checkout",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": "tab"
+          },
+          {
+            "screen": "checkout",
+            "t": "Eu",
+            "fs": 13,
+            "ctl": "tab"
+          }
+        ],
+        "meta": [
+          {
+            "screen": "E01",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "E01",
+            "t": "Protagon Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E01",
+            "t": "E-mail ou CPF",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E01",
+            "t": "Sem senha. O código vale por 10 minutos.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E01-erro",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "E01-erro",
+            "t": "Protagon Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E01-erro",
+            "t": "E-mail ou CPF",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E01-erro",
+            "t": "Sem senha. O código vale por 10 minutos.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E02",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "E02-invalido",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-exec-1",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-exec-1",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-exec-1",
+            "t": "Intervalo · em 25 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-exec-1",
+            "t": "12h30 · 2º andar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-1",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-1",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-1",
+            "t": "Intervalo · em 25 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-1",
+            "t": "12h30 · 2º andar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-2",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-2",
+            "t": "Credencial",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-2",
+            "t": "Agenda",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-2",
+            "t": "Mapa",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-3",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "E03-vip-3",
+            "t": "Afinidade alta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E04n",
+            "t": "1",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E04n",
+            "t": "2",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "E04n",
+            "t": "3",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "09:00",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Faltam 2 dias · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Sexta-feira, 12 de março · 9h",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "dias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "horas",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "0 de 5",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Local",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Estacionamento",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-vip",
+            "t": "Proposta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "09:00",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Faltam 2 dias · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Sexta-feira, 12 de março · 9h",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "dias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "horas",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "0 de 5",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Local",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Estacionamento",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Setor Executivo · fila 21",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-before-exec",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "· Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "WC",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Fundador do Grupo Virtus",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Começou às 9h30 · 35 de 60 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "A seguir",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Volte ao salão às 10h45",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Protagon-Alunos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "· Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "WC",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Fundador do Grupo Virtus",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Começou às 9h30 · 35 de 60 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "A seguir",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Volte ao salão às 10h45",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Setor Executivo · fila 21",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Protagon-Alunos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "· Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "WC",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Fundador do Grupo Virtus",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Começou às 9h30 · 35 de 60 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "A seguir",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Volte ao salão às 10h45",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Protagon-Alunos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "10:38",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "A seguir",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Protagon-Alunos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "10:40",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "A seguir",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Protagon-Alunos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "12:52",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Onde comer",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Restaurantes próximos também",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Protagon-Alunos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "13:20",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Onde comer",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Restaurantes próximos também",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Protagon-Alunos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "19:10",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Dia 1 concluído",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Materiais do dia",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "De 0 a 10. Leva 10 segundos.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Nada provável",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Muito provável",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-endOfDay",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "10:00",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Evento encerrado · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Resumo da sua jornada",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Blocos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "De 0 a 10. Leva 10 segundos.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Nada provável",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Muito provável",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Indique o Protagon",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-vip",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "10:00",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Evento encerrado · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Resumo da sua jornada",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Blocos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Materiais",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "De 0 a 10. Leva 10 segundos.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Nada provável",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Muito provável",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Indique o Protagon",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Setor Executivo · fila 21",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-after-exec",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Dia 1 · Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "· Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "WC",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Fundador do Grupo Virtus",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Começou às 9h30 · 35 de 60 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "A seguir",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Volte ao salão às 10h45",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Setor VIP · fila 8",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Você está na Plenária",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Protagon-Alunos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Avisos fixados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Conexões",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A02-break",
+            "t": "Volte ao salão em",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A02-five",
+            "t": "Volte ao salão em",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A02-now",
+            "t": "Hora de voltar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "Espera ~12 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "R$ 38 a R$ 52",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "Opção vegetariana",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "Espera ~8 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "R$ 34 a R$ 46",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "Espera ~5 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "R$ 29 a R$ 41",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "Sem glúten e vegano",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "Espera ~3 min",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A03",
+            "t": "R$ 12 a R$ 24",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Plenária principal",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Palco",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Diamond",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "VIP · seu setor",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Executivo",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Foyer",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Credenciamento",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Estande",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Banheiros",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "Praça de alimentação",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "A",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "B",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A04",
+            "t": "C",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Plenária principal",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Palco",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Diamond",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "VIP",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Executivo · seu setor",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Foyer",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Credenciamento",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Estande",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Banheiros",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04-exec",
+            "t": "Praça de alimentação",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Plenária principal",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Palco",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Diamond",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "VIP · seu setor",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Executivo",
+            "fs": 12,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Foyer",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Credenciamento",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Estande",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Banheiros",
+            "fs": 10.5,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "Praça de alimentação",
+            "fs": 11,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "A",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "B",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A04c",
+            "t": "C",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A05",
+            "t": "Rede",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "A05",
+            "t": "Senha",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01",
+            "t": "Protagon Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01",
+            "t": "VIP",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01",
+            "t": "Brilho no máximo para leitura",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01",
+            "t": "Setor",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01",
+            "t": "Datas",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01",
+            "t": "Código",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01-offline",
+            "t": "Protagon Porto Alegre",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01-offline",
+            "t": "VIP",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01-offline",
+            "t": "Brilho no máximo para leitura",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01-offline",
+            "t": "Setor",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01-offline",
+            "t": "Datas",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G01-offline",
+            "t": "Código",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G02",
+            "t": "10:05",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "G03",
+            "t": "Agenda atualizada",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "G03",
+            "t": "10:05",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "G04-live",
+            "t": "Conexões liberadas",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "G04-live",
+            "t": "10:05",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "G04-live",
+            "t": "Bem-vindo ao Protagon",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-live",
+            "t": "1 de 33 blocos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-live",
+            "t": "3 % dos 3 dias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-live",
+            "t": "Hoje · 1 de 11 blocos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-live",
+            "t": "Abertura",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Concluída",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Palestra",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Com material",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Dinâmica",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Exercício",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "17h",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Alterado",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "Encerramento",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-day2",
+            "t": "12 de 33 blocos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-day2",
+            "t": "36 % dos 3 dias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Hoje · 1 de 11 blocos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Abertura",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Concluída",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Palestra",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Com material",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Dinâmica",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Exercício",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Encerramento",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "10:00",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "33 de 33 blocos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "100 % dos 3 dias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Encerrado · 11 de 11 blocos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Abertura",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Concluída",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Palestra",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Com material",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Dinâmica",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Exercício",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "17h",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Alterado",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day3-end",
+            "t": "Encerramento",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "T02-live",
+            "t": "Palestra · Dia 1",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-live",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-live",
+            "t": "35 de 60 min · termina às 10h30",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-live",
+            "t": "Fundador do Grupo Virtus",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-live",
+            "t": "Objetivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-live",
+            "t": "PDF · Libera às 10h30",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-live",
+            "t": "Agendado",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-break",
+            "t": "Palestra · Dia 1",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-break",
+            "t": "Concluída",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-break",
+            "t": "Fundador do Grupo Virtus",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-break",
+            "t": "Objetivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "T02-break",
+            "t": "PDF · PDF · 4,2 MB",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C00-exec",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C01",
+            "t": "Passo 1 de 3 · leva menos de 1 minuto",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C01",
+            "t": "Sócio-fundador · Rede Movimento Academias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C01",
+            "t": "Porto Alegre, RS · Fitness e bem-estar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C01",
+            "t": "(até 3 )",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C01",
+            "t": "Preparar a empresa para sócio ou investidor",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02",
+            "t": "10:38",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Sugestão 1 de 26 · Restam 15 pedidos hoje",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Afinidade alta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Franquias de alimentação · Curitiba",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Destravar a liderança do meu time",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "No Protagon:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Quer mentorar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Busca parcerias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Franquias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Expansão",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "e mais 3",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Maior desafio:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Fazer o time assumir mais responsabilidade",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Domina:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Expansão por franquia",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": ", Precificação",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Diamond",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02",
+            "t": "Fundador",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "10:38",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Afinidade alta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Franquias de alimentação · Curitiba",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Destravar a liderança do meu time",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "No Protagon:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Quer mentorar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Busca parcerias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Franquias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Expansão",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "e mais 3",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Maior desafio:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Fazer o time assumir mais responsabilidade",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Domina:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Expansão por franquia",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": ", Precificação",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Diamond",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Fundador",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "09:00",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Proposta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Conexões abertas antes do evento",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Sugestão 1 de 26 · Restam 15 pedidos hoje",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Afinidade alta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Franquias de alimentação · Curitiba",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Destravar a liderança do meu time",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "No Protagon:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Quer mentorar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Busca parcerias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Franquias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Expansão",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "e mais 3",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Maior desafio:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Fazer o time assumir mais responsabilidade",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Domina:",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Expansão por franquia",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": ", Precificação",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Diamond",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-before",
+            "t": "Fundador",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "Você escolhe o que fica visível.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Afinidade alta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Nicho",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Objetivo no Protagon",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Busca parcerias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Busca clientes",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "VIP",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Conectados",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Por que vale conversar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Atendimento ao cliente",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Contratação de vendedores",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Varejo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Expansão",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Franquias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Atendimento",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "WhatsApp",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "LinkedIn",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-conectado",
+            "t": "Instagram",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Afinidade alta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Nicho",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Objetivo no Protagon",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Quer mentorar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Busca parcerias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Diamond",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Ricardo quer se conectar com você",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Por que vale conversar",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Expansão por franquia",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Precificação",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Franquias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Expansão",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Varejo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Vendas",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C03-sugestao",
+            "t": "Liderança",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C04",
+            "t": "Torres RH",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C04",
+            "t": "149 / 280",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C04",
+            "t": "Seus contatos só aparecem se Camila aceitar.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C04",
+            "t": "Restam 15 de 15 pedidos hoje",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C04-limite",
+            "t": "Torres RH",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C04-limite",
+            "t": "149 / 280",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C04-limite",
+            "t": "Seus contatos só aparecem se Camila aceitar.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C04-limite",
+            "t": "Restam 0 de 15 pedidos hoje",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C05",
+            "t": "10:38",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C05",
+            "t": "Destaque Diamond",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C05",
+            "t": "Proposta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C05",
+            "t": "Diamond",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C05",
+            "t": "CEO · Lacerda Suplementos",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C05",
+            "t": "Fundador · Pacheco Franquias",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C05",
+            "t": "VIP",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C05",
+            "t": "Diretora comercial · Prates Moda",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C05",
+            "t": "Produtora · Moura Eventos",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "10:38",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C06",
+            "t": "30 pessoas nesta edição",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C06",
+            "t": "Franquias · Curitiba",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Afinidade alta",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Diamond",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Quer mentorar",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Busca parcerias",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Saúde e bem-estar · Canoas",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Busca clientes",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Saúde · Pelotas",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Fala de investimento",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Beleza · Porto Alegre",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "VIP",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Alimentação · Porto Alegre",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Busca sócio",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Distribuição · Esteio",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Construção civil · Caxias do Sul",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Logística · Gravataí",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C07",
+            "t": "Isabela Ramos · Sócia",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C07",
+            "t": "@isabelaramos.otica.exemplo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C07",
+            "t": "09:30",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C07",
+            "t": "09:41",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C07",
+            "t": "Isabela propôs um encontro",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C08",
+            "t": "Escolha o horário e o ponto",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C08",
+            "t": "Larissa confirma ou sugere outro horário.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C09",
+            "t": "10:38",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C09",
+            "t": "5 conexões · ficam no app por 90 dias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C09",
+            "t": "Proprietária · Studio Antunes Pilates",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "@larissa.pilates.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "Sócia · Ramos Ótica",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "@isabelaramos.otica.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "Assessor · Correa Investimentos",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "@felipecorrea.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "Sócia-diretora · Coelho Marketing",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "@renatacoelho.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "Corretor e sócio · Vieira Imóveis",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "@marcosvieira.imoveis.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "10:00",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "C09-after",
+            "t": "5 conexões · ficam no app por 90 dias",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C09-after",
+            "t": "Proprietária · Studio Antunes Pilates",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "@larissa.pilates.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Sócia · Ramos Ótica",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "@isabelaramos.otica.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Assessor · Correa Investimentos",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "@felipecorrea.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Sócia-diretora · Coelho Marketing",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "@renatacoelho.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "QR",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "Corretor e sócio · Vieira Imóveis",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09-after",
+            "t": "@marcosvieira.imoveis.exemplo",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C11",
+            "t": "Some das sugestões e não vê mais você",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C11",
+            "t": "Conta para a equipe do Protagon",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C11",
+            "t": "Contatos e chat deixam de aparecer",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C11",
+            "t": "Ninguém vê você e você não recebe pedidos",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "Fazer o time assumir mais responsabilidade",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "C01b",
+            "t": "(até 3 )",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "C01b",
+            "t": "Preparar a empresa para sócio ou investidor",
+            "fs": 15,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-live",
+            "t": "0 liberados · 0 baixados · 0 concluídos",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-live",
+            "t": "9h30 · A mentalidade do protagonista",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-live",
+            "t": "PDF · 4,2 MB",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Agendado",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Libera às 10h30",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "11h30 · Autorresponsabilidade nos negócios",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-live",
+            "t": "Áudio · 10 min",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Libera às 14h",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "14h30 · Exercício: sua roda da vida",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-live",
+            "t": "Workbook · 8 páginas",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Libera às 14h30",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "PDF · 2,1 MB",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Libera às 17h",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "17h30 · Seu próximo nível",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-live",
+            "t": "Vídeo · 12 min",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Libera às 19h10",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "19:10",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "5 liberados · 2 baixados · 1 concluído",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "9h30 · A mentalidade do protagonista",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "PDF · 4,2 MB",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Baixado",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "11h30 · Autorresponsabilidade nos negócios",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Áudio · 10 min",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Liberado",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "14h30 · Exercício: sua roda da vida",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Workbook · 8 páginas",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Concluído",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "PDF · 2,1 MB",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "17h30 · Seu próximo nível",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M01-endOfDay",
+            "t": "Vídeo · 12 min",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "M02",
+            "t": "PDF",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M02",
+            "t": "PDF · 4,2 MB",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "M02",
+            "t": "Página 1",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "VIP",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Edição",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Datas",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Setor",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Código",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "CPF",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "E-mail",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Nicho",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Objetivo no Protagon",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Maior desafio",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Domina",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Instagram",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Visibilidade, pausa e exclusão",
+            "fs": 13,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "10:05",
+            "fs": 15,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Executivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Edição",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Datas",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Setor",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Código",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-exec",
+            "t": "CPF",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U01-exec",
+            "t": "E-mail",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U02",
+            "t": "Mudança de horário e material liberado",
+            "fs": 13,
+            "ctl": "switch"
+          },
+          {
+            "screen": "U02",
+            "t": "Pedidos e respostas, entregues no intervalo",
+            "fs": 13,
+            "ctl": "switch"
+          },
+          {
+            "screen": "U03",
+            "t": "Proposta",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U03",
+            "t": "Você some das sugestões até reativar",
+            "fs": 13,
+            "ctl": "switch"
+          },
+          {
+            "screen": "U04",
+            "t": "De 0 a 10. Leva 10 segundos.",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U04",
+            "t": "Nada provável",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U04",
+            "t": "Muito provável",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U04",
+            "t": "Abre no fim do Dia 2",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U04",
+            "t": "Abre no fim do Dia 3",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U04",
+            "t": "Abre depois do evento",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "U05",
+            "t": "Das 7h às 20h nos dias do evento",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "checkout",
+            "t": "Executivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "checkout",
+            "t": "VIP",
+            "fs": 13,
+            "ctl": ""
+          }
+        ],
+        "chrome": [
+          {
+            "screen": "A01-live-vip",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-live-vip",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-live-exec",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-live-vip-ativo",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "Intervalo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-break-vip",
+            "t": "volta 10h45",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "Faltam 5 min",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-break-five",
+            "t": "10h45",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "Almoço",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-lunch",
+            "t": "retorno 13h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "Volte agora",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-lunch-now",
+            "t": "agora",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-offline",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "A01-offline",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "G03",
+            "t": "Protagon",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G03",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G03",
+            "t": "25 min para terminar",
+            "fs": 14,
+            "ctl": ""
+          },
+          {
+            "screen": "G04-lunch",
+            "t": "Protagon",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G04-lunch",
+            "t": "Almoço",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G04-lunch",
+            "t": "Volte ao salão às 13h20",
+            "fs": 14,
+            "ctl": ""
+          },
+          {
+            "screen": "G04-live",
+            "t": "Protagon",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G04-live",
+            "t": "Ao vivo",
+            "fs": 13,
+            "ctl": ""
+          },
+          {
+            "screen": "G04-live",
+            "t": "25 min para terminar",
+            "fs": 14,
+            "ctl": ""
+          },
+          {
+            "screen": "T01-live",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-live",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "T01-day2",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C00-exec",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C00-exec",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02",
+            "t": "Intervalo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02",
+            "t": "volta 10h45",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "Intervalo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02-limite",
+            "t": "volta 10h45",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C02-vazio-perfil",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C05",
+            "t": "Intervalo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C05",
+            "t": "volta 10h45",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "Intervalo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C06",
+            "t": "volta 10h45",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "Intervalo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "C09",
+            "t": "volta 10h45",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "M01-live",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-vip",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "Ao vivo",
+            "fs": 11,
+            "ctl": "button"
+          },
+          {
+            "screen": "U01-exec",
+            "t": "até 10h30",
+            "fs": 11,
+            "ctl": "button"
+          }
+        ]
+      }
+    },
+    "infra": {
+      "errosDeConsole": []
+    }
+  }
+}

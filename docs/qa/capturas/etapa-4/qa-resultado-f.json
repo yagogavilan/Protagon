@@ -1,0 +1,249 @@
+{
+  "checks": [
+    {
+      "section": "f",
+      "name": "C04 pedido: abre como role=dialog aria-modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C04 pedido: foco inicial dentro do sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C04 pedido: Tab não escapa do sheet (focus trap)",
+      "ok": false,
+      "detail": "18/25 Tabs fora do sheet, primeiro: SELECT:Escolha um código (E01 a U05)E"
+    },
+    {
+      "section": "f",
+      "name": "C04 pedido: Esc fecha o sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C11 segurança: abre como role=dialog aria-modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C11 segurança: foco inicial dentro do sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C11 segurança: Tab não escapa do sheet (focus trap)",
+      "ok": false,
+      "detail": "20/25 Tabs fora do sheet, primeiro: SELECT:Escolha um código (E01 a U05)E"
+    },
+    {
+      "section": "f",
+      "name": "C11 segurança: Esc fecha o sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C08 encontro: abre como role=dialog aria-modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C08 encontro: foco inicial dentro do sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C08 encontro: Tab não escapa do sheet (focus trap)",
+      "ok": false,
+      "detail": "15/25 Tabs fora do sheet, primeiro: SELECT:Escolha um código (E01 a U05)E"
+    },
+    {
+      "section": "f",
+      "name": "C08 encontro: Esc fecha o sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "A05 Wi-Fi: abre como role=dialog aria-modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "A05 Wi-Fi: foco inicial dentro do sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "A05 Wi-Fi: Tab não escapa do sheet (focus trap)",
+      "ok": false,
+      "detail": "23/25 Tabs fora do sheet, primeiro: SELECT:Escolha um código (E01 a U05)E"
+    },
+    {
+      "section": "f",
+      "name": "A05 Wi-Fi: Esc fecha o sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C00 convite: abre como role=dialog aria-modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C00 convite: foco inicial dentro do sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "C00 convite: Tab não escapa do sheet (focus trap)",
+      "ok": false,
+      "detail": "21/25 Tabs fora do sheet, primeiro: SELECT:Escolha um código (E01 a U05)E"
+    },
+    {
+      "section": "f",
+      "name": "C00 convite: Esc fecha o sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "U03 excluir: abre como role=dialog aria-modal",
+      "ok": false,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "E04 permissão: abre como role=dialog aria-modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "E04 permissão: foco inicial dentro do sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "E04 permissão: Tab não escapa do sheet (focus trap)",
+      "ok": false,
+      "detail": "22/25 Tabs fora do sheet, primeiro: SELECT:Escolha um código (E01 a U05)E"
+    },
+    {
+      "section": "f",
+      "name": "E04 permissão: Esc fecha o sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "f",
+      "name": "página empilhada: conteúdo da aba de trás fora da ordem de foco (inert/aria-hidden)",
+      "ok": false,
+      "detail": "{\"atrás\":9,\"inert\":false,\"ariaHidden\":false}"
+    },
+    {
+      "section": "f",
+      "name": "Home VIP live: anel de foco visível em todo controle alcançado por Tab",
+      "ok": true,
+      "detail": "17 controles, sem anel: "
+    },
+    {
+      "section": "f",
+      "name": "Conexões VIP: anel de foco visível em todo controle alcançado por Tab",
+      "ok": true,
+      "detail": "19 controles, sem anel: "
+    },
+    {
+      "section": "f",
+      "name": "Trilha: anel de foco visível em todo controle alcançado por Tab",
+      "ok": true,
+      "detail": "25 controles, sem anel: "
+    },
+    {
+      "section": "f",
+      "name": "Login: anel de foco visível em todo controle alcançado por Tab",
+      "ok": false,
+      "detail": "2 controles, sem anel: "
+    }
+  ],
+  "findings": {
+    "f": {
+      "foco C04 pedido": {
+        "tag": "BUTTON",
+        "outline": "solid 2px",
+        "shadow": "",
+        "matches": true
+      },
+      "foco C11 segurança": {
+        "tag": "BUTTON",
+        "outline": "solid 2px",
+        "shadow": "",
+        "matches": true
+      },
+      "foco C08 encontro": {
+        "tag": "BUTTON",
+        "outline": "solid 2px",
+        "shadow": "",
+        "matches": true
+      },
+      "foco A05 Wi-Fi": {
+        "tag": "BUTTON",
+        "outline": "solid 2px",
+        "shadow": "",
+        "matches": true
+      },
+      "foco C00 convite": {
+        "tag": "BUTTON",
+        "outline": "solid 2px",
+        "shadow": "",
+        "matches": true
+      },
+      "foco E04 permissão": {
+        "tag": "BUTTON",
+        "outline": "solid 2px",
+        "shadow": "",
+        "matches": true
+      },
+      "conteudoAtrasDoOverlay": {
+        "atrás": 9,
+        "inert": false,
+        "ariaHidden": false
+      },
+      "tab Home VIP live": {
+        "focados": 17,
+        "semAnel": []
+      },
+      "tab Conexões VIP": {
+        "focados": 19,
+        "semAnel": []
+      },
+      "tab Trilha": {
+        "focados": 25,
+        "semAnel": []
+      },
+      "tab Login": {
+        "focados": 2,
+        "semAnel": []
+      },
+      "clicaveisNaoNativos": 0
+    },
+    "infra": {
+      "errosDeConsole": []
+    }
+  }
+}

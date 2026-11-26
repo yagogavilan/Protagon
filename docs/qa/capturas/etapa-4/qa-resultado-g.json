@@ -1,0 +1,409 @@
+{
+  "checks": [
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/agora/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/agora/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 1 toque(s) [executivo/agora/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/agora/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/agora/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 1 toque(s) [executivo/agora/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/trilha/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/trilha/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [executivo/trilha/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/trilha/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/trilha/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [executivo/trilha/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/conexoes/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/conexoes/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [executivo/conexoes/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/conexoes/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/conexoes/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [executivo/conexoes/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/materiais/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/materiais/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [executivo/materiais/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/materiais/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/materiais/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [executivo/materiais/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/eu/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/eu/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [executivo/eu/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [executivo/eu/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [executivo/eu/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [executivo/eu/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/agora/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/agora/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 1 toque(s) [vip/agora/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/agora/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/agora/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 1 toque(s) [vip/agora/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/trilha/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/trilha/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [vip/trilha/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/trilha/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/trilha/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [vip/trilha/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/conexoes/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/conexoes/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [vip/conexoes/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/conexoes/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/conexoes/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [vip/conexoes/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/materiais/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/materiais/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [vip/materiais/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/materiais/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/materiais/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [vip/materiais/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/eu/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/eu/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [vip/eu/live]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial a 1 toque [vip/eu/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda a 1 toque [vip/eu/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa a 2 toque(s) [vip/eu/lunch]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "credencial funciona offline",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "mapa funciona offline",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "section": "g",
+      "name": "agenda funciona offline",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "findings": {
+    "g": {
+      "credencialVisivelEm chat": {
+        "botoes": 1,
+        "cobertoPorOverlay": true
+      },
+      "credencialVisivelEm perfil C03": {
+        "botoes": 1,
+        "cobertoPorOverlay": true
+      },
+      "credencialVisivelEm sessão T02": {
+        "botoes": 1,
+        "cobertoPorOverlay": true
+      },
+      "credencialVisivelEm material M02": {
+        "botoes": 1,
+        "cobertoPorOverlay": true
+      },
+      "credencialVisivelEm Wi-Fi": {
+        "botoes": 1,
+        "cobertoPorOverlay": true
+      }
+    },
+    "infra": {
+      "errosDeConsole": []
+    }
+  }
+}
